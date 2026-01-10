@@ -1694,55 +1694,178 @@
         }
 
         // ============================================
-        // SYSEX GENERATION (Simplified - CC/Channel only)
+        // UC4 SYSEX ENCODING (Reverse-engineered)
         // ============================================
         
+        // Encode CC number and channel into triplet bytes
+        function encodeCC(cc, channel) {
+            const xx = 0x20 + (cc >> 4);
+            const yy = ((channel - 1) << 4) | (cc & 0x0F);
+            return [0x4D, xx, yy];
+        }
+        
+        // Encode type with channel
+        function encodeType(type, channel, displayOrMode) {
+            const typeValues = {
+                // Encoder types
+                'ccr1': 0, 'ccr2': 1, 'ccabs': 2, 'prgc': 3, 'ccah': 4, 'pbnd': 5, 'aftt': 6,
+                // Button types  
+                'off': 0, 'note': 1, 'cc': 2
+            };
+            const typeVal = typeValues[type] || 2;
+            const xx = 0x20 + typeVal;
+            const yy = ((channel - 1) << 4) | (displayOrMode & 0x0F);
+            return [0x4D, xx, yy];
+        }
+        
+        // Encode acceleration
+        function encodeAccel(accel, channel) {
+            const accelValues = { 'acc0': 0, 'acc1': 1, 'acc2': 2, 'acc3': 3 };
+            const val = accelValues[accel] || 3;
+            const xx = 0x20 + val;
+            const yy = ((channel - 1) << 4) | 0x0A; // 0x0A seems to be accel marker
+            return [0x4D, xx, yy];
+        }
+        
+        // Encode display scale
+        function encodeDisplay(display, channel) {
+            const displayValues = { 'off': 0, 'std': 1, 'bpol': 2 };
+            const val = displayValues[display] || 1;
+            const xx = 0x20 + val;
+            const yy = ((channel - 1) << 4) | 0x08; // 0x08 seems to be display marker
+            return [0x4D, xx, yy];
+        }
+        
+        // Encode button mode
+        function encodeMode(mode, channel) {
+            const modeVal = mode === 'toggle' ? 1 : 0;
+            const xx = 0x20 + modeVal;
+            const yy = ((channel - 1) << 4);
+            return [0x4D, xx, yy];
+        }
+        
         function generateSysEx() {
-            // Note: This is a simplified SysEx generator focusing on CC/Channel
-            // Full implementation would need complete reverse-engineering of UC4 format
-            
             const sysex = [];
+            const setup = config.setup;
             
-            // SysEx header
-            sysex.push(0xF0);
-            sysex.push(0x00, 0x01, 0x77); // Manufacturer ID (placeholder)
-            sysex.push(0x00, config.setup); // Device/Setup
+            // SysEx start + Manufacturer ID (Faderfox)
+            sysex.push(0xF0, 0x00, 0x00, 0x00);
             
-            // For each group, encode the data
+            // Header - group name encoding (default "GrP1" style)
+            sysex.push(0x41, 0x20, 0x16); // G
+            sysex.push(0x42, 0x20, 0x13); // r
+            sysex.push(0x43, 0x20, 0x12); // P
+            sysex.push(0x44, 0x20, 0x10 + setup); // Setup number
+            
+            // Generate data for each group (1-8)
             for (let g = 1; g <= 8; g++) {
-                // Group marker
-                sysex.push(0x10 + g - 1);
+                const groupBase = 0x14 + g; // Group identifier
                 
-                // Faders (9 controls)
-                for (let i = 1; i <= 9; i++) {
-                    const f = config.faders[g][i];
-                    sysex.push(f.channel - 1); // Channel (0-15)
-                    sysex.push(f.cc);          // CC number
+                // ========== GREEN BUTTONS SECTION (4A 28) ==========
+                sysex.push(0x49, 0x21, groupBase);
+                sysex.push(0x4A, 0x28, 0x10);
+                
+                // 8 buttons × 4 triplets × 2 halves = 64 triplets
+                for (let half = 0; half < 2; half++) {
+                    for (let b = 1; b <= 8; b++) {
+                        const btn = config.buttons[g][b];
+                        const ch = btn.channel || 1;
+                        const cc = btn.cc || 0;
+                        
+                        // T0: Type
+                        sysex.push(...encodeType(btn.type, ch, 0));
+                        // T1: Mode (upper value related)
+                        sysex.push(...encodeMode(btn.mode, ch));
+                        // T2: Display/feedback
+                        sysex.push(0x4D, 0x21, ((ch - 1) << 4) | 0x08);
+                        // T3: CC/Note number
+                        sysex.push(...encodeCC(cc, ch));
+                    }
                 }
                 
-                // Encoders (8 controls)
-                for (let i = 1; i <= 8; i++) {
-                    const e = config.encoders[g][i];
-                    sysex.push(e.channel - 1);
-                    sysex.push(e.cc);
+                // Section end markers
+                sysex.push(0x4B, 0x20, 0x14);
+                sysex.push(0x4C, 0x26, 0x18);
+                // Padding
+                for (let p = 0; p < 30; p++) sysex.push(0x00);
+                
+                // ========== PUSH BUTTONS SECTION (4A 2C) ==========
+                sysex.push(0x49, 0x21, groupBase);
+                sysex.push(0x4A, 0x2C, 0x10);
+                
+                for (let half = 0; half < 2; half++) {
+                    for (let p = 1; p <= 8; p++) {
+                        const pb = config.pushbuttons[g][p];
+                        const ch = pb.channel || 1;
+                        const cc = pb.cc || 0;
+                        
+                        sysex.push(...encodeType(pb.type, ch, 0));
+                        sysex.push(...encodeMode(pb.mode, ch));
+                        sysex.push(0x4D, 0x21, ((ch - 1) << 4) | 0x08);
+                        sysex.push(...encodeCC(cc, ch));
+                    }
                 }
                 
-                // Green buttons (8 controls)
-                for (let i = 1; i <= 8; i++) {
-                    const b = config.buttons[g][i];
-                    sysex.push(b.channel - 1);
-                    sysex.push(b.cc);
+                sysex.push(0x4B, 0x20, 0x14);
+                sysex.push(0x4C, 0x26, 0x18);
+                for (let p = 0; p < 30; p++) sysex.push(0x00);
+                
+                // ========== ENCODERS SECTION (4A 20) ==========
+                sysex.push(0x49, 0x21, groupBase + 1);
+                sysex.push(0x4A, 0x20, 0x10);
+                
+                for (let half = 0; half < 2; half++) {
+                    for (let e = 1; e <= 8; e++) {
+                        const enc = config.encoders[g][e];
+                        const ch = enc.channel || 1;
+                        const cc = enc.cc || 0;
+                        
+                        // T0: Type
+                        sysex.push(...encodeType(enc.type, ch, 0));
+                        // T1: Acceleration
+                        sysex.push(...encodeAccel(enc.accel, ch));
+                        // T2: Display
+                        sysex.push(...encodeDisplay(enc.display, ch));
+                        // T3: CC number
+                        sysex.push(...encodeCC(cc, ch));
+                    }
                 }
                 
-                // Push buttons (8 controls)
-                for (let i = 1; i <= 8; i++) {
-                    const p = config.pushbuttons[g][i];
-                    sysex.push(p.channel - 1);
-                    sysex.push(p.cc);
+                sysex.push(0x4B, 0x20, 0x14);
+                sysex.push(0x4C, 0x26, 0x18);
+                for (let p = 0; p < 30; p++) sysex.push(0x00);
+                
+                // ========== FADERS SECTION (4A 24) ==========
+                sysex.push(0x49, 0x21, groupBase + 1);
+                sysex.push(0x4A, 0x24, 0x10);
+                
+                for (let half = 0; half < 2; half++) {
+                    for (let f = 1; f <= 8; f++) {
+                        const fad = config.faders[g][f];
+                        const ch = fad.channel || 1;
+                        const cc = fad.cc || 0;
+                        
+                        // T0: Type
+                        sysex.push(...encodeType(fad.type, ch, 0));
+                        // T1: Mode (snap/jump)
+                        const modeVal = fad.mode === 'snap' ? 1 : 0;
+                        sysex.push(0x4D, 0x20 + modeVal, ((ch - 1) << 4));
+                        // T2: Lower value
+                        sysex.push(...encodeCC(fad.lower || 0, ch));
+                        // T3: CC number
+                        sysex.push(...encodeCC(cc, ch));
+                    }
                 }
+                
+                // Fader 9 special
+                const f9 = config.faders[g][9];
+                sysex.push(0x4B, 0x20, (f9.cc || 112) & 0x1F);
+                sysex.push(0x4C, 0x26, 0x18);
+                for (let p = 0; p < 30; p++) sysex.push(0x00);
             }
             
-            // SysEx end
+            // Footer
+            sysex.push(0x4F, 0x20, 0x16);
             sysex.push(0xF7);
             
             return new Uint8Array(sysex);
@@ -1767,7 +1890,7 @@
             a.click();
             URL.revokeObjectURL(url);
             
-            showStatus(`Downloaded UC4_Setup${config.setup}.syx`);
+            showStatus(`Downloaded UC4_Setup${config.setup}.syx (${sysex.length} bytes)`);
         }
 
         // ============================================
