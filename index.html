@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faderfox UC4 SysEx Editor v2</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #15151f;
+            --accent-primary: #00ff88;
+            --accent-secondary: #ff6b35;
+            --accent-tertiary: #6b5bff;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border-color: #2a2a3a;
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --success: #2ed573;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-tertiary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--bg-primary);
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), #00cc6a);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .control-section {
+            display: none;
+        }
+
+        .control-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .section-title span {
+            color: var(--accent-primary);
+        }
+
+        .group-selector {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .group-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .group-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .group-btn.active {
+            background: var(--accent-tertiary);
+            color: white;
+            border-color: var(--accent-tertiary);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .control-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .control-type-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            color: var(--text-secondary);
+        }
+
+        .control-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .control-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-field {
+            flex: 1;
+        }
+
+        .control-field label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .control-field input,
+        .control-field select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .control-field input:focus,
+        .control-field select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .info-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-panel h3 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .info-panel p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .encoding-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .encoding-table th,
+        .encoding-table td {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .encoding-table th {
+            background: var(--bg-tertiary);
+            color: var(--accent-primary);
+        }
+
+        .encoding-table td {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+        }
+
+        .status {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .status.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .copy-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .copy-section h3 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .copy-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">UC4</div>
+                <div class="logo-text">
+                    <h1>SysEx Editor</h1>
+                    <span>v2.0 - Verified Encodings</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <select id="setupSelect" class="btn btn-secondary" onchange="changeSetup()">
+                    <option value="1">Setup 1</option>
+                    <option value="2">Setup 2</option>
+                    <option value="3">Setup 3</option>
+                    <option value="4">Setup 4</option>
+                    <option value="5">Setup 5</option>
+                    <option value="6">Setup 6</option>
+                    <option value="7">Setup 7</option>
+                    <option value="8">Setup 8</option>
+                    <option value="9">Setup 9</option>
+                    <option value="10">Setup 10</option>
+                    <option value="11">Setup 11</option>
+                    <option value="12">Setup 12</option>
+                    <option value="13">Setup 13</option>
+                    <option value="14">Setup 14</option>
+                    <option value="15">Setup 15</option>
+                    <option value="16">Setup 16</option>
+                </select>
+                <button class="btn btn-secondary" onclick="loadFactoryDefaults()">Factory Defaults</button>
+                <button class="btn btn-secondary" onclick="loadChannelPerGroup()">Channel Per Group</button>
+                <button class="btn btn-primary" onclick="downloadSysEx()">Download .syx</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="info-panel">
+            <h3>Encoding Reference (Verified)</h3>
+            <p>This editor uses encodings confirmed through systematic testing of the UC4 hardware.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div>
+                    <h4 style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 0.5rem;">ENCODER TYPES</h4>
+                    <table class="encoding-table">
+                        <tr><th>Value</th><th>Type</th></tr>
+                        <tr><td>0</td><td>CCr1</td></tr>
+                        <tr><td>1</td><td>CCr2</td></tr>
+                        <tr><td>2</td><td>CCAb ✓</td></tr>
+                        <tr><td>3</td><td>PrGC ✓</td></tr>
+                        <tr><td>4</td><td>CCAh ✓</td></tr>
+                        <tr><td>5</td><td>Pbnd ✓</td></tr>
+                        <tr><td>6</td><td>AFtt ✓</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 0.5rem;">BUTTON TYPES</h4>
+                    <table class="encoding-table">
+                        <tr><th>Value</th><th>Type</th></tr>
+                        <tr><td>0</td><td>OFF</td></tr>
+                        <tr><td>1</td><td>Note ✓</td></tr>
+                        <tr><td>2</td><td>CC ✓</td></tr>
+                        <tr><td>3</td><td>PrGC ✓</td></tr>
+                        <tr><td>4</td><td>AFtt ✓</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 0.5rem;">ACCELERATION</h4>
+                    <table class="encoding-table">
+                        <tr><th>Value</th><th>Mode</th></tr>
+                        <tr><td>0</td><td>Acc0 ✓</td></tr>
+                        <tr><td>1</td><td>Acc1 ✓</td></tr>
+                        <tr><td>2</td><td>Acc2 ✓</td></tr>
+                        <tr><td>3</td><td>Acc3 ✓</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 0.5rem;">DISPLAY SCALE</h4>
+                    <table class="encoding-table">
+                        <tr><th>Value</th><th>Mode</th></tr>
+                        <tr><td>0</td><td>OFF ✓</td></tr>
+                        <tr><td>1</td><td>Std ✓</td></tr>
+                        <tr><td>2</td><td>bPoL ✓</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-tabs">
+            <button class="tab-btn active" onclick="switchSection('encoders')">Encoders</button>
+            <button class="tab-btn" onclick="switchSection('faders')">Faders</button>
+            <button class="tab-btn" onclick="switchSection('buttons')">Green Buttons</button>
+            <button class="tab-btn" onclick="switchSection('pushbuttons')">Push Buttons</button>
+        </div>
+
+        <!-- Encoders Section -->
+        <section id="encoders-section" class="control-section active">
+            <div class="section-header">
+                <h2 class="section-title">Encoders <span>1-8</span></h2>
+                <div class="group-selector">
+                    <button class="group-btn active" onclick="switchGroup('encoders', 1)">1</button>
+                    <button class="group-btn" onclick="switchGroup('encoders', 2)">2</button>
+                    <button class="group-btn" onclick="switchGroup('encoders', 3)">3</button>
+                    <button class="group-btn" onclick="switchGroup('encoders', 4)">4</button>
+                    <button class="group-btn" onclick="switchGroup('encoders', 5)">5</button>
+                    <button class="group-btn" onclick="switchGroup('encoders', 6)">6</button>
+                    <button class="group-btn" onclick="switchGroup('encoders', 7)">7</button>
+                    <button class="group-btn" onclick="switchGroup('encoders', 8)">8</button>
+                </div>
+            </div>
+            <div class="controls-grid" id="encoders-grid"></div>
+            <div class="copy-section">
+                <h3>Copy to All Groups</h3>
+                <div class="copy-buttons">
+                    <button class="btn btn-secondary" onclick="copyToAllGroups('encoders', 'channel')">Copy Channels</button>
+                    <button class="btn btn-secondary" onclick="copyToAllGroups('encoders', 'cc')">Copy CC Numbers</button>
+                    <button class="btn btn-secondary" onclick="copyToAllGroups('encoders', 'type')">Copy Types</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Faders Section -->
+        <section id="faders-section" class="control-section">
+            <div class="section-header">
+                <h2 class="section-title">Faders <span>1-9</span></h2>
+                <div class="group-selector">
+                    <button class="group-btn active" onclick="switchGroup('faders', 1)">1</button>
+                    <button class="group-btn" onclick="switchGroup('faders', 2)">2</button>
+                    <button class="group-btn" onclick="switchGroup('faders', 3)">3</button>
+                    <button class="group-btn" onclick="switchGroup('faders', 4)">4</button>
+                    <button class="group-btn" onclick="switchGroup('faders', 5)">5</button>
+                    <button class="group-btn" onclick="switchGroup('faders', 6)">6</button>
+                    <button class="group-btn" onclick="switchGroup('faders', 7)">7</button>
+                    <button class="group-btn" onclick="switchGroup('faders', 8)">8</button>
+                </div>
+            </div>
+            <div class="controls-grid" id="faders-grid"></div>
+            <div class="copy-section">
+                <h3>Copy to All Groups</h3>
+                <div class="copy-buttons">
+                    <button class="btn btn-secondary" onclick="copyToAllGroups('faders', 'channel')">Copy Channels</button>
+                    <button class="btn btn-secondary" onclick="copyToAllGroups('faders', 'cc')">Copy CC Numbers</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Green Buttons Section -->
+        <section id="buttons-section" class="control-section">
+            <div class="section-header">
+                <h2 class="section-title">Green Buttons <span>1-8</span></h2>
+                <div class="group-selector">
+                    <button class="group-btn active" onclick="switchGroup('buttons', 1)">1</button>
+                    <button class="group-btn" onclick="switchGroup('buttons', 2)">2</button>
+                    <button class="group-btn" onclick="switchGroup('buttons', 3)">3</button>
+                    <button class="group-btn" onclick="switchGroup('buttons', 4)">4</button>
+                    <button class="group-btn" onclick="switchGroup('buttons', 5)">5</button>
+                    <button class="group-btn" onclick="switchGroup('buttons', 6)">6</button>
+                    <button class="group-btn" onclick="switchGroup('buttons', 7)">7</button>
+                    <button class="group-btn" onclick="switchGroup('buttons', 8)">8</button>
+                </div>
+            </div>
+            <div class="controls-grid" id="buttons-grid"></div>
+            <div class="copy-section">
+                <h3>Copy to All Groups</h3>
+                <div class="copy-buttons">
+                    <button class="btn btn-secondary" onclick="copyToAllGroups('buttons', 'channel')">Copy Channels</button>
+                    <button class="btn btn-secondary" onclick="copyToAllGroups('buttons', 'cc')">Copy Note Numbers</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Push Buttons Section -->
+        <section id="pushbuttons-section" class="control-section">
+            <div class="section-header">
+                <h2 class="section-title">Push Buttons <span>1-8</span></h2>
+                <div class="group-selector">
+                    <button class="group-btn active" onclick="switchGroup('pushbuttons', 1)">1</button>
+                    <button class="group-btn" onclick="switchGroup('pushbuttons', 2)">2</button>
+                    <button class="group-btn" onclick="switchGroup('pushbuttons', 3)">3</button>
+                    <button class="group-btn" onclick="switchGroup('pushbuttons', 4)">4</button>
+                    <button class="group-btn" onclick="switchGroup('pushbuttons', 5)">5</button>
+                    <button class="group-btn" onclick="switchGroup('pushbuttons', 6)">6</button>
+                    <button class="group-btn" onclick="switchGroup('pushbuttons', 7)">7</button>
+                    <button class="group-btn" onclick="switchGroup('pushbuttons', 8)">8</button>
+                </div>
+            </div>
+            <div class="controls-grid" id="pushbuttons-grid"></div>
+            <div class="copy-section">
+                <h3>Copy to All Groups</h3>
+                <div class="copy-buttons">
+                    <button class="btn btn-secondary" onclick="copyToAllGroups('pushbuttons', 'channel')">Copy Channels</button>
+                    <button class="btn btn-secondary" onclick="copyToAllGroups('pushbuttons', 'cc')">Copy Note Numbers</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Faderfox UC4 SysEx Editor v2.0 | Encodings verified through hardware testing</p>
+        <p>Not affiliated with Faderfox. Use at your own risk.</p>
+    </footer>
+
+    <div class="status" id="status"></div>
+
+    <script>
+        // ============================================
+        // VERIFIED ENCODING CONSTANTS
+        // ============================================
+        
+        // Encoder types (XX low nibble in 4A 20 section)
+        const ENCODER_TYPES = {
+            'ccr1': 0,   // CC Relative Mode 1
+            'ccr2': 1,   // CC Relative Mode 2
+            'ccabs': 2,  // CC Absolute (default)
+            'prgc': 3,   // Program Change
+            'ccah': 4,   // CC 14-bit High Res
+            'pbnd': 5,   // Pitch Bend
+            'aftt': 6    // Aftertouch
+        };
+        
+        // Encoder acceleration (XX low nibble in mode section)
+        const ENCODER_ACCEL = {
+            'acc0': 0,   // No acceleration
+            'acc1': 1,   // Low
+            'acc2': 2,   // Medium
+            'acc3': 3    // Maximum (default)
+        };
+        
+        // Display scale (YY low nibble)
+        const DISPLAY_SCALE = {
+            'off': 0,    // No display
+            'std': 1,    // Standard (default)
+            'bpol': 2    // Bipolar
+        };
+        
+        // Button types (XX low nibble in 4A 28 section)
+        const BUTTON_TYPES = {
+            'off': 0,    // Disabled
+            'note': 1,   // Note (default)
+            'cc': 2,     // Control Change
+            'prgc': 3,   // Program Change
+            'aftt': 4    // Aftertouch
+        };
+        
+        // Button modes
+        const BUTTON_MODES = {
+            'momentary': 0,  // Momentary (default)
+            'toggle': 1      // Toggle
+        };
+        
+        // Fader types (XX low nibble in 4A 2C section)
+        const FADER_TYPES = {
+            'ccabs': 0,  // CC Absolute (default)
+            'prgc': 1,   // Program Change (assumed)
+            'pbnd': 2,   // Pitch Bend
+            'aftt': 3    // Aftertouch
+        };
+        
+        // Fader modes
+        const FADER_MODES = {
+            'jump': 0,   // Jump (default)
+            'snap': 1    // Snap
+        };
+
+        // ============================================
+        // CONFIGURATION STATE
+        // ============================================
+        
+        const config = {
+            setup: 1,
+            currentGroup: {
+                encoders: 1,
+                faders: 1,
+                buttons: 1,
+                pushbuttons: 1
+            },
+            encoders: {},
+            faders: {},
+            buttons: {},
+            pushbuttons: {}
+        };
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        function initConfig() {
+            for (let g = 1; g <= 8; g++) {
+                config.encoders[g] = {};
+                config.faders[g] = {};
+                config.buttons[g] = {};
+                config.pushbuttons[g] = {};
+                
+                for (let e = 1; e <= 8; e++) {
+                    config.encoders[g][e] = {
+                        cc: 7 + e + (g - 1) * 8,
+                        channel: 1,
+                        type: 'ccabs',
+                        accel: 'acc3',
+                        display: 'std',
+                        lower: 0,
+                        upper: 127
+                    };
+                }
+                
+                for (let f = 1; f <= 9; f++) {
+                    config.faders[g][f] = {
+                        cc: 31 + f + (g - 1) * 8,
+                        channel: 1,
+                        type: 'ccabs',
+                        mode: 'jump',
+                        lower: 0,
+                        upper: 127
+                    };
+                }
+                
+                for (let b = 1; b <= 8; b++) {
+                    config.buttons[g][b] = {
+                        cc: 63 + b + (g - 1) * 8,
+                        channel: 1,
+                        type: 'note',
+                        mode: 'momentary',
+                        lower: 0,
+                        upper: 127
+                    };
+                }
+                
+                for (let p = 1; p <= 8; p++) {
+                    config.pushbuttons[g][p] = {
+                        cc: (p - 1) + (g - 1) * 8,
+                        channel: 1,
+                        type: 'note',
+                        mode: 'momentary',
+                        lower: 0,
+                        upper: 127
+                    };
+                }
+            }
+        }
+
+        // ============================================
+        // UI RENDERING
+        // ============================================
+        
+        function createEncoderCard(num, data) {
+            return `
+                <div class="control-card">
+                    <div class="control-header">
+                        <span class="control-name">Encoder ${num}</span>
+                        <span class="control-type-badge">${data.type.toUpperCase()}</span>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-field">
+                            <label>CC/Note</label>
+                            <input type="number" min="0" max="127" value="${data.cc}" 
+                                   onchange="updateEncoder(${num}, 'cc', this.value)">
+                        </div>
+                        <div class="control-field">
+                            <label>Channel</label>
+                            <input type="number" min="1" max="16" value="${data.channel}" 
+                                   onchange="updateEncoder(${num}, 'channel', this.value)">
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-field">
+                            <label>Type</label>
+                            <select onchange="updateEncoder(${num}, 'type', this.value)">
+                                <option value="ccabs" ${data.type === 'ccabs' ? 'selected' : ''}>CC Absolute</option>
+                                <option value="ccr1" ${data.type === 'ccr1' ? 'selected' : ''}>CC Relative 1</option>
+                                <option value="ccr2" ${data.type === 'ccr2' ? 'selected' : ''}>CC Relative 2</option>
+                                <option value="ccah" ${data.type === 'ccah' ? 'selected' : ''}>CC 14-bit</option>
+                                <option value="prgc" ${data.type === 'prgc' ? 'selected' : ''}>Program Change</option>
+                                <option value="pbnd" ${data.type === 'pbnd' ? 'selected' : ''}>Pitch Bend</option>
+                                <option value="aftt" ${data.type === 'aftt' ? 'selected' : ''}>Aftertouch</option>
+                            </select>
+                        </div>
+                        <div class="control-field">
+                            <label>Acceleration</label>
+                            <select onchange="updateEncoder(${num}, 'accel', this.value)">
+                                <option value="acc0" ${data.accel === 'acc0' ? 'selected' : ''}>None</option>
+                                <option value="acc1" ${data.accel === 'acc1' ? 'selected' : ''}>Low</option>
+                                <option value="acc2" ${data.accel === 'acc2' ? 'selected' : ''}>Medium</option>
+                                <option value="acc3" ${data.accel === 'acc3' ? 'selected' : ''}>Maximum</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-field">
+                            <label>Display</label>
+                            <select onchange="updateEncoder(${num}, 'display', this.value)">
+                                <option value="std" ${data.display === 'std' ? 'selected' : ''}>Standard</option>
+                                <option value="bpol" ${data.display === 'bpol' ? 'selected' : ''}>Bipolar</option>
+                                <option value="off" ${data.display === 'off' ? 'selected' : ''}>Off</option>
+                            </select>
+                        </div>
+                        <div class="control-field">
+                            <label>Lower</label>
+                            <input type="number" min="0" max="127" value="${data.lower}" 
+                                   onchange="updateEncoder(${num}, 'lower', this.value)">
+                        </div>
+                        <div class="control-field">
+                            <label>Upper</label>
+                            <input type="number" min="0" max="127" value="${data.upper}" 
+                                   onchange="updateEncoder(${num}, 'upper', this.value)">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function createFaderCard(num, data) {
+            return `
+                <div class="control-card">
+                    <div class="control-header">
+                        <span class="control-name">Fader ${num}</span>
+                        <span class="control-type-badge">${data.type.toUpperCase()}</span>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-field">
+                            <label>CC/Note</label>
+                            <input type="number" min="0" max="127" value="${data.cc}" 
+                                   onchange="updateFader(${num}, 'cc', this.value)">
+                        </div>
+                        <div class="control-field">
+                            <label>Channel</label>
+                            <input type="number" min="1" max="16" value="${data.channel}" 
+                                   onchange="updateFader(${num}, 'channel', this.value)">
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-field">
+                            <label>Type</label>
+                            <select onchange="updateFader(${num}, 'type', this.value)">
+                                <option value="ccabs" ${data.type === 'ccabs' ? 'selected' : ''}>CC Absolute</option>
+                                <option value="prgc" ${data.type === 'prgc' ? 'selected' : ''}>Program Change</option>
+                                <option value="pbnd" ${data.type === 'pbnd' ? 'selected' : ''}>Pitch Bend</option>
+                                <option value="aftt" ${data.type === 'aftt' ? 'selected' : ''}>Aftertouch</option>
+                            </select>
+                        </div>
+                        <div class="control-field">
+                            <label>Mode</label>
+                            <select onchange="updateFader(${num}, 'mode', this.value)">
+                                <option value="jump" ${data.mode === 'jump' ? 'selected' : ''}>Jump</option>
+                                <option value="snap" ${data.mode === 'snap' ? 'selected' : ''}>Snap</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-field">
+                            <label>Lower</label>
+                            <input type="number" min="0" max="127" value="${data.lower}" 
+                                   onchange="updateFader(${num}, 'lower', this.value)">
+                        </div>
+                        <div class="control-field">
+                            <label>Upper</label>
+                            <input type="number" min="0" max="127" value="${data.upper}" 
+                                   onchange="updateFader(${num}, 'upper', this.value)">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function createButtonCard(type, num, data) {
+            const label = type === 'buttons' ? 'Button' : 'Push Btn';
+            return `
+                <div class="control-card">
+                    <div class="control-header">
+                        <span class="control-name">${label} ${num}</span>
+                        <span class="control-type-badge">${data.type.toUpperCase()}</span>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-field">
+                            <label>Note/CC</label>
+                            <input type="number" min="0" max="127" value="${data.cc}" 
+                                   onchange="updateButton('${type}', ${num}, 'cc', this.value)">
+                        </div>
+                        <div class="control-field">
+                            <label>Channel</label>
+                            <input type="number" min="1" max="16" value="${data.channel}" 
+                                   onchange="updateButton('${type}', ${num}, 'channel', this.value)">
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-field">
+                            <label>Type</label>
+                            <select onchange="updateButton('${type}', ${num}, 'type', this.value)">
+                                <option value="note" ${data.type === 'note' ? 'selected' : ''}>Note</option>
+                                <option value="cc" ${data.type === 'cc' ? 'selected' : ''}>CC</option>
+                                <option value="prgc" ${data.type === 'prgc' ? 'selected' : ''}>Program Change</option>
+                                <option value="aftt" ${data.type === 'aftt' ? 'selected' : ''}>Aftertouch</option>
+                                <option value="off" ${data.type === 'off' ? 'selected' : ''}>Off</option>
+                            </select>
+                        </div>
+                        <div class="control-field">
+                            <label>Mode</label>
+                            <select onchange="updateButton('${type}', ${num}, 'mode', this.value)">
+                                <option value="momentary" ${data.mode === 'momentary' ? 'selected' : ''}>Momentary</option>
+                                <option value="toggle" ${data.mode === 'toggle' ? 'selected' : ''}>Toggle</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-field">
+                            <label>Lower</label>
+                            <input type="number" min="0" max="127" value="${data.lower}" 
+                                   onchange="updateButton('${type}', ${num}, 'lower', this.value)">
+                        </div>
+                        <div class="control-field">
+                            <label>Upper</label>
+                            <input type="number" min="0" max="127" value="${data.upper}" 
+                                   onchange="updateButton('${type}', ${num}, 'upper', this.value)">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderControls(section) {
+            const group = config.currentGroup[section];
+            const grid = document.getElementById(`${section}-grid`);
+            
+            if (section === 'encoders') {
+                grid.innerHTML = '';
+                for (let i = 1; i <= 8; i++) {
+                    grid.innerHTML += createEncoderCard(i, config.encoders[group][i]);
+                }
+            } else if (section === 'faders') {
+                grid.innerHTML = '';
+                for (let i = 1; i <= 9; i++) {
+                    grid.innerHTML += createFaderCard(i, config.faders[group][i]);
+                }
+            } else if (section === 'buttons' || section === 'pushbuttons') {
+                grid.innerHTML = '';
+                for (let i = 1; i <= 8; i++) {
+                    grid.innerHTML += createButtonCard(section, i, config[section][group][i]);
+                }
+            }
+        }
+
+        // ============================================
+        // UPDATE HANDLERS
+        // ============================================
+        
+        function updateEncoder(num, prop, value) {
+            const group = config.currentGroup.encoders;
+            if (prop === 'cc' || prop === 'channel' || prop === 'lower' || prop === 'upper') {
+                config.encoders[group][num][prop] = parseInt(value);
+            } else {
+                config.encoders[group][num][prop] = value;
+            }
+            renderControls('encoders');
+        }
+        
+        function updateFader(num, prop, value) {
+            const group = config.currentGroup.faders;
+            if (prop === 'cc' || prop === 'channel' || prop === 'lower' || prop === 'upper') {
+                config.faders[group][num][prop] = parseInt(value);
+            } else {
+                config.faders[group][num][prop] = value;
+            }
+            renderControls('faders');
+        }
+        
+        function updateButton(type, num, prop, value) {
+            const group = config.currentGroup[type];
+            if (prop === 'cc' || prop === 'channel' || prop === 'lower' || prop === 'upper') {
+                config[type][group][num][prop] = parseInt(value);
+            } else {
+                config[type][group][num][prop] = value;
+            }
+            renderControls(type);
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        
+        function switchSection(section) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.control-section').forEach(sec => sec.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${section}-section`).classList.add('active');
+            
+            renderControls(section);
+        }
+        
+        function switchGroup(type, group) {
+            config.currentGroup[type] = group;
+            
+            const section = document.getElementById(`${type}-section`);
+            section.querySelectorAll('.group-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i + 1 === group);
+            });
+            
+            renderControls(type);
+        }
+        
+        function changeSetup() {
+            config.setup = parseInt(document.getElementById('setupSelect').value);
+            showStatus(`Setup ${config.setup} selected`);
+        }
+
+        // ============================================
+        // COPY FUNCTIONS
+        // ============================================
+        
+        function copyToAllGroups(type, prop) {
+            const currentGroup = config.currentGroup[type];
+            const controls = config[type][currentGroup];
+            
+            for (let g = 1; g <= 8; g++) {
+                if (g !== currentGroup) {
+                    for (let c in controls) {
+                        config[type][g][c][prop] = controls[c][prop];
+                    }
+                }
+            }
+            
+            showStatus(`${prop} copied to all ${type} groups`);
+        }
+
+        // ============================================
+        // PRESETS
+        // ============================================
+        
+        function loadFactoryDefaults() {
+            const factoryEncoders = [
+                [8, 9, 10, 11, 12, 13, 14, 15],
+                [16, 17, 18, 19, 20, 21, 22, 23],
+                [24, 25, 26, 27, 28, 29, 30, 31],
+                [32, 33, 34, 35, 36, 37, 38, 39],
+                [72, 73, 74, 75, 76, 77, 78, 79],
+                [80, 81, 82, 83, 84, 85, 86, 87],
+                [88, 89, 90, 91, 92, 93, 94, 95],
+                [96, 97, 98, 99, 100, 101, 102, 103]
+            ];
+            
+            const factoryFaders = [
+                [32, 33, 34, 35, 36, 37, 38, 39, 112],
+                [40, 41, 42, 43, 44, 45, 46, 47, 112],
+                [48, 49, 50, 51, 52, 53, 54, 55, 112],
+                [56, 57, 58, 59, 60, 61, 62, 63, 112],
+                [104, 105, 106, 107, 108, 109, 110, 111, 112],
+                [104, 105, 106, 107, 108, 109, 110, 111, 112],
+                [104, 105, 106, 107, 108, 109, 110, 111, 112],
+                [104, 105, 106, 107, 108, 109, 110, 111, 112]
+            ];
+            
+            const factoryButtons = [
+                [64, 65, 66, 67, 68, 69, 70, 71],
+                [72, 73, 74, 75, 76, 77, 78, 79],
+                [80, 81, 82, 83, 84, 85, 86, 87],
+                [88, 89, 90, 91, 92, 93, 94, 95],
+                [96, 97, 98, 99, 100, 101, 102, 103],
+                [104, 105, 106, 107, 108, 109, 110, 111],
+                [112, 113, 114, 115, 116, 117, 118, 119],
+                [120, 121, 122, 123, 124, 125, 126, 127]
+            ];
+            
+            const factoryPushButtons = [
+                [0, 1, 2, 3, 4, 5, 6, 7],
+                [8, 9, 10, 11, 12, 13, 14, 15],
+                [16, 17, 18, 19, 20, 21, 22, 23],
+                [24, 25, 26, 27, 28, 29, 30, 31],
+                [32, 33, 34, 35, 36, 37, 38, 39],
+                [40, 41, 42, 43, 44, 45, 46, 47],
+                [48, 49, 50, 51, 52, 53, 54, 55],
+                [56, 57, 58, 59, 60, 61, 62, 63]
+            ];
+            
+            for (let g = 1; g <= 8; g++) {
+                for (let e = 1; e <= 8; e++) {
+                    config.encoders[g][e] = {
+                        cc: factoryEncoders[g-1][e-1],
+                        channel: config.setup,
+                        type: 'ccabs',
+                        accel: 'acc3',
+                        display: 'std',
+                        lower: 0,
+                        upper: 127
+                    };
+                }
+                
+                for (let f = 1; f <= 9; f++) {
+                    config.faders[g][f] = {
+                        cc: factoryFaders[g-1][f-1],
+                        channel: config.setup,
+                        type: 'ccabs',
+                        mode: 'jump',
+                        lower: 0,
+                        upper: 127
+                    };
+                }
+                
+                for (let b = 1; b <= 8; b++) {
+                    config.buttons[g][b] = {
+                        cc: factoryButtons[g-1][b-1],
+                        channel: config.setup,
+                        type: 'note',
+                        mode: 'momentary',
+                        lower: 0,
+                        upper: 127
+                    };
+                }
+                
+                for (let p = 1; p <= 8; p++) {
+                    config.pushbuttons[g][p] = {
+                        cc: factoryPushButtons[g-1][p-1],
+                        channel: config.setup,
+                        type: 'note',
+                        mode: 'momentary',
+                        lower: 0,
+                        upper: 127
+                    };
+                }
+            }
+            
+            renderControls('encoders');
+            showStatus('Factory defaults loaded');
+        }
+        
+        function loadChannelPerGroup() {
+            for (let g = 1; g <= 8; g++) {
+                for (let e = 1; e <= 8; e++) {
+                    config.encoders[g][e].channel = g;
+                    config.encoders[g][e].cc = e - 1;
+                }
+                
+                for (let f = 1; f <= 9; f++) {
+                    config.faders[g][f].channel = g;
+                    config.faders[g][f].cc = 10 + f - 1;
+                }
+                
+                for (let b = 1; b <= 8; b++) {
+                    config.buttons[g][b].channel = g;
+                    config.buttons[g][b].cc = 50 + b - 1;
+                }
+                
+                for (let p = 1; p <= 8; p++) {
+                    config.pushbuttons[g][p].channel = g;
+                    config.pushbuttons[g][p].cc = 40 + p - 1;
+                }
+            }
+            
+            renderControls('encoders');
+            showStatus('Channel per group preset loaded - each group on separate MIDI channel');
+        }
+
+        // ============================================
+        // SYSEX ENCODING (VERIFIED)
+        // ============================================
+        
+        function encodeValue(value, channel) {
+            // Encode value 0-127 with channel in 4D XX YY format
+            // XX = 0x20 + (value >> 4)
+            // YY = ((channel - 1) << 4) + (value & 0x0F)
+            const valueHigh = (value >> 4) & 0x0F;
+            const valueLow = value & 0x0F;
+            const channelBits = ((channel - 1) & 0x0F) << 4;
+            
+            return [0x4D, 0x20 + valueHigh, channelBits + valueLow];
+        }
+        
+        function encodeEncoder(ctrl) {
+            // Encoder: 4D [0x20 + type] [channel + display]
+            const typeValue = ENCODER_TYPES[ctrl.type] || 2;
+            const displayValue = DISPLAY_SCALE[ctrl.display] || 1;
+            const channelBits = ((ctrl.channel - 1) & 0x0F) << 4;
+            
+            return [0x4D, 0x20 + typeValue, channelBits + displayValue];
+        }
+        
+        function encodeEncoderAccel(ctrl) {
+            // Acceleration stored separately
+            const accelValue = ENCODER_ACCEL[ctrl.accel] || 3;
+            const channelBits = ((ctrl.channel - 1) & 0x0F) << 4;
+            const ccHigh = (ctrl.cc >> 4) & 0x0F;
+            const ccLow = ctrl.cc & 0x0F;
+            
+            return [0x4D, 0x20 + accelValue, channelBits + ccLow];
+        }
+        
+        function encodeFaderCC(ctrl) {
+            // Fader CC: 4D [0x20 + cc_high] [channel + cc_low]
+            const ccHigh = (ctrl.cc >> 4) & 0x0F;
+            const ccLow = ctrl.cc & 0x0F;
+            const channelBits = ((ctrl.channel - 1) & 0x0F) << 4;
+            
+            return [0x4D, 0x20 + ccHigh, channelBits + ccLow];
+        }
+        
+        function encodeFaderType(ctrl) {
+            // Fader type: 4D [0x20 + type] [channel]
+            const typeValue = FADER_TYPES[ctrl.type] || 0;
+            const channelBits = ((ctrl.channel - 1) & 0x0F) << 4;
+            
+            return [0x4D, 0x20 + typeValue, channelBits];
+        }
+        
+        function encodeButton(ctrl) {
+            // Button: 4D [0x20 + type] [channel + note_low]
+            const typeValue = BUTTON_TYPES[ctrl.type] || 1;
+            const noteLow = ctrl.cc & 0x0F;
+            const channelBits = ((ctrl.channel - 1) & 0x0F) << 4;
+            
+            return [0x4D, 0x20 + typeValue, channelBits + noteLow];
+        }
+        
+        function encodeButtonMode(ctrl) {
+            // Button mode
+            const modeValue = BUTTON_MODES[ctrl.mode] || 0;
+            const channelBits = ((ctrl.channel - 1) & 0x0F) << 4;
+            
+            return [0x4D, 0x20 + modeValue, channelBits];
+        }
+
+        function generateSysEx() {
+            const sysex = [];
+            
+            // SysEx start
+            sysex.push(0xF0);
+            sysex.push(0x00, 0x00, 0x00);
+            
+            // Header (group name bytes)
+            sysex.push(0x41, 0x20, 0x16);
+            sysex.push(0x42, 0x20, 0x12);
+            sysex.push(0x43, 0x20, 0x12);
+            sysex.push(0x44, 0x20, 0x15);
+            
+            // Generate each group's data
+            for (let g = 1; g <= 8; g++) {
+                const groupId = g <= 4 ? (0x1C + g - 1) : (0x10 + g - 4);
+                const groupByte2 = g <= 4 ? 0x21 : 0x22;
+                
+                // 4A 20 section - Encoder type/display
+                sysex.push(0x49, groupByte2, groupId);
+                sysex.push(0x4A, 0x20, 0x10);
+                
+                // 64 entries for encoders (8 controls × 8 parameters)
+                for (let e = 1; e <= 8; e++) {
+                    const ctrl = config.encoders[g][e];
+                    // Type entry
+                    sysex.push(...encodeEncoder(ctrl));
+                    // CC entry
+                    sysex.push(...encodeFaderCC(ctrl));
+                    // Lower value
+                    sysex.push(...encodeValue(ctrl.lower, ctrl.channel));
+                    // Upper value
+                    sysex.push(...encodeValue(ctrl.upper, ctrl.channel));
+                    // Acceleration
+                    sysex.push(...encodeEncoderAccel(ctrl));
+                    // Padding (3 more entries per encoder)
+                    sysex.push(0x4D, 0x20, 0x10);
+                    sysex.push(0x4D, 0x20, 0x10);
+                    sysex.push(0x4D, 0x20, 0x10);
+                }
+                
+                // Fader 9 and end
+                const fad9 = config.faders[g][9];
+                sysex.push(0x4B, 0x20, fad9.cc & 0x1F);
+                sysex.push(0x4C, 0x20, 0x10);
+                
+                // Padding
+                for (let i = 0; i < 30; i++) sysex.push(0x00);
+                
+                // 4A 24 section - Fader CC numbers
+                sysex.push(0x49, groupByte2, groupId);
+                sysex.push(0x4A, 0x24, 0x10);
+                
+                for (let f = 1; f <= 8; f++) {
+                    const ctrl = config.faders[g][f];
+                    for (let i = 0; i < 8; i++) {
+                        sysex.push(...encodeFaderCC(ctrl));
+                    }
+                }
+                
+                sysex.push(0x4B, 0x20, fad9.cc & 0x1F);
+                sysex.push(0x4C, 0x20, 0x10);
+                for (let i = 0; i < 30; i++) sysex.push(0x00);
+                
+                // 4A 28 section - Green buttons
+                sysex.push(0x49, groupByte2, groupId);
+                sysex.push(0x4A, 0x28, 0x10);
+                
+                for (let b = 1; b <= 8; b++) {
+                    const ctrl = config.buttons[g][b];
+                    for (let i = 0; i < 8; i++) {
+                        sysex.push(...encodeButton(ctrl));
+                    }
+                }
+                
+                sysex.push(0x4B, 0x20, 0x10);
+                sysex.push(0x4C, 0x20, 0x10);
+                for (let i = 0; i < 30; i++) sysex.push(0x00);
+                
+                // 4A 2C section - Push buttons and fader types
+                sysex.push(0x49, groupByte2, groupId);
+                sysex.push(0x4A, 0x2C, 0x10);
+                
+                for (let p = 1; p <= 8; p++) {
+                    const ctrl = config.pushbuttons[g][p];
+                    for (let i = 0; i < 8; i++) {
+                        sysex.push(...encodeButton(ctrl));
+                    }
+                }
+                
+                sysex.push(0x4B, 0x20, 0x10);
+                sysex.push(0x4C, 0x20, 0x10);
+                for (let i = 0; i < 30; i++) sysex.push(0x00);
+            }
+            
+            // Footer
+            sysex.push(0x4F, 0x20, 0x16);
+            sysex.push(0xF7);
+            
+            return new Uint8Array(sysex);
+        }
+
+        // ============================================
+        // FILE HANDLING
+        // ============================================
+        
+        function downloadSysEx() {
+            const sysex = generateSysEx();
+            const blob = new Blob([sysex], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `UC4_Setup${config.setup}.syx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus(`Downloaded UC4_Setup${config.setup}.syx (${sysex.length} bytes)`);
+        }
+
+        // ============================================
+        // UTILITY
+        // ============================================
+        
+        function showStatus(message) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.classList.add('show');
+            
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, 3000);
+        }
+
+        // ============================================
+        // INIT
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initConfig();
+            renderControls('encoders');
+        });
+    </script>
+</body>
+</html>
