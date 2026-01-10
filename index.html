@@ -1190,12 +1190,36 @@
         }
         
         /**
-         * Validate Faderfox device ID in SysEx data
+         * Validate UC4 SysEx dump file
+         * UC4 bulk dumps have different structure than real-time messages
          */
         function validateFaderfoxDevice(data) {
-            if (data.length < 10) return false;
-            // Check for Faderfox device ID at expected position
-            return data[4] === 0x4E && data[5] === 0x2C && data[6] === 0x1B;
+            // Check minimum size
+            if (data.length < 1000) return false;
+            
+            // Check SysEx boundaries
+            if (data[0] !== 0xF0) return false;
+            if (data[data.length - 1] !== 0xF7) return false;
+            
+            // Valid UC4 dump sizes:
+            // - All 18 setups: ~100,640 bytes
+            // - Single setup: ~5,590 bytes
+            const validSizes = [100640, 5591, 5590, 5592]; // Allow some tolerance
+            const sizeOk = validSizes.some(s => Math.abs(data.length - s) < 100) || data.length > 50000;
+            
+            // Look for UC4 section markers anywhere in file
+            let foundSections = 0;
+            for (let i = 0; i < Math.min(data.length - 3, 10000); i++) {
+                if (data[i] === 0x4A && data[i + 2] === 0x10) {
+                    const marker = data[i + 1];
+                    if (marker === 0x20 || marker === 0x24 || marker === 0x28 || marker === 0x2C) {
+                        foundSections++;
+                    }
+                }
+            }
+            
+            // Valid if we found section markers OR size matches known UC4 dump
+            return foundSections >= 2 || sizeOk;
         }
 
         // ============================================
@@ -1282,15 +1306,17 @@
             
             if (sysexTemplate && sysexInfo.valid) {
                 indicator.classList.add('loaded');
+                const sections = findAllSections(sysexTemplate);
+                const setupCount = sysexTemplate.length > 50000 ? '18 setups' : '1 setup';
                 info.innerHTML = `
-                    <strong>✓ Template loaded: ${sysexInfo.filename}</strong><br>
-                    <span class="details">${sysexInfo.size.toLocaleString()} bytes | Device ID verified | Ready for editing</span>
+                    <strong>✓ UC4 backup loaded: ${sysexInfo.filename}</strong><br>
+                    <span class="details">${sysexInfo.size.toLocaleString()} bytes | ${setupCount} | ${sections.length} sections detected | Ready for editing</span>
                 `;
             } else if (sysexTemplate) {
                 indicator.classList.remove('loaded');
                 info.innerHTML = `
-                    <strong>⚠️ Template loaded but may be invalid</strong><br>
-                    <span class="details">${sysexInfo.filename} (${sysexInfo.size} bytes) - Device ID not recognized</span>
+                    <strong>⚠️ File loaded - format unrecognized</strong><br>
+                    <span class="details">${sysexInfo.filename} (${sysexInfo.size.toLocaleString()} bytes) - May not be a UC4 backup</span>
                 `;
             } else {
                 indicator.classList.remove('loaded');
@@ -1323,9 +1349,10 @@
                     
                     if (sysexInfo.valid) {
                         parseTemplateIntoConfig();
-                        showStatus(`✓ Loaded ${file.name} - Faderfox device verified`);
+                        const sections = findAllSections(sysexTemplate);
+                        showStatus(`✓ Loaded ${file.name} - ${sections.length} sections found, ready to edit`);
                     } else {
-                        showStatus(`⚠️ Loaded ${file.name} - Device ID not recognized`, true);
+                        showStatus(`⚠️ Loaded ${file.name} - format not recognized as UC4 backup`, true);
                     }
                 } catch (err) {
                     showStatus('Error loading SysEx: ' + err.message, true);
