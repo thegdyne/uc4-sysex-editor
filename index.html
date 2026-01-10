@@ -813,6 +813,10 @@
                         <h4>Noise Engineering</h4>
                         <p>Optimized for modular/Eurorack. CC 1-8 per group.</p>
                     </div>
+                    <div class="template-card" onclick="loadNoiseEngine()">
+                        <h4>🎛️ Noise Engine</h4>
+                        <p>8-slot texture synth. Channel per group, standardized CCs.</p>
+                    </div>
                     <div class="template-card" onclick="loadTemplate('blank')">
                         <h4>Blank Slate</h4>
                         <p>All controls set to CC 0, Channel 1. Start fresh.</p>
@@ -1441,6 +1445,7 @@
                 }
             }
             
+            closeModal('templatesModal');
             renderGrid();
             renderCards();
             showStatus('🎛️ Noise Engine template loaded');
