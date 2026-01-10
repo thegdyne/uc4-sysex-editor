@@ -693,6 +693,7 @@
             </div>
             <div class="header-actions">
                 <button class="btn" onclick="showTemplates()">📋 Templates</button>
+                <button class="btn" onclick="importSysExTemplate()">📂 Load .syx Backup</button>
                 <button class="btn" onclick="showImportJSON()">📥 Import JSON</button>
                 <button class="btn" onclick="exportJSON()">📤 Export JSON</button>
                 <button class="btn" onclick="showValidation()">✓ Validate</button>
@@ -1694,184 +1695,202 @@
         }
 
         // ============================================
-        // UC4 SYSEX ENCODING (Reverse-engineered)
+        // UC4 SYSEX ENCODING (Template-based)
         // ============================================
         
-        // Encode CC number and channel into triplet bytes
+        // Store the original SysEx template (loaded from file)
+        let sysexTemplate = null;
+        
+        // Encode CC number and channel into XX, YY bytes
         function encodeCC(cc, channel) {
-            const xx = 0x20 + (cc >> 4);
+            const xx = 0x20 + ((cc >> 4) & 0x0F);
             const yy = ((channel - 1) << 4) | (cc & 0x0F);
-            return [0x4D, xx, yy];
+            return { xx, yy };
         }
         
-        // Encode type with channel
-        function encodeType(type, channel, displayOrMode) {
-            const typeValues = {
-                // Encoder types
-                'ccr1': 0, 'ccr2': 1, 'ccabs': 2, 'prgc': 3, 'ccah': 4, 'pbnd': 5, 'aftt': 6,
-                // Button types  
-                'off': 0, 'note': 1, 'cc': 2
-            };
-            const typeVal = typeValues[type] || 2;
-            const xx = 0x20 + typeVal;
-            const yy = ((channel - 1) << 4) | (displayOrMode & 0x0F);
-            return [0x4D, xx, yy];
+        // Decode CC and channel from XX, YY bytes
+        function decodeCC(xx, yy) {
+            const cc = ((xx - 0x20) << 4) | (yy & 0x0F);
+            const channel = ((yy >> 4) & 0x0F) + 1;
+            return { cc, channel };
         }
         
-        // Encode acceleration
-        function encodeAccel(accel, channel) {
-            const accelValues = { 'acc0': 0, 'acc1': 1, 'acc2': 2, 'acc3': 3 };
-            const val = accelValues[accel] || 3;
-            const xx = 0x20 + val;
-            const yy = ((channel - 1) << 4) | 0x0A; // 0x0A seems to be accel marker
-            return [0x4D, xx, yy];
+        // Load template from file
+        function loadSysExTemplate(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    sysexTemplate = new Uint8Array(e.target.result);
+                    resolve(sysexTemplate);
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
         }
         
-        // Encode display scale
-        function encodeDisplay(display, channel) {
-            const displayValues = { 'off': 0, 'std': 1, 'bpol': 2 };
-            const val = displayValues[display] || 1;
-            const xx = 0x20 + val;
-            const yy = ((channel - 1) << 4) | 0x08; // 0x08 seems to be display marker
-            return [0x4D, xx, yy];
-        }
-        
-        // Encode button mode
-        function encodeMode(mode, channel) {
-            const modeVal = mode === 'toggle' ? 1 : 0;
-            const xx = 0x20 + modeVal;
-            const yy = ((channel - 1) << 4);
-            return [0x4D, xx, yy];
-        }
-        
-        function generateSysEx() {
-            const sysex = [];
-            const setup = config.setup;
+        // Find all CC triplet positions in the template
+        function findCCPositions(template) {
+            const positions = [];
             
-            // SysEx start + Manufacturer ID (Faderfox)
-            sysex.push(0xF0, 0x00, 0x00, 0x00);
-            
-            // Header - group name encoding (default "GrP1" style)
-            sysex.push(0x41, 0x20, 0x16); // G
-            sysex.push(0x42, 0x20, 0x13); // r
-            sysex.push(0x43, 0x20, 0x12); // P
-            sysex.push(0x44, 0x20, 0x10 + setup); // Setup number
-            
-            // Generate data for each group (1-8)
-            for (let g = 1; g <= 8; g++) {
-                const groupBase = 0x14 + g; // Group identifier
-                
-                // ========== GREEN BUTTONS SECTION (4A 28) ==========
-                sysex.push(0x49, 0x21, groupBase);
-                sysex.push(0x4A, 0x28, 0x10);
-                
-                // 8 buttons × 4 triplets × 2 halves = 64 triplets
-                for (let half = 0; half < 2; half++) {
-                    for (let b = 1; b <= 8; b++) {
-                        const btn = config.buttons[g][b];
-                        const ch = btn.channel || 1;
-                        const cc = btn.cc || 0;
+            // Scan for section markers and extract CC positions
+            for (let i = 0; i < template.length - 200; i++) {
+                // Look for section marker: 4A XX 10
+                if (template[i] === 0x4A && template[i + 2] === 0x10) {
+                    const sectionType = template[i + 1];
+                    const sectionName = { 0x20: 'encoders', 0x24: 'faders', 0x28: 'buttons', 0x2C: 'pushbuttons' }[sectionType];
+                    
+                    if (!sectionName) continue;
+                    
+                    // Data starts after 4A XX 10
+                    const dataStart = i + 3;
+                    
+                    // Each control has 4 triplets (12 bytes), CC is in triplet 3 (offset 9)
+                    // There are 16 entries (8 controls × 2 halves)
+                    for (let ctrl = 0; ctrl < 16; ctrl++) {
+                        const tripletBase = dataStart + (ctrl * 4 * 3);
+                        const ccOffset = tripletBase + 9; // Triplet 3
                         
-                        // T0: Type
-                        sysex.push(...encodeType(btn.type, ch, 0));
-                        // T1: Mode (upper value related)
-                        sysex.push(...encodeMode(btn.mode, ch));
-                        // T2: Display/feedback
-                        sysex.push(0x4D, 0x21, ((ch - 1) << 4) | 0x08);
-                        // T3: CC/Note number
-                        sysex.push(...encodeCC(cc, ch));
+                        if (ccOffset + 2 < template.length && template[ccOffset] === 0x4D) {
+                            positions.push({
+                                section: sectionName,
+                                control: (ctrl % 8) + 1,
+                                half: Math.floor(ctrl / 8),
+                                offset: ccOffset,
+                                sectionStart: i
+                            });
+                        }
                     }
                 }
-                
-                // Section end markers
-                sysex.push(0x4B, 0x20, 0x14);
-                sysex.push(0x4C, 0x26, 0x18);
-                // Padding
-                for (let p = 0; p < 30; p++) sysex.push(0x00);
-                
-                // ========== PUSH BUTTONS SECTION (4A 2C) ==========
-                sysex.push(0x49, 0x21, groupBase);
-                sysex.push(0x4A, 0x2C, 0x10);
-                
-                for (let half = 0; half < 2; half++) {
-                    for (let p = 1; p <= 8; p++) {
-                        const pb = config.pushbuttons[g][p];
-                        const ch = pb.channel || 1;
-                        const cc = pb.cc || 0;
-                        
-                        sysex.push(...encodeType(pb.type, ch, 0));
-                        sysex.push(...encodeMode(pb.mode, ch));
-                        sysex.push(0x4D, 0x21, ((ch - 1) << 4) | 0x08);
-                        sysex.push(...encodeCC(cc, ch));
-                    }
-                }
-                
-                sysex.push(0x4B, 0x20, 0x14);
-                sysex.push(0x4C, 0x26, 0x18);
-                for (let p = 0; p < 30; p++) sysex.push(0x00);
-                
-                // ========== ENCODERS SECTION (4A 20) ==========
-                sysex.push(0x49, 0x21, groupBase + 1);
-                sysex.push(0x4A, 0x20, 0x10);
-                
-                for (let half = 0; half < 2; half++) {
-                    for (let e = 1; e <= 8; e++) {
-                        const enc = config.encoders[g][e];
-                        const ch = enc.channel || 1;
-                        const cc = enc.cc || 0;
-                        
-                        // T0: Type
-                        sysex.push(...encodeType(enc.type, ch, 0));
-                        // T1: Acceleration
-                        sysex.push(...encodeAccel(enc.accel, ch));
-                        // T2: Display
-                        sysex.push(...encodeDisplay(enc.display, ch));
-                        // T3: CC number
-                        sysex.push(...encodeCC(cc, ch));
-                    }
-                }
-                
-                sysex.push(0x4B, 0x20, 0x14);
-                sysex.push(0x4C, 0x26, 0x18);
-                for (let p = 0; p < 30; p++) sysex.push(0x00);
-                
-                // ========== FADERS SECTION (4A 24) ==========
-                sysex.push(0x49, 0x21, groupBase + 1);
-                sysex.push(0x4A, 0x24, 0x10);
-                
-                for (let half = 0; half < 2; half++) {
-                    for (let f = 1; f <= 8; f++) {
-                        const fad = config.faders[g][f];
-                        const ch = fad.channel || 1;
-                        const cc = fad.cc || 0;
-                        
-                        // T0: Type
-                        sysex.push(...encodeType(fad.type, ch, 0));
-                        // T1: Mode (snap/jump)
-                        const modeVal = fad.mode === 'snap' ? 1 : 0;
-                        sysex.push(0x4D, 0x20 + modeVal, ((ch - 1) << 4));
-                        // T2: Lower value
-                        sysex.push(...encodeCC(fad.lower || 0, ch));
-                        // T3: CC number
-                        sysex.push(...encodeCC(cc, ch));
-                    }
-                }
-                
-                // Fader 9 special
-                const f9 = config.faders[g][9];
-                sysex.push(0x4B, 0x20, (f9.cc || 112) & 0x1F);
-                sysex.push(0x4C, 0x26, 0x18);
-                for (let p = 0; p < 30; p++) sysex.push(0x00);
             }
             
-            // Footer
-            sysex.push(0x4F, 0x20, 0x16);
-            sysex.push(0xF7);
+            return positions;
+        }
+        
+        // Generate SysEx by modifying template
+        function generateSysEx() {
+            if (!sysexTemplate) {
+                showStatus('Please load a UC4 backup first (use Import SysEx)', true);
+                return null;
+            }
             
-            return new Uint8Array(sysex);
+            // Clone the template
+            const sysex = new Uint8Array(sysexTemplate);
+            
+            // Find all CC positions
+            const positions = findCCPositions(sysex);
+            
+            // Group positions by section marker offset to identify groups
+            const sectionGroups = {};
+            positions.forEach(pos => {
+                const key = pos.sectionStart;
+                if (!sectionGroups[key]) {
+                    sectionGroups[key] = { section: pos.section, positions: [] };
+                }
+                sectionGroups[key].positions.push(pos);
+            });
+            
+            // Sort sections by offset and assign to UC4 groups
+            const sortedSections = Object.entries(sectionGroups)
+                .sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+            
+            // Count sections per type to map to groups
+            const sectionCounts = { encoders: 0, faders: 0, buttons: 0, pushbuttons: 0 };
+            
+            sortedSections.forEach(([offset, { section, positions }]) => {
+                const groupNum = Math.floor(sectionCounts[section] / 1) + 1; // Each section = one group
+                sectionCounts[section]++;
+                
+                if (groupNum > 8) return; // Only 8 groups
+                
+                positions.forEach(pos => {
+                    const ctrl = config[section][groupNum]?.[pos.control];
+                    if (ctrl && pos.half === 0) { // Only modify first half (second half seems to be duplicate)
+                        const { xx, yy } = encodeCC(ctrl.cc || 0, ctrl.channel || 1);
+                        sysex[pos.offset + 1] = xx;
+                        sysex[pos.offset + 2] = yy;
+                    }
+                });
+            });
+            
+            return sysex;
+        }
+        
+        // Import SysEx template file
+        async function importSysExTemplate() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.syx';
+            
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                try {
+                    await loadSysExTemplate(file);
+                    showStatus(`Loaded SysEx template: ${file.name} (${sysexTemplate.length} bytes)`);
+                    
+                    // Also parse the template to load current values into editor
+                    parseTemplateIntoConfig();
+                } catch (err) {
+                    showStatus('Error loading SysEx file: ' + err.message, true);
+                }
+            };
+            
+            input.click();
+        }
+        
+        // Parse loaded template into config
+        function parseTemplateIntoConfig() {
+            if (!sysexTemplate) return;
+            
+            const positions = findCCPositions(sysexTemplate);
+            const sectionCounts = { encoders: 0, faders: 0, buttons: 0, pushbuttons: 0 };
+            
+            // Group by section offset
+            const sectionGroups = {};
+            positions.forEach(pos => {
+                const key = pos.sectionStart;
+                if (!sectionGroups[key]) {
+                    sectionGroups[key] = { section: pos.section, positions: [] };
+                }
+                sectionGroups[key].positions.push(pos);
+            });
+            
+            const sortedSections = Object.entries(sectionGroups)
+                .sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+            
+            sortedSections.forEach(([offset, { section, positions }]) => {
+                const groupNum = Math.floor(sectionCounts[section] / 1) + 1;
+                sectionCounts[section]++;
+                
+                if (groupNum > 8) return;
+                
+                positions.forEach(pos => {
+                    if (pos.half === 0 && config[section][groupNum]?.[pos.control]) {
+                        const xx = sysexTemplate[pos.offset + 1];
+                        const yy = sysexTemplate[pos.offset + 2];
+                        const { cc, channel } = decodeCC(xx, yy);
+                        
+                        config[section][groupNum][pos.control].cc = cc;
+                        config[section][groupNum][pos.control].channel = channel;
+                    }
+                });
+            });
+            
+            renderGrid();
+            renderCards();
+            updateValidationBar();
+            showStatus('Loaded configuration from SysEx template');
         }
         
         function downloadSysEx() {
+            if (!sysexTemplate) {
+                if (confirm('No SysEx template loaded.\n\nYou need to first load your UC4 backup file (.syx) as a template.\n\nWould you like to load one now?')) {
+                    importSysExTemplate();
+                }
+                return;
+            }
+            
             const { conflicts } = runValidation();
             
             if (conflicts.length > 0) {
@@ -1881,6 +1900,8 @@
             }
             
             const sysex = generateSysEx();
+            if (!sysex) return;
+            
             const blob = new Blob([sysex], { type: 'application/octet-stream' });
             const url = URL.createObjectURL(blob);
             
