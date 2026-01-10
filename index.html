@@ -1331,9 +1331,7 @@
                     break;
                     
                 case 'noiseEngineering':
-                    // Optimized layout: each group controls one module
-                    // Faders 1-8 = main params, F9 = master
-                    // Encoders = modulation/fine params
+                    // Generic modular layout
                     for (let g = 1; g <= 8; g++) {
                         for (let i = 1; i <= 8; i++) {
                             config.faders[g][i] = { cc: i, channel: g, type: 'ccabs', mode: 'jump', lower: 0, upper: 127 };
@@ -1366,6 +1364,102 @@
             renderCards();
             showStatus(`Loaded template: ${name}`);
         }
+        
+        // Hidden template - type 'ne' to load
+        function loadNoiseEngine() {
+            // Noise Engine: 8-slot texture synth. Channel per group, standardized CCs.
+            const encoderDef = [
+                { cc: 10, type: 'ccabs', accel: 'acc2' },  // 1: Pan
+                { cc: 72, type: 'ccabs', accel: 'acc2' },  // 2: Resonance
+                { cc: 75, type: 'ccabs', accel: 'acc2' },  // 3: Portamento
+                { cc: 80, type: 'ccabs', accel: 'acc2' },  // 4: P5
+                { cc: 20, type: 'ccabs', accel: 'acc2' },  // 5: EQ Hi
+                { cc: 21, type: 'ccabs', accel: 'acc2' },  // 6: EQ Mid
+                { cc: 22, type: 'ccabs', accel: 'acc2' },  // 7: EQ Lo
+                { cc: 23, type: 'ccabs', accel: 'acc2' },  // 8: Echo Send
+            ];
+            const faderDef = [
+                { cc: 7, type: 'ccabs', mode: 'snap' },    // 1: Volume
+                { cc: 71, type: 'ccabs', mode: 'snap' },   // 2: Cutoff
+                { cc: 73, type: 'ccabs', mode: 'snap' },   // 3: Attack
+                { cc: 74, type: 'ccabs', mode: 'snap' },   // 4: Decay
+                { cc: 76, type: 'ccabs', mode: 'snap' },   // 5: P1
+                { cc: 77, type: 'ccabs', mode: 'snap' },   // 6: P2
+                { cc: 78, type: 'ccabs', mode: 'snap' },   // 7: P3
+                { cc: 79, type: 'ccabs', mode: 'snap' },   // 8: P4
+                { cc: 11, type: 'ccabs', mode: 'snap' },   // 9: Expression/spare
+            ];
+            const buttonDef = [
+                { cc: 32, type: 'cc', mode: 'toggle' },    // 1: Mute
+                { cc: 33, type: 'cc', mode: 'toggle' },    // 2: Solo
+                { cc: 34, type: 'cc', mode: 'momentary' }, // 3: Filter -
+                { cc: 35, type: 'cc', mode: 'momentary' }, // 4: Filter +
+                { cc: 36, type: 'cc', mode: 'momentary' }, // 5: Env Source -
+                { cc: 37, type: 'cc', mode: 'momentary' }, // 6: Env Source +
+                { cc: 38, type: 'cc', mode: 'momentary' }, // 7: Clock Rate -
+                { cc: 39, type: 'cc', mode: 'momentary' }, // 8: Clock Rate +
+            ];
+            const pushDef = [
+                { cc: 24, type: 'cc', mode: 'momentary' }, // 1: Verb Send
+                { cc: 25, type: 'cc', mode: 'momentary' }, // 2: Filter Type
+                { cc: 26, type: 'cc', mode: 'momentary' }, // 3: Env Source
+                { cc: 27, type: 'cc', mode: 'momentary' }, // 4: Clock Rate
+                { cc: 28, type: 'cc', mode: 'toggle' },    // 5: Lo Cut
+                { cc: 29, type: 'cc', mode: 'toggle' },    // 6: Hi Cut
+                { cc: 30, type: 'cc', mode: 'momentary' }, // 7: Gain cycle
+                { cc: 31, type: 'cc', mode: 'momentary' }, // 8: Transpose reset
+            ];
+            
+            for (let g = 1; g <= 8; g++) {
+                for (let i = 1; i <= 8; i++) {
+                    const enc = encoderDef[i-1];
+                    config.encoders[g][i] = { 
+                        cc: enc.cc, channel: g, type: enc.type, 
+                        accel: enc.accel, display: 'std', lower: 0, upper: 127 
+                    };
+                }
+                for (let i = 1; i <= 9; i++) {
+                    const fad = faderDef[i-1];
+                    config.faders[g][i] = { 
+                        cc: fad.cc, channel: g, type: fad.type, 
+                        mode: fad.mode, lower: 0, upper: 127 
+                    };
+                }
+                for (let i = 1; i <= 8; i++) {
+                    const btn = buttonDef[i-1];
+                    config.buttons[g][i] = { 
+                        cc: btn.cc, channel: g, type: btn.type, 
+                        mode: btn.mode, lower: 0, upper: 127 
+                    };
+                }
+                for (let i = 1; i <= 8; i++) {
+                    const pb = pushDef[i-1];
+                    config.pushbuttons[g][i] = { 
+                        cc: pb.cc, channel: g, type: pb.type, 
+                        mode: pb.mode, lower: 0, upper: 127 
+                    };
+                }
+            }
+            
+            renderGrid();
+            renderCards();
+            showStatus('🎛️ Noise Engine template loaded');
+        }
+        
+        // Secret key sequence detector
+        let keyBuffer = '';
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger when typing in inputs
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+            
+            keyBuffer += e.key.toLowerCase();
+            keyBuffer = keyBuffer.slice(-10); // Keep last 10 chars
+            
+            if (keyBuffer.endsWith('ne')) {
+                loadNoiseEngine();
+                keyBuffer = '';
+            }
+        });
         
         function loadFactoryDefaults() {
             for (let g = 1; g <= 8; g++) {
