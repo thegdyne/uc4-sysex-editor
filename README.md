@@ -8,12 +8,32 @@ A web-based editor for creating and editing Faderfox UC4 MIDI controller configu
 
 ## Features
 
-- **Visual Editor** - Edit all UC4 parameters through an intuitive interface
+- **Dual View Modes** - Card View for detailed editing, Grid View for quick overview
+- **Real-time Conflict Detection** - Highlights CC/Channel conflicts as you edit
 - **All Control Types** - Encoders, faders, green buttons, and push buttons
 - **8 Groups** - Full support for all 8 encoder and fader/button groups
-- **Verified Encodings** - Based on systematic hardware testing
-- **Presets** - Factory defaults and "Channel Per Group" configurations
+- **Templates** - Factory Defaults, Channel Per Group, DAW Mixer, Multi-Synth, Noise Engineering, Blank Slate
+- **JSON Import/Export** - Save, share, and version control your configurations
+- **Validation Report** - Check for conflicts and issues before downloading
+- **Copy with Preview** - Copy CCs/Channels between groups with visual preview
 - **Export** - Download configurations as .syx files
+
+## View Modes
+
+### Card View (Default)
+Detailed editing of all parameters per control:
+- Select control type: Encoders, Faders, Green Buttons, Push Buttons
+- Switch between groups 1-8
+- Edit CC, Channel, Type, Mode, Acceleration, Display, Lower/Upper values
+
+### Grid View
+Quick overview of CC assignments across all groups:
+- **All Grid** - See all controls at once
+- **Fader Grid** - Focus on faders only
+- **Encoder Grid** - Focus on encoders only
+- **Button Grid** - Focus on buttons only
+
+Conflict cells highlighted in red with ⚠ indicator.
 
 ## Supported Parameters
 
@@ -110,11 +130,21 @@ Visit the [GitHub Pages site](https://thegdyne.github.io/uc4-sysex-editor/) to u
 
 ### Workflow
 1. Select your setup number (1-16)
-2. Edit parameters for each control type
-3. Switch between groups using the group selector buttons
-4. Use presets for quick configuration
-5. Click "Download .syx" to save your configuration
-6. Send the .syx file to your UC4 using SysEx Librarian or similar tool
+2. Choose a template or start from scratch
+3. **Card View**: Edit detailed parameters for each control
+4. **Grid View**: Quick overview and CC assignment
+5. Use "Copy CCs →" to copy settings between groups
+6. Check the validation bar for conflicts
+7. Click "Download .syx" to save your configuration
+8. Send the .syx file to your UC4 using SysEx Librarian or similar tool
+
+### Quick Actions
+- **Templates** - Load preset configurations
+- **Import JSON** - Load a previously exported configuration
+- **Export JSON** - Save configuration for backup/sharing
+- **Validate** - Full validation report
+- **Factory Reset** - Load original Faderfox defaults
+- **Clear All** - Blank out all CC assignments
 
 ## Technical Details
 
@@ -124,6 +154,7 @@ See [SPECIFICATION.md](SPECIFICATION.md) for the complete reverse-engineered Sys
 ```
 ├── index.html          # Main editor application
 ├── README.md           # This file
+├── HOWTO.md            # Complete user guide
 ├── SPECIFICATION.md    # SysEx format specification
 └── LICENSE             # MIT License
 ```
@@ -143,11 +174,12 @@ Contributions are welcome! If you discover additional encoding details or find b
 3. Submit a pull request
 
 ### Areas for Improvement
-- [ ] SysEx file loading/parsing
+- [ ] SysEx file loading/parsing (.syx import)
 - [ ] Group name editing
 - [ ] Full 18-setup support
 - [ ] MIDI WebMIDI integration for direct transfer
-- [ ] Fader mode (Jump/Snap) encoding verification
+- [ ] Verified SysEx encoding (current export is placeholder format)
+- [ ] Export cheatsheet (PDF/PNG reference card)
 
 ## Disclaimer
 

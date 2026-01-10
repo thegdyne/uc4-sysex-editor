@@ -49,11 +49,13 @@ No installation required - it runs entirely in your web browser.
 
 Go to **[thegdyne.github.io/uc4-sysex-editor](https://thegdyne.github.io/uc4-sysex-editor/)**
 
-You'll see the editor interface with tabs for:
+The editor opens in **Card View** by default, showing detailed controls for:
 - **Encoders** (1-8)
 - **Faders** (1-9)
 - **Green Buttons** (1-8)
 - **Push Buttons** (1-8 encoder push buttons)
+
+You can switch to **Grid View** for a quick overview of all CC assignments using the View dropdown.
 
 ### Step 2: Select Your Setup
 
@@ -95,21 +97,64 @@ Each encoder can be configured with:
 
 ### Step 4: Work with Groups
 
-The UC4 has **8 groups** for each control type. Switch between groups using the numbered buttons (1-8) in each section.
+The UC4 has **8 groups** for each control type. 
 
-> **Pro Tip:** Use the "Copy to All Groups" buttons to quickly copy channel or CC settings across all 8 groups.
+**In Card View:** Use the numbered buttons (1-8) above the cards to switch groups.
 
-### Step 5: Use Presets (Optional)
+**In Grid View:** All 8 groups are visible at once - each row is a group.
 
-| Preset | Description |
-|--------|-------------|
-| **Factory Defaults** | Loads the original Faderfox factory settings |
-| **Channel Per Group** | Sets each group to a different MIDI channel (Group 1 = Ch 1, Group 2 = Ch 2, etc.) |
+> **Pro Tip:** Use "Copy CCs →" button to copy settings between groups with a preview of what will change.
 
-### Step 6: Download Your Configuration
+### Step 4b: Switch Between Views
 
-1. Click the green **"Download .syx"** button
-2. Save the file (e.g., `UC4_Setup1.syx`)
+| View | Best For |
+|------|----------|
+| **Card View** | Detailed editing of all parameters (type, mode, acceleration, etc.) |
+| **All Grid** | Quick overview of all CC assignments, spotting conflicts |
+| **Fader Grid** | Focus on fader CCs only |
+| **Encoder Grid** | Focus on encoder CCs only |
+| **Button Grid** | Focus on button CCs only |
+
+Conflicts are highlighted in red with ⚠ indicators in Grid View.
+
+### Step 5: Use Templates (Optional)
+
+Click the **"📋 Templates"** button to load a preset configuration:
+
+| Template | Description |
+|----------|-------------|
+| **Factory Defaults** | Original Faderfox factory settings (note: has known CC conflicts) |
+| **Channel Per Group** | Each group on a different MIDI channel (Group 1 = Ch 1, etc.) - no conflicts possible |
+| **DAW Mixer** | All Ch 1, sequential CCs. Faders 1-8, Encoders 9-16 per group |
+| **Multi-Synth** | 8 synths on channels 1-8. Same CCs, different channels |
+| **Noise Engineering** | Optimized for modular/Eurorack. CC 1-8 per group |
+| **Blank Slate** | All controls set to CC 0, Channel 1. Start fresh |
+
+### Step 5b: Import/Export JSON
+
+For backup, sharing, or version control:
+
+- **📤 Export JSON** - Save your configuration as a JSON file
+- **📥 Import JSON** - Load a previously exported configuration
+
+JSON files can be:
+- Stored in Git repositories
+- Shared with other users
+- Diffed to see changes between versions
+
+### Step 6: Validate and Download
+
+1. Check the **validation bar** at the top for any warnings:
+   - ✓ No CC conflicts
+   - ⚠ Fader groups 5-8 are identical (factory default issue)
+   - ✗ CC conflicts detected
+
+2. Click **"✓ Validate"** for a full report
+
+3. Click the green **"⬇ Download .syx"** button
+   - If conflicts exist, you'll be warned before download
+   
+4. Save the file (e.g., `UC4_Setup1.syx`)
 
 ---
 
