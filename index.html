@@ -1457,18 +1457,26 @@
         }
         
         function getGroupName(setupIdx, group) {
-            // 4 characters per group, 32 total values
+            // Group names are stored globally (same for all setups), always read from setup 0
             const baseIdx = group * 4;
             let name = '';
+            let hasValidData = true;
+            
             for (let i = 0; i < 4; i++) {
-                const val = getValue(setupIdx, 0x14, 0x80, baseIdx + i);
+                const val = getValue(0, 0x14, 0x80, baseIdx + i);
                 if (val !== null) {
-                    // Simple 7-seg decode (approximate)
                     name += decode7Seg(val);
                 } else {
-                    name += '?';
+                    hasValidData = false;
+                    break;
                 }
             }
+            
+            // Fallback to default if read failed
+            if (!hasValidData || name.includes('?')) {
+                return `GrP${group + 1}`;
+            }
+            
             return name;
         }
         
