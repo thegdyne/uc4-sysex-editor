@@ -434,6 +434,119 @@
             color: var(--text-dim);
         }
         
+        /* Context Menu */
+        .context-menu {
+            position: absolute;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            min-width: 200px;
+            z-index: 1000;
+            padding: 0.25rem 0;
+        }
+        
+        .context-menu-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--text);
+        }
+        
+        .context-menu-item:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+        
+        .context-menu-item.disabled {
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+        
+        .context-menu-item.disabled:hover {
+            background: none;
+            color: var(--text-muted);
+        }
+        
+        .context-menu-separator {
+            height: 1px;
+            background: var(--border);
+            margin: 0.25rem 0;
+        }
+        
+        /* Paste Special Dialog */
+        .paste-special-dialog {
+            max-width: 400px;
+        }
+        
+        .paste-source {
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        
+        .paste-section {
+            margin-bottom: 1rem;
+        }
+        
+        .paste-section-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .paste-targets label {
+            display: block;
+            padding: 0.25rem 0;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        .paste-targets input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+        
+        .paste-transforms {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .transform-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .transform-row label {
+            min-width: 140px;
+        }
+        
+        .transform-row input[type="number"] {
+            width: 80px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .transform-row select {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border-color: var(--accent);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-dim);
+            border-color: var(--accent-dim);
+        }
+        
         /* Navigation */
         .nav-bar {
             background: var(--bg-panel);
@@ -928,6 +1041,15 @@
         // Conflict filter state
         let showConcurrentConflicts = true;
         let showMutuallyExclusiveConflicts = false;
+        
+        // Copy/Paste State
+        let clipboard = null;
+        let selection = {
+            mode: 'none', // 'none' | 'single' | 'row' | 'column'
+            controlType: null,
+            group: null,
+            index: null
+        };
         
         // Parameters that affect conflict detection
         const CONFLICT_PARAMS = new Set([
@@ -1937,6 +2059,7 @@
                     const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                     cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatEncoderCell(data)}</div>`;
                     cell.onclick = () => jumpToFocusedView('encoder', g, i);
+                    cell.oncontextmenu = (e) => showContextMenu(e, 'encoder', g, i);
                     cell.title = createEncoderTooltip(data, g, i);
                     row.appendChild(cell);
                 }
@@ -1988,6 +2111,7 @@
                     const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                     cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatButtonCell(data)}</div>`;
                     cell.onclick = () => jumpToFocusedView(type, g, i);
+                    cell.oncontextmenu = (e) => showContextMenu(e, type, g, i);
                     row.appendChild(cell);
                 }
                 
@@ -2038,6 +2162,7 @@
                     const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                     cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatFaderCell(data)}</div>`;
                     cell.onclick = () => jumpToFocusedView('fader', g, i);
+                    cell.oncontextmenu = (e) => showContextMenu(e, 'fader', g, i);
                     row.appendChild(cell);
                 }
                 
@@ -2065,6 +2190,7 @@
                 const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                 cell.innerHTML = `<div class="overview-cell">${warningIcon}${ch}:CC ${data.cc}</div>`;
                 cell.onclick = () => jumpToFocusedView('fader9', g, 0);
+                cell.oncontextmenu = (e) => showContextMenu(e, 'fader9', g, 0);
                 f9row.appendChild(cell);
             }
             
@@ -3207,6 +3333,459 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         }
         
         // ============================================================
+        // Copy/Paste Operations
+        // ============================================================
+        
+        // Generic control data accessors
+        function getControlData(controlType, setupIdx, group, index) {
+            switch (controlType) {
+                case 'encoder': return getEncoderData(setupIdx, group, index);
+                case 'push': return getPushData(setupIdx, group, index);
+                case 'green': return getGreenData(setupIdx, group, index);
+                case 'fader': return getFaderData(setupIdx, group, index);
+                case 'fader9': return getFader9Data(setupIdx, group);
+                default: return null;
+            }
+        }
+        
+        function setControlData(controlType, setupIdx, group, index, data) {
+            switch (controlType) {
+                case 'encoder': return setEncoderData(setupIdx, group, index, data);
+                case 'push': return setPushData(setupIdx, group, index, data);
+                case 'green': return setGreenData(setupIdx, group, index, data);
+                case 'fader': return setFaderData(setupIdx, group, index, data);
+                case 'fader9': return setFader9Data(setupIdx, group, data);
+            }
+        }
+        
+        function formatControlName(controlType, group, index) {
+            const typeNames = {
+                'encoder': 'Enc',
+                'push': 'Push',
+                'green': 'Grn',
+                'fader': 'Fad',
+                'fader9': 'Fad9'
+            };
+            const name = typeNames[controlType] || controlType;
+            if (controlType === 'fader9') {
+                return `${name} G${group + 1}`;
+            }
+            return `${name} G${group + 1}.${index + 1}`;
+        }
+        
+        // Copy operations
+        function copyControl(controlType, setupIdx, group, index) {
+            const data = getControlData(controlType, setupIdx, group, index);
+            if (!data) return;
+            
+            clipboard = {
+                type: 'control',
+                controlType,
+                sourceSetup: setupIdx,
+                sourceGroup: group,
+                sourceIndex: index,
+                data: { ...data }
+            };
+            showToast(`Copied ${formatControlName(controlType, group, index)}`);
+        }
+        
+        function copyRow(controlType, setupIdx, index) {
+            const data = [];
+            for (let g = 0; g < 8; g++) {
+                data.push({ ...getControlData(controlType, setupIdx, g, index) });
+            }
+            clipboard = {
+                type: 'row',
+                controlType,
+                sourceSetup: setupIdx,
+                sourceGroup: null,
+                sourceIndex: index,
+                data
+            };
+            const typeName = { encoder: 'Enc', push: 'Push', green: 'Grn', fader: 'Fad', fader9: 'Fad9' }[controlType];
+            showToast(`Copied ${typeName} ${index + 1} row (all groups)`);
+        }
+        
+        function copyColumn(controlType, setupIdx, group) {
+            const count = controlType === 'fader9' ? 1 : 8;
+            const data = [];
+            for (let i = 0; i < count; i++) {
+                data.push({ ...getControlData(controlType, setupIdx, group, i) });
+            }
+            clipboard = {
+                type: 'column',
+                controlType,
+                sourceSetup: setupIdx,
+                sourceGroup: group,
+                sourceIndex: null,
+                data
+            };
+            const typeName = { encoder: 'Encoders', push: 'Push Btns', green: 'Green Btns', fader: 'Faders', fader9: 'Fader 9' }[controlType];
+            showToast(`Copied Group ${group + 1} ${typeName}`);
+        }
+        
+        // Check paste compatibility
+        function canPaste(clip, targetControlType) {
+            if (!clip) return false;
+            // Must be same control type
+            return clip.controlType === targetControlType;
+        }
+        
+        // Apply offset with wrap/clamp
+        function applyOffset(value, delta, min, max, wrapMode) {
+            const v = value + delta;
+            if (wrapMode === 'wrap') {
+                const range = max - min + 1;
+                return min + (((v - min) % range) + range) % range;
+            } else {
+                return Math.max(min, Math.min(max, v)); // clamp
+            }
+        }
+        
+        // Transform copied data with options
+        function transformControlData(data, options, incrementIndex = 0) {
+            let newData = { ...data };
+            
+            // Apply channel offset (channel is 1-based: 1-16)
+            if (options.channelOffset && options.channelOffset !== 0) {
+                const newCh = applyOffset(newData.channel, options.channelOffset, 1, 16, options.wrapMode);
+                newData.channel = newCh;
+            }
+            
+            // Apply CC/number offset
+            if (options.numberOffset && options.numberOffset !== 0) {
+                if (newData.cc !== undefined) {
+                    newData.cc = applyOffset(newData.cc, options.numberOffset, 0, 127, options.wrapMode);
+                }
+            }
+            
+            // Apply auto-increment
+            if (options.autoIncrement && options.incrementBy) {
+                const delta = options.incrementBy * incrementIndex;
+                if (newData.cc !== undefined) {
+                    newData.cc = applyOffset(newData.cc, delta, 0, 127, options.wrapMode);
+                }
+            }
+            
+            return newData;
+        }
+        
+        // Paste to single control
+        function pasteToControl(controlType, setupIdx, group, index, options = {}) {
+            if (!clipboard || !canPaste(clipboard, controlType)) {
+                showToast('Nothing compatible to paste', 'warning');
+                return;
+            }
+            
+            const before = getControlData(controlType, setupIdx, group, index);
+            let sourceData;
+            
+            if (clipboard.type === 'control') {
+                sourceData = clipboard.data;
+            } else if (clipboard.type === 'row') {
+                sourceData = clipboard.data[group]; // Use data for this group
+            } else if (clipboard.type === 'column') {
+                sourceData = clipboard.data[index]; // Use data for this index
+            } else {
+                showToast('Unsupported clipboard type for single paste', 'warning');
+                return;
+            }
+            
+            const newData = transformControlData(sourceData, options, 0);
+            setControlData(controlType, setupIdx, group, index, newData);
+            
+            recordUndo({
+                type: 'control',
+                description: `Paste to ${formatControlName(controlType, group, index)}`,
+                controlType,
+                setupIdx,
+                group,
+                index,
+                before,
+                after: newData
+            });
+            
+            markModified();
+            scheduleConflictRebuild();
+            renderCurrentView();
+            showToast(`Pasted to ${formatControlName(controlType, group, index)}`);
+        }
+        
+        // Paste row to all groups
+        function pasteRowToGroups(controlType, setupIdx, index, options = {}) {
+            if (!clipboard || !canPaste(clipboard, controlType)) {
+                showToast('Nothing compatible to paste', 'warning');
+                return;
+            }
+            
+            const batch = { type: 'batch', description: `Paste row ${index + 1}`, actions: [] };
+            
+            for (let g = 0; g < 8; g++) {
+                const before = getControlData(controlType, setupIdx, g, index);
+                let sourceData;
+                
+                if (clipboard.type === 'control') {
+                    sourceData = clipboard.data;
+                } else if (clipboard.type === 'row') {
+                    sourceData = clipboard.data[g];
+                } else if (clipboard.type === 'column') {
+                    sourceData = clipboard.data[0]; // Use first item for all
+                }
+                
+                const newData = transformControlData(sourceData, options, g);
+                setControlData(controlType, setupIdx, g, index, newData);
+                
+                batch.actions.push({
+                    type: 'control',
+                    controlType,
+                    setupIdx,
+                    group: g,
+                    index,
+                    before,
+                    after: newData
+                });
+            }
+            
+            recordUndo(batch);
+            markModified();
+            scheduleConflictRebuild();
+            renderCurrentView();
+            showToast(`Pasted to row ${index + 1} (all groups)`);
+        }
+        
+        // Paste column to group
+        function pasteColumnToGroup(controlType, setupIdx, group, options = {}) {
+            if (!clipboard || !canPaste(clipboard, controlType)) {
+                showToast('Nothing compatible to paste', 'warning');
+                return;
+            }
+            
+            const count = controlType === 'fader9' ? 1 : 8;
+            const batch = { type: 'batch', description: `Paste to Group ${group + 1}`, actions: [] };
+            
+            for (let i = 0; i < count; i++) {
+                const before = getControlData(controlType, setupIdx, group, i);
+                let sourceData;
+                
+                if (clipboard.type === 'control') {
+                    sourceData = clipboard.data;
+                } else if (clipboard.type === 'row') {
+                    sourceData = clipboard.data[0]; // Use first group's data
+                } else if (clipboard.type === 'column') {
+                    sourceData = clipboard.data[i];
+                }
+                
+                const newData = transformControlData(sourceData, options, i);
+                setControlData(controlType, setupIdx, group, i, newData);
+                
+                batch.actions.push({
+                    type: 'control',
+                    controlType,
+                    setupIdx,
+                    group,
+                    index: i,
+                    before,
+                    after: newData
+                });
+            }
+            
+            recordUndo(batch);
+            markModified();
+            scheduleConflictRebuild();
+            renderCurrentView();
+            showToast(`Pasted to Group ${group + 1}`);
+        }
+        
+        // Set selection (for overview click)
+        function setSelection(controlType, group, index) {
+            selection = {
+                mode: 'single',
+                controlType,
+                group,
+                index
+            };
+        }
+        
+        // Clear selection
+        function clearSelection() {
+            selection = { mode: 'none', controlType: null, group: null, index: null };
+        }
+        
+        // Context menu
+        let contextMenu = null;
+        
+        function showContextMenu(e, controlType, group, index) {
+            e.preventDefault();
+            hideContextMenu();
+            
+            setSelection(controlType, group, index);
+            
+            const menu = document.createElement('div');
+            menu.className = 'context-menu';
+            menu.innerHTML = `
+                <div class="context-menu-item" onclick="copyControl('${controlType}', ${currentSetup}, ${group}, ${index}); hideContextMenu();">
+                    Copy Control
+                </div>
+                <div class="context-menu-item" onclick="copyRow('${controlType}', ${currentSetup}, ${index}); hideContextMenu();">
+                    Copy Row (${controlType === 'fader9' ? 'Fad9' : (index + 1)} × 8 groups)
+                </div>
+                <div class="context-menu-item" onclick="copyColumn('${controlType}', ${currentSetup}, ${group}); hideContextMenu();">
+                    Copy Column (Group ${group + 1})
+                </div>
+                <div class="context-menu-separator"></div>
+                <div class="context-menu-item ${!clipboard || !canPaste(clipboard, controlType) ? 'disabled' : ''}" 
+                     onclick="${clipboard && canPaste(clipboard, controlType) ? `pasteToControl('${controlType}', ${currentSetup}, ${group}, ${index}); hideContextMenu();` : ''}">
+                    Paste
+                </div>
+                <div class="context-menu-item ${!clipboard || !canPaste(clipboard, controlType) ? 'disabled' : ''}" 
+                     onclick="${clipboard && canPaste(clipboard, controlType) ? `showPasteSpecialDialog('${controlType}', ${group}, ${index}); hideContextMenu();` : ''}">
+                    Paste Special...
+                </div>
+            `;
+            
+            menu.style.left = e.pageX + 'px';
+            menu.style.top = e.pageY + 'px';
+            
+            document.body.appendChild(menu);
+            contextMenu = menu;
+            
+            // Close on click outside
+            setTimeout(() => {
+                document.addEventListener('click', hideContextMenu, { once: true });
+            }, 0);
+        }
+        
+        function hideContextMenu() {
+            if (contextMenu) {
+                contextMenu.remove();
+                contextMenu = null;
+            }
+        }
+        
+        // Paste Special Dialog
+        function showPasteSpecialDialog(controlType, group, index) {
+            if (!clipboard || !canPaste(clipboard, controlType)) {
+                showToast('Nothing compatible to paste', 'warning');
+                return;
+            }
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            
+            const sourceInfo = clipboard.type === 'control' 
+                ? formatControlName(clipboard.controlType, clipboard.sourceGroup, clipboard.sourceIndex)
+                : clipboard.type === 'row'
+                    ? `Row ${clipboard.sourceIndex + 1} (8 groups)`
+                    : `Group ${clipboard.sourceGroup + 1} column`;
+            
+            overlay.innerHTML = `
+                <div class="modal-dialog paste-special-dialog">
+                    <h3>Paste Special</h3>
+                    <p class="paste-source">Source: ${sourceInfo}</p>
+                    
+                    <div class="paste-section">
+                        <label class="paste-section-label">Paste to:</label>
+                        <div class="paste-targets">
+                            <label><input type="radio" name="pasteTarget" value="single" checked> Current cell</label>
+                            <label><input type="radio" name="pasteTarget" value="row"> Entire row (all groups)</label>
+                            <label><input type="radio" name="pasteTarget" value="column"> Entire column (Group ${group + 1})</label>
+                        </div>
+                    </div>
+                    
+                    <div class="paste-section">
+                        <label class="paste-section-label">Transforms:</label>
+                        <div class="paste-transforms">
+                            <div class="transform-row">
+                                <label>Channel offset:</label>
+                                <input type="number" id="channelOffset" value="0" min="-15" max="15">
+                            </div>
+                            <div class="transform-row">
+                                <label>CC/Number offset:</label>
+                                <input type="number" id="numberOffset" value="0" min="-127" max="127">
+                            </div>
+                            <div class="transform-row">
+                                <label>
+                                    <input type="checkbox" id="autoIncrement"> Auto-increment CC by:
+                                </label>
+                                <input type="number" id="incrementBy" value="1" min="1" max="127" style="width: 60px;">
+                            </div>
+                            <div class="transform-row">
+                                <label>Out-of-range:</label>
+                                <select id="wrapMode">
+                                    <option value="clamp">Clamp to limits</option>
+                                    <option value="wrap">Wrap around</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-buttons">
+                        <button class="btn" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+                        <button class="btn btn-primary" onclick="executePasteSpecial('${controlType}', ${group}, ${index}); this.closest('.modal-overlay').remove();">Paste</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+        }
+        
+        function executePasteSpecial(controlType, group, index) {
+            const target = document.querySelector('input[name="pasteTarget"]:checked').value;
+            const options = {
+                channelOffset: parseInt(document.getElementById('channelOffset').value) || 0,
+                numberOffset: parseInt(document.getElementById('numberOffset').value) || 0,
+                autoIncrement: document.getElementById('autoIncrement').checked,
+                incrementBy: parseInt(document.getElementById('incrementBy').value) || 1,
+                wrapMode: document.getElementById('wrapMode').value
+            };
+            
+            switch (target) {
+                case 'single':
+                    pasteToControl(controlType, currentSetup, group, index, options);
+                    break;
+                case 'row':
+                    pasteRowToGroups(controlType, currentSetup, index, options);
+                    break;
+                case 'column':
+                    pasteColumnToGroup(controlType, currentSetup, group, options);
+                    break;
+            }
+        }
+        
+        // Keyboard copy/paste for current selection or focused view
+        function handleCopy() {
+            if (currentView === 'focused') {
+                // In focused view, copy the currently visible encoders (first one as default)
+                // This is a simple approach - could be enhanced with actual selection
+                copyControl('encoder', currentSetup, encoderGroup, 0);
+            } else if (selection.mode !== 'none') {
+                copyControl(selection.controlType, currentSetup, selection.group, selection.index);
+            } else {
+                showToast('Nothing selected to copy', 'warning');
+            }
+        }
+        
+        function handlePaste() {
+            if (!clipboard) {
+                showToast('Nothing to paste', 'warning');
+                return;
+            }
+            
+            if (currentView === 'focused') {
+                // Paste to current encoder group, first encoder
+                if (canPaste(clipboard, 'encoder')) {
+                    pasteToControl('encoder', currentSetup, encoderGroup, 0);
+                } else {
+                    showToast('Clipboard contents not compatible with encoders', 'warning');
+                }
+            } else if (selection.mode !== 'none') {
+                pasteToControl(selection.controlType, currentSetup, selection.group, selection.index);
+            } else {
+                showToast('Nothing selected to paste to', 'warning');
+            }
+        }
+        
+        // ============================================================
         // Keyboard Shortcuts
         // ============================================================
         
@@ -3228,6 +3807,15 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             } else if (ctrlKey && e.key === 'y') {
                 e.preventDefault();
                 redo();
+            } else if (ctrlKey && e.key === 'c' && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                handleCopy();
+            } else if (ctrlKey && e.key === 'v' && !e.shiftKey) {
+                e.preventDefault();
+                handlePaste();
+            } else if (e.key === 'Escape') {
+                hideContextMenu();
+                clearSelection();
             }
         });
         
