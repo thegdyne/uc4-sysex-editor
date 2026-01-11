@@ -10,5 +10,4 @@ Thumbs.db
 .vscode/
 
 # Test files
-*.syx
 test/
