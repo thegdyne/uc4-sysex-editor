@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UC4 SysEx Editor — Usage Guide</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-code: #1a1a24;
+            --text: #e8e8e8;
+            --text-dim: #888;
+            --accent: #00ffaa;
+            --accent-dim: #00aa77;
+            --border: #2a2a3a;
+            --warning: #ffaa00;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            margin: 0;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: var(--accent);
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h1 + p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+        
+        h2 {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        h3 {
+            color: var(--text);
+            font-size: 1.2rem;
+            margin-top: 2rem;
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        pre {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem 1.5rem;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        code {
+            background: var(--bg-code);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.6rem 1rem;
+            text-align: left;
+        }
+        
+        th {
+            background: var(--bg-card);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background: var(--bg-card);
+        }
+        
+        blockquote {
+            border-left: 3px solid var(--accent);
+            margin: 1rem 0;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            color: var(--text-dim);
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 3rem 0;
+        }
+        
+        .toc {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .toc li {
+            margin: 0.4rem 0;
+        }
+        
+        .warning {
+            background: rgba(255, 170, 0, 0.15);
+            border: 1px solid var(--warning);
+            border-radius: 6px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .warning::before {
+            content: '⚠ ';
+            color: var(--warning);
+        }
+        
+        .tip {
+            background: rgba(0, 255, 170, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .tip::before {
+            content: '💡 ';
+        }
+        
+        .quick-ref {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .quick-ref h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+        
+        kbd {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 0.1rem 0.4rem;
+            font-family: inherit;
+            font-size: 0.9em;
+        }
+        
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+        
+        li {
+            margin: 0.3rem 0;
+        }
+        
+        strong {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <h1>UC4 SysEx Editor</h1>
+    <p>Complete Usage Guide — A web-based configuration editor for the Faderfox UC4 MIDI controller</p>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ol>
+            <li><a href="#quick-start">Quick Start</a></li>
+            <li><a href="#interface">Interface Overview</a></li>
+            <li><a href="#files">Working with Files</a></li>
+            <li><a href="#navigation">Navigating Setups &amp; Groups</a></li>
+            <li><a href="#focused">Focused View — Detailed Editing</a></li>
+            <li><a href="#overview">Overview Mode — See Everything</a></li>
+            <li><a href="#conflicts">Conflict Detection</a></li>
+            <li><a href="#copypaste">Copy &amp; Paste Operations</a></li>
+            <li><a href="#undo">Undo &amp; Redo</a></li>
+            <li><a href="#session">Session Persistence</a></li>
+            <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
+            <li><a href="#workflows">Workflow Examples</a></li>
+            <li><a href="#validation">Validation &amp; Troubleshooting</a></li>
+        </ol>
+    </div>
+
+    <h2 id="quick-start">Quick Start</h2>
+    <pre>
+1. Open editor        →  Factory defaults load automatically
+2. Select Setup 1-18  →  Pick which setup to edit
+3. Edit in Focused    →  Change individual parameters
+4. Check in Overview  →  See all 64 controls at once
+5. Export .syx        →  Send to UC4 via MIDI</pre>
+    <p>That's it! The editor auto-loads factory defaults so you can start immediately.</p>
+
+    <h2 id="interface">Interface Overview</h2>
+    <pre>
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                 │
+│   UC4 SysEx Editor          [Import SysEx] [Export SysEx] [Import JSON]        │
+│                             [Export JSON]  [↶ Undo] [↷ Redo]                   │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   Setup [01 ▾]    [🔗 Link]    Encoder Grp [1][2][3][4][5][6][7][8]  GrP1      │
+│                                Fader/Btn   [1][2][3][4][5][6][7][8]  GrP1      │
+│                                                       [Focused] [Overview]      │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│                              MAIN EDITING AREA                                  │
+│                          (Focused View or Overview Mode)                        │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│   ● Modified                                             100,640 bytes loaded   │
+└─────────────────────────────────────────────────────────────────────────────────┘</pre>
+
+    <h3>Header Elements</h3>
+    <table>
+        <tr><th>Button</th><th>What It Does</th></tr>
+        <tr><td><strong>Import SysEx</strong></td><td>Load a .syx dump from your UC4</td></tr>
+        <tr><td><strong>Export SysEx</strong></td><td>Save changes as .syx to send back to UC4</td></tr>
+        <tr><td><strong>Import JSON</strong></td><td>Load a human-readable JSON backup</td></tr>
+        <tr><td><strong>Export JSON</strong></td><td>Save human-readable JSON (great for git!)</td></tr>
+        <tr><td><strong>↶ Undo</strong></td><td>Reverse your last change</td></tr>
+        <tr><td><strong>↷ Redo</strong></td><td>Replay an undone change</td></tr>
+    </table>
+
+    <h3>Navigation Elements</h3>
+    <table>
+        <tr><th>Element</th><th>What It Does</th></tr>
+        <tr><td><strong>Setup [▾]</strong></td><td>Choose which of the 18 setups to edit</td></tr>
+        <tr><td><strong>🔗 Link</strong></td><td>Sync encoder and fader groups together</td></tr>
+        <tr><td><strong>Encoder Grp [1-8]</strong></td><td>Select group for encoders + push buttons</td></tr>
+        <tr><td><strong>Fader/Btn [1-8]</strong></td><td>Select group for faders + green buttons</td></tr>
+        <tr><td><strong>GrP1</strong></td><td>Shows the 4-character group name from UC4</td></tr>
+        <tr><td><strong>Focused / Overview</strong></td><td>Toggle between edit modes</td></tr>
+    </table>
+
+    <h3>Status Bar</h3>
+    <table>
+        <tr><th>Indicator</th><th>Meaning</th></tr>
+        <tr><td>● Green dot</td><td>All changes saved/exported</td></tr>
+        <tr><td>● Amber dot</td><td>You have unsaved changes!</td></tr>
+        <tr><td>File size</td><td>Confirms valid 100,640 byte file loaded</td></tr>
+    </table>
+
+    <h2 id="files">Working with Files</h2>
+    
+    <h3>Importing Your UC4 Configuration</h3>
+    <p><strong>Step 1:</strong> Dump your UC4 via MIDI</p>
+    <ul>
+        <li>Connect UC4 to computer via USB or MIDI</li>
+        <li>Use a SysEx librarian (e.g., SysEx Librarian, MIDI-OX, your DAW)</li>
+        <li>Request dump from UC4 (see UC4 manual)</li>
+        <li>Save as .syx file</li>
+    </ul>
+    
+    <p><strong>Step 2:</strong> Load into editor</p>
+    <pre>
+Click [Import SysEx]
+        ↓
+Select file: my_uc4_backup.syx (100,640 bytes ✓)
+        ↓
+Editor loads all 18 setups</pre>
+
+    <div class="tip">The status bar shows "100,640 bytes loaded" — this confirms a valid full dump.</div>
+
+    <h3>JSON Export/Import — Your Best Friend</h3>
+    <p>JSON creates a <strong>human-readable</strong> backup of your entire configuration.</p>
+    
+    <table>
+        <tr><th>Benefit</th><th>Description</th></tr>
+        <tr><td><strong>Git-friendly</strong></td><td>Track changes with version control</td></tr>
+        <tr><td><strong>Readable</strong></td><td>Review exactly what changed</td></tr>
+        <tr><td><strong>Shareable</strong></td><td>Send configs to bandmates</td></tr>
+        <tr><td><strong>Backup</strong></td><td>Safety net before experiments</td></tr>
+        <tr><td><strong>Smaller</strong></td><td>~50KB vs 100KB for .syx</td></tr>
+    </table>
+    
+    <div class="tip"><strong>Workflow tip:</strong> Export JSON before making big changes. If something goes wrong, import the JSON to restore.</div>
+
+    <h2 id="navigation">Navigating Setups &amp; Groups</h2>
+    
+    <h3>The UC4's Structure</h3>
+    <pre>
+UC4 Memory Structure
+│
+├── Setup 1
+│   ├── Group 1: 8 encoders, 8 push, 8 green, 8 faders, fader9
+│   ├── Group 2: ...
+│   └── Group 8: ...
+│
+├── Setup 2 ... Setup 18
+
+Total: 18 setups × 8 groups × 33 controls = 4,752 editable controls!</pre>
+
+    <h3>Domain Mapping (Critical to Understand!)</h3>
+    <p>The UC4 has <strong>two independent group selectors</strong> on the hardware:</p>
+    
+    <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                      ENCODER DOMAIN                             │
+│                                                                 │
+│   Hardware: Hold Shift + Press Encoder 1-8                      │
+│   Controls: 8 Encoders + 8 Push Buttons (under encoders)        │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                    FADER/BUTTON DOMAIN                          │
+│                                                                 │
+│   Hardware: Hold Shift + Press Green Button 1-8                 │
+│   Controls: 8 Faders + 8 Green Buttons + Fader 9                │
+└─────────────────────────────────────────────────────────────────┘</pre>
+    
+    <p><strong>This is why the editor has TWO group selectors!</strong></p>
+
+    <h3>🔗 Link Groups</h3>
+    <p>When you want both domains on the same group (common for channel-per-group setups):</p>
+    <pre>
+[🔗 Link ✓]     ← Check this box
+
+Encoder Grp  [1] [2] [③] [4] [5] [6] [7] [8]   GrP3
+Fader/Btn    [1] [2] [③] [4] [5] [6] [7] [8]   GrP3
+                  ↑
+             Both sync!</pre>
+
+    <h2 id="focused">Focused View — Detailed Editing</h2>
+    <p>The Focused view shows full parameter cards for all controls in the selected groups.</p>
+    
+    <pre>
+┌─ FADERS ───────────────────────────────────────────── GrP1 ─────┐
+│                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │ Fader 1     │  │ Fader 2     │  │ Fader 3     │   ...       │
+│  │ F1.1        │  │ F1.2        │  │ F1.3        │             │
+│  │─────────────│  │─────────────│  │─────────────│             │
+│  │ Chan [1 ▾]  │  │ Chan [1 ▾]  │  │ Chan [1 ▾]  │             │
+│  │ CC   [ 1  ] │  │ CC   [ 2  ] │  │ CC   [ 3  ] │             │
+│  │ Type [CCAb] │  │ Type [CCAb] │  │ Type [CCAb] │             │
+│  │ Min  [ 0  ] │  │ Min  [ 0  ] │  │ Min  [ 0  ] │             │
+│  │ Max  [127 ] │  │ Max  [127 ] │  │ Max  [127 ] │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘             │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─ GREEN BUTTONS ────────────────────────────────────── GrP1 ─────┐
+┌─ ENCODERS ─────────────────────────────────────────── GrP1 ─────┐
+┌─ PUSH BUTTONS ─────────────────────────────────────── GrP1 ─────┐
+┌─ FADER 9 ──────────────────────────────────────────── GrP1 ─────┐</pre>
+
+    <h3>Section Headers — Know What You're Editing!</h3>
+    <p>Each section shows the <strong>group name in bright cyan</strong>:</p>
+    <pre>
+┌─ ENCODERS ──────────────────────────────── GrP3 ────┐
+                                              ↑
+                                    Bright accent color
+                                    Matches UC4 display</pre>
+
+    <h3>Encoder Types Explained</h3>
+    <table>
+        <tr><th>Type</th><th>Description</th></tr>
+        <tr><td>CCr1</td><td>Relative mode 1 (64 = no change)</td></tr>
+        <tr><td>CCr2</td><td>Relative mode 2 (0 = no change)</td></tr>
+        <tr><td>CCAb</td><td>Absolute CC (standard 0-127)</td></tr>
+        <tr><td>PrGC</td><td>Program Change</td></tr>
+        <tr><td>CCAh</td><td>14-bit high-resolution CC</td></tr>
+        <tr><td>Pbnd</td><td>Pitch Bend</td></tr>
+        <tr><td>AFtt</td><td>Aftertouch</td></tr>
+    </table>
+
+    <h2 id="overview">Overview Mode — See Everything</h2>
+    <p>Click <strong>[Overview]</strong> to see all 64 controls in an 8×8 grid.</p>
+    
+    <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│   [ Encoders ] [ Push Buttons ] [ Green Buttons ] [ Faders ]    │
+│                                                                 │
+│   [✓ Concurrent (3)] [Mutually-Exclusive (12)]   ← Filters     │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│           │ Group 1 │ Group 2 │ Group 3 │ Group 4 │ ...        │
+│           │  GrP1   │  GrP2   │  GrP3   │  GrP4   │            │
+│  ─────────┼─────────┼─────────┼─────────┼─────────┼────        │
+│  Enc 1    │ 1:CC 1  │ 1:CC 1  │ 1:CC 1  │⚠1:CC 1 │            │
+│  Enc 2    │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │            │
+│  ...      │         │         │         │         │            │
+└─────────────────────────────────────────────────────────────────┘</pre>
+
+    <h3>Cell Format</h3>
+    <p>Each cell shows: <code>Channel:Type CC#</code></p>
+    <pre>
+┌─────────┐
+│ 1:CC 64 │  ← Channel 1, CC type, CC# 64
+└─────────┘
+
+┌─────────┐
+│⚠1:CC 64│  ← Warning icon = conflict detected
+└─────────┘</pre>
+
+    <h3>Interaction</h3>
+    <table>
+        <tr><th>Action</th><th>Result</th></tr>
+        <tr><td><strong>Single-click</strong></td><td>Select cell (green outline)</td></tr>
+        <tr><td><strong>Double-click</strong></td><td>Jump to Focused view for that control</td></tr>
+        <tr><td><strong>Right-click</strong></td><td>Open copy/paste context menu</td></tr>
+        <tr><td><strong>Arrow keys</strong></td><td>Move selection</td></tr>
+        <tr><td><strong>Enter</strong></td><td>Jump to Focused view</td></tr>
+    </table>
+
+    <h2 id="conflicts">Conflict Detection</h2>
+    <p>The editor automatically detects when two controls send the <strong>same MIDI message</strong>.</p>
+
+    <h3>Conflict Types</h3>
+    <div class="warning">
+        <strong>CONCURRENT CONFLICTS (Serious!)</strong><br>
+        Two controls that are ACTIVE AT THE SAME TIME send the same MIDI message.
+        These will fight each other!
+    </div>
+    
+    <div class="tip">
+        <strong>MUTUALLY-EXCLUSIVE CONFLICTS (Usually OK)</strong><br>
+        Two controls in DIFFERENT GROUPS send the same message. Only one group is active at a time, so they won't conflict in practice.
+    </div>
+
+    <h3>Conflict Filters</h3>
+    <pre>
+[✓ Concurrent (3)]  [□ Mutually-Exclusive (12)]
+       ↑                      ↑
+   Checked = shown       Unchecked = hidden</pre>
+
+    <h2 id="copypaste">Copy &amp; Paste Operations</h2>
+    
+    <h3>Right-Click Context Menu</h3>
+    <pre>
+Right-click any cell in Overview:
+
+┌─────────────────────────────────┐
+│ Copy Control                    │
+│ Copy Row (3 × 8 groups)         │
+│ Copy Column (Group 2)           │
+├─────────────────────────────────┤
+│ Paste                           │
+│ Paste Special...                │
+└─────────────────────────────────┘</pre>
+
+    <h3>Copy Scopes</h3>
+    <table>
+        <tr><th>Scope</th><th>What's Copied</th></tr>
+        <tr><td><strong>Copy Control</strong></td><td>Single cell — all parameters for one control</td></tr>
+        <tr><td><strong>Copy Row</strong></td><td>One control across all 8 groups</td></tr>
+        <tr><td><strong>Copy Column</strong></td><td>All controls in one group</td></tr>
+    </table>
+
+    <h3>Paste Special — Power Features!</h3>
+    <pre>
+┌─ Paste Special ─────────────────────────────────────────────────┐
+│                                                                 │
+│  Source: Enc G1.3 (Ch1 CC 45)                                  │
+│                                                                 │
+│  Paste to:                                                      │
+│    ○ Current cell                                               │
+│    ○ Entire row (all groups)                                    │
+│    ○ Entire column (Group 2)                                    │
+│                                                                 │
+│  Transforms:                                                    │
+│    Channel offset:    [ 0 ▾]  (-15 to +15)                     │
+│    CC/Number offset:  [ 0 ▾]  (-127 to +127)                   │
+│    [✓] Auto-increment CC by: [ 1 ]                             │
+│    Out-of-range:      [Clamp ▾]  (Clamp / Wrap)                │
+│                                                                 │
+│                              [Cancel]  [Paste]                  │
+└─────────────────────────────────────────────────────────────────┘</pre>
+
+    <h3>Transform Examples</h3>
+    <table>
+        <tr><th>Transform</th><th>Example</th></tr>
+        <tr><td>Channel Offset +2</td><td>Ch1 → Ch3</td></tr>
+        <tr><td>CC Offset +10</td><td>CC 64 → CC 74</td></tr>
+        <tr><td>Auto-increment (row)</td><td>CC 1, CC 2, CC 3... CC 8</td></tr>
+        <tr><td>Wrap (Ch15 +3)</td><td>Ch15 → Ch2 (wraps around)</td></tr>
+        <tr><td>Clamp (Ch15 +3)</td><td>Ch15 → Ch16 (stops at max)</td></tr>
+    </table>
+
+    <h2 id="undo">Undo &amp; Redo</h2>
+    <p>Every edit can be reversed. Rapid edits to the same parameter are <strong>combined</strong> into one undo step.</p>
+    <table>
+        <tr><th>Action</th><th>Windows/Linux</th><th>Mac</th></tr>
+        <tr><td>Undo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td><kbd>Cmd</kbd>+<kbd>Z</kbd></td></tr>
+        <tr><td>Redo</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td></tr>
+    </table>
+
+    <h2 id="session">Session Persistence</h2>
+    <p>Your work is <strong>automatically saved</strong> to browser storage every 2 seconds.</p>
+    <pre>
+You edit → 2 seconds pass → Auto-saved to localStorage
+You close browser → Reopen → Restore dialog appears</pre>
+
+    <h2 id="shortcuts">Keyboard Shortcuts</h2>
+    
+    <h3>Global</h3>
+    <table>
+        <tr><th>Action</th><th>Shortcut</th></tr>
+        <tr><td>Undo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td></tr>
+        <tr><td>Redo</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> or <kbd>Ctrl</kbd>+<kbd>Y</kbd></td></tr>
+    </table>
+    
+    <h3>Overview Mode</h3>
+    <table>
+        <tr><th>Action</th><th>Key</th></tr>
+        <tr><td>Move selection</td><td>Arrow keys</td></tr>
+        <tr><td>Jump to Focused view</td><td><kbd>Enter</kbd></td></tr>
+        <tr><td>Clear selection</td><td><kbd>Escape</kbd></td></tr>
+        <tr><td>Copy selected</td><td><kbd>Ctrl</kbd>+<kbd>C</kbd></td></tr>
+        <tr><td>Paste to selected</td><td><kbd>Ctrl</kbd>+<kbd>V</kbd></td></tr>
+    </table>
+
+    <h2 id="workflows">Workflow Examples</h2>
+    
+    <h3>Quick CC Remap (30 seconds)</h3>
+    <pre>
+1. Open editor (factory defaults load)
+2. Focused view → find Encoder 1 card
+3. Change CC: 1 → 74
+4. Export SysEx → send to UC4</pre>
+
+    <h3>Set Up 8 Channels (3 minutes)</h3>
+    <pre>
+1. Overview mode → Encoders tab
+2. Click Group 1, Encoder 1 cell
+3. Right-click → Copy Column
+4. Click Group 2 → Paste Special
+   - Channel offset: +1
+   - Paste to: Entire column
+5. Repeat for Groups 3-8
+6. Export</pre>
+
+    <h2 id="validation">Validation &amp; Troubleshooting</h2>
+    
+    <h3>File Size Validation</h3>
+    <table>
+        <tr><td>Valid UC4 dump</td><td>100,640 bytes ✓</td></tr>
+        <tr><td>Wrong size</td><td>Error: "Invalid file size"</td></tr>
+    </table>
+
+    <h3>Common Issues</h3>
+    <table>
+        <tr><th>Problem</th><th>Solution</th></tr>
+        <tr><td>"Invalid file size"</td><td>Dump ALL setups from UC4, not just one</td></tr>
+        <tr><td>Changes not on UC4</td><td>Did you send the .syx via MIDI after exporting?</td></tr>
+        <tr><td>Lost my edits</td><td>Check restore dialog on page load; use JSON backups</td></tr>
+        <tr><td>Conflicts everywhere</td><td>Factory defaults duplicate settings — use ME filter to hide</td></tr>
+    </table>
+
+    <div class="quick-ref">
+        <h3>Quick Reference Card</h3>
+        <pre>
+IMPORT:     Load .syx from UC4 dump or .json backup
+EXPORT:     Save .syx for UC4, .json for backup/git
+SETUP:      18 total, independent configurations
+GROUPS:     8 per setup, selected via Shift+Encoder/Green
+LINK:       Sync encoder &amp; fader group selectors
+────────────────────────────────────────────────────
+FOCUSED:    Edit individual parameters
+OVERVIEW:   See 8×8 grid, copy/paste, find conflicts
+────────────────────────────────────────────────────
+Ctrl+Z      Undo            Arrows     Navigate
+Ctrl+Y      Redo            Enter      Jump to Focused
+Ctrl+C      Copy            Escape     Clear selection
+Ctrl+V      Paste           Right-click Context menu
+────────────────────────────────────────────────────
+⚠ Concurrent    = Active at same time (fix these!)
+⚠ Mut-Excl      = Different groups (usually OK)
+● Amber dot     = Unsaved changes</pre>
+    </div>
+
+    <hr>
+    <p style="color: var(--text-dim); text-align: center;">Built for the Faderfox UC4. Not affiliated with Faderfox.</p>
+</body>
+</html>

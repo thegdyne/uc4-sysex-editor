@@ -118,6 +118,20 @@
             vertical-align: middle;
         }
         
+        .help-link {
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            background: transparent;
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .help-link:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+        
         /* Toast Notifications */
         .toast-container {
             position: fixed;
@@ -252,6 +266,22 @@
         
         .overview-grid {
             overflow-x: auto;
+        }
+        
+        .overview-section {
+            margin-bottom: 2rem;
+        }
+        
+        .overview-section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 0 0 0.75rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
         }
         
         .overview-table {
@@ -1007,6 +1037,8 @@
             <span class="btn-divider"></span>
             <button class="btn" id="undoBtn" onclick="undo()" disabled title="Undo (Ctrl+Z)">↶ Undo</button>
             <button class="btn" id="redoBtn" onclick="redo()" disabled title="Redo (Ctrl+Y)">↷ Redo</button>
+            <span class="btn-divider"></span>
+            <a href="UC4_EDITOR_GUIDE.html" class="btn help-link" target="_blank" title="Usage Guide">? Guide</a>
         </div>
     </header>
     
@@ -1929,6 +1961,7 @@
             const tabs = document.createElement('div');
             tabs.className = 'overview-tabs';
             tabs.innerHTML = `
+                <button class="overview-tab ${overviewTab === 'all' ? 'active' : ''}" onclick="setOverviewTab('all')">All</button>
                 <button class="overview-tab ${overviewTab === 'encoders' ? 'active' : ''}" onclick="setOverviewTab('encoders')">Encoders</button>
                 <button class="overview-tab ${overviewTab === 'push' ? 'active' : ''}" onclick="setOverviewTab('push')">Push Buttons</button>
                 <button class="overview-tab ${overviewTab === 'green' ? 'active' : ''}" onclick="setOverviewTab('green')">Green Buttons</button>
@@ -1959,6 +1992,13 @@
             grid.className = 'overview-grid';
             
             switch (overviewTab) {
+                case 'all':
+                    // Show all control types stacked
+                    grid.appendChild(createOverviewSection('Encoders', createEncoderOverviewTable()));
+                    grid.appendChild(createOverviewSection('Push Buttons', createButtonOverviewTable('push', getPushData, 'P')));
+                    grid.appendChild(createOverviewSection('Green Buttons', createButtonOverviewTable('green', getGreenData, 'B')));
+                    grid.appendChild(createOverviewSection('Faders', createFaderOverviewTable()));
+                    break;
                 case 'encoders':
                     grid.appendChild(createEncoderOverviewTable());
                     break;
@@ -2023,7 +2063,7 @@
         }
         
         // Overview state
-        let overviewTab = 'encoders';
+        let overviewTab = 'all';
         
         function setOverviewTab(tab) {
             overviewTab = tab;
@@ -2088,6 +2128,19 @@
             }
             
             return `${ch}:${type} ${data.cc} [${mode}]`;
+        }
+        
+        function createOverviewSection(title, table) {
+            const section = document.createElement('div');
+            section.className = 'overview-section';
+            
+            const header = document.createElement('h3');
+            header.className = 'overview-section-title';
+            header.textContent = title;
+            section.appendChild(header);
+            
+            section.appendChild(table);
+            return section;
         }
         
         function createEncoderOverviewTable() {
@@ -3814,16 +3867,22 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         function moveSelection(direction) {
             if (currentView !== 'overview') return;
             
-            // If no selection, start at 0,0
+            // If no selection, start at 0,0 with appropriate control type
             if (selection.mode === 'none') {
-                setSelection(overviewTab === 'encoders' ? 'encoder' : 
-                            overviewTab === 'push' ? 'push' :
-                            overviewTab === 'green' ? 'green' : 'fader', 0, 0);
+                let startType = 'encoder';
+                if (overviewTab === 'push') startType = 'push';
+                else if (overviewTab === 'green') startType = 'green';
+                else if (overviewTab === 'faders') startType = 'fader';
+                // 'all' and 'encoders' both start with encoder
+                setSelection(startType, 0, 0);
                 return;
             }
             
             let { controlType, group, index } = selection;
             const maxIndex = getMaxIndex(controlType);
+            
+            // Define control type order for 'all' tab navigation
+            const allTypeOrder = ['encoder', 'push', 'green', 'fader', 'fader9'];
             
             switch (direction) {
                 case 'left':
@@ -3835,6 +3894,13 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 case 'up':
                     if (index > 0) {
                         index--;
+                    } else if (overviewTab === 'all') {
+                        // Move to previous control type section
+                        const currentTypeIdx = allTypeOrder.indexOf(controlType);
+                        if (currentTypeIdx > 0) {
+                            controlType = allTypeOrder[currentTypeIdx - 1];
+                            index = getMaxIndex(controlType);
+                        }
                     } else if (controlType === 'fader9') {
                         // Move from fader9 row to fader row 8
                         controlType = 'fader';
@@ -3844,6 +3910,13 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 case 'down':
                     if (index < maxIndex) {
                         index++;
+                    } else if (overviewTab === 'all') {
+                        // Move to next control type section
+                        const currentTypeIdx = allTypeOrder.indexOf(controlType);
+                        if (currentTypeIdx < allTypeOrder.length - 1) {
+                            controlType = allTypeOrder[currentTypeIdx + 1];
+                            index = 0;
+                        }
                     } else if (controlType === 'fader' && overviewTab === 'faders') {
                         // Move from fader row 8 to fader9 row
                         controlType = 'fader9';
