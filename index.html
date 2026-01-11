@@ -1272,7 +1272,7 @@
             if (offset > 0) {
                 for (let g = 1; g <= 8; g++) {
                     for (let i = 1; i <= 8; i++) {
-                        encodeValue(buf, offset, (g-1)*8 + (i-1), config.encoders[g][i].channel - 1);
+                        encodeValue(buf, offset, (g-1)*8 + (i-1), 0x20 | (config.encoders[g][i].channel - 1));
                     }
                 }
                 recalcBankChecksum(buf, offset);
