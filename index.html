@@ -109,6 +109,221 @@
             color: var(--bg-dark);
         }
         
+        .btn-divider {
+            display: inline-block;
+            width: 1px;
+            height: 1.5rem;
+            background: var(--border);
+            margin: 0 0.5rem;
+            vertical-align: middle;
+        }
+        
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .toast {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            animation: slideIn 0.3s ease-out;
+            max-width: 300px;
+        }
+        
+        .toast.error {
+            border-color: var(--error);
+            color: var(--error);
+        }
+        
+        .toast.success {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Restore Dialog */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .modal-dialog {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .modal-dialog h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .modal-dialog p {
+            color: var(--text-dim);
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .modal-dialog .info {
+            background: var(--bg-input);
+            padding: 0.75rem;
+            margin: 1rem 0;
+            font-size: 0.8rem;
+        }
+        
+        .modal-dialog label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin: 1rem 0;
+            cursor: pointer;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+        
+        /* Overview Mode */
+        .overview-container {
+            padding: 1rem;
+        }
+        
+        .overview-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        
+        .overview-tab {
+            font-family: inherit;
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--bg-control);
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.1s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .overview-tab:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+        
+        .overview-tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-dark);
+            font-weight: 600;
+        }
+        
+        .overview-grid {
+            overflow-x: auto;
+        }
+        
+        .overview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        
+        .overview-table th,
+        .overview-table td {
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.5rem;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .overview-table th {
+            background: var(--bg-panel);
+            color: var(--text-dim);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .overview-table th.group-header {
+            color: var(--accent);
+        }
+        
+        .overview-table th.row-header {
+            text-align: left;
+            width: 70px;
+            min-width: 70px;
+        }
+        
+        .overview-table td {
+            background: var(--bg-input);
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        
+        .overview-table td:hover {
+            background: var(--bg-control);
+        }
+        
+        .overview-table td.conflict {
+            background: rgba(255, 170, 0, 0.2);
+        }
+        
+        .overview-table td.conflict-dim {
+            background: rgba(255, 170, 0, 0.1);
+        }
+        
+        .overview-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        
+        .overview-cell .conflict-icon {
+            color: var(--warning);
+            font-size: 0.65rem;
+        }
+        
+        .group-name-row td {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            background: var(--bg-panel) !important;
+            padding: 0.2rem 0.5rem;
+        }
+        
         /* Navigation */
         .nav-bar {
             background: var(--bg-panel);
@@ -499,6 +714,7 @@
     </style>
 </head>
 <body>
+    <div id="toastContainer" class="toast-container"></div>
     <header class="header">
         <div class="logo">UC4 <span>SysEx Editor</span></div>
         <div class="file-actions">
@@ -508,6 +724,9 @@
             <input type="file" id="jsonInput" accept=".json" class="hidden-input">
             <button class="btn" onclick="document.getElementById('jsonInput').click()">Import JSON</button>
             <button class="btn" id="exportJsonBtn" onclick="exportJSON()" disabled>Export JSON</button>
+            <span class="btn-divider"></span>
+            <button class="btn" id="undoBtn" onclick="undo()" disabled title="Undo (Ctrl+Z)">↶ Undo</button>
+            <button class="btn" id="redoBtn" onclick="redo()" disabled title="Redo (Ctrl+Y)">↷ Redo</button>
         </div>
     </header>
     
@@ -577,6 +796,29 @@
         let currentView = 'focused';
         let isModified = false;
         let dirtyBanks = new Set();
+        
+        // Undo/Redo State
+        const undoStack = [];
+        const redoStack = [];
+        const MAX_UNDO = 100;
+        const COALESCE_WINDOW = 1000; // 1 second
+        
+        // Session Persistence State
+        const STORAGE_KEY = 'uc4-editor-session';
+        const SESSION_VERSION = 1;
+        const AUTO_SAVE_DELAY = 2000; // 2 seconds
+        let autoSaveTimer = null;
+        
+        // Conflict Detection State
+        const CONFLICT_REBUILD_DELAY = 200; // 200ms
+        let conflictRebuildTimer = null;
+        let conflicts = { concurrent: new Map(), mutuallyExclusive: new Map() };
+        
+        // Parameters that affect conflict detection
+        const CONFLICT_PARAMS = new Set([
+            'channel', 'type', 'cc', 'note', 'typeNibble', 
+            'upper', 'lower', 'mode', 'min', 'max'
+        ]);
         
         // Constants
         const EXPECTED_SIZE = 100640;
@@ -1368,41 +1610,415 @@
         
         function renderOverview() {
             const main = document.getElementById('mainContent');
-            main.innerHTML = '<div class="no-data"><h2>Overview Mode</h2><p>Coming soon - shows all 8 groups at once for comparison</p></div>';
+            main.innerHTML = '';
+            
+            const container = document.createElement('div');
+            container.className = 'overview-container';
+            
+            // Tab bar
+            const tabs = document.createElement('div');
+            tabs.className = 'overview-tabs';
+            tabs.innerHTML = `
+                <button class="overview-tab ${overviewTab === 'encoders' ? 'active' : ''}" onclick="setOverviewTab('encoders')">Encoders</button>
+                <button class="overview-tab ${overviewTab === 'push' ? 'active' : ''}" onclick="setOverviewTab('push')">Push Buttons</button>
+                <button class="overview-tab ${overviewTab === 'green' ? 'active' : ''}" onclick="setOverviewTab('green')">Green Buttons</button>
+                <button class="overview-tab ${overviewTab === 'faders' ? 'active' : ''}" onclick="setOverviewTab('faders')">Faders</button>
+            `;
+            container.appendChild(tabs);
+            
+            // Grid based on active tab
+            const grid = document.createElement('div');
+            grid.className = 'overview-grid';
+            
+            switch (overviewTab) {
+                case 'encoders':
+                    grid.appendChild(createEncoderOverviewTable());
+                    break;
+                case 'push':
+                    grid.appendChild(createButtonOverviewTable('push', getPushData, 'P'));
+                    break;
+                case 'green':
+                    grid.appendChild(createButtonOverviewTable('green', getGreenData, 'B'));
+                    break;
+                case 'faders':
+                    grid.appendChild(createFaderOverviewTable());
+                    break;
+            }
+            
+            container.appendChild(grid);
+            main.appendChild(container);
+        }
+        
+        // Overview state
+        let overviewTab = 'encoders';
+        
+        function setOverviewTab(tab) {
+            overviewTab = tab;
+            renderOverview();
+        }
+        
+        // MIDI Channel Helpers
+        function chDisp(ch0) { return (ch0 | 0) + 1; }
+        
+        function formatEncoderCell(data) {
+            const typeMap = {
+                0: 'r1', 1: 'r2', 2: 'CC', 3: 'PC', 4: 'Hi', 5: 'PB', 6: 'AT'
+            };
+            const type = typeMap[data.type] || '??';
+            const ch = chDisp(data.channel - 1);  // data.channel is already 1-based
+            
+            // Program Change: show range
+            if (data.type === 3) {
+                const lo = Math.min(data.min, data.max);
+                const hi = Math.max(data.min, data.max);
+                return `${ch}:PC ${lo}-${hi}`;
+            }
+            
+            // Pitch bend and aftertouch have no CC number
+            if (data.type === 5 || data.type === 6) {
+                return `${ch}:${type}`;
+            }
+            
+            return `${ch}:${type} ${data.cc}`;
+        }
+        
+        function formatFaderCell(data) {
+            const typeMap = { 0: 'CC', 1: 'PC', 2: 'PB', 3: 'AT' };
+            const type = typeMap[data.type] || '??';
+            const ch = chDisp(data.channel - 1);
+            
+            // Program Change: show range
+            if (data.type === 1) {
+                const lo = Math.min(data.min, data.max);
+                const hi = Math.max(data.min, data.max);
+                return `${ch}:PC ${lo}-${hi}`;
+            }
+            
+            // Pitch bend and aftertouch have no CC number
+            if (data.type === 2 || data.type === 3) {
+                return `${ch}:${type}`;
+            }
+            
+            return `${ch}:${type} ${data.cc}`;
+        }
+        
+        function formatButtonCell(data) {
+            if (data.typeNibble === 0x00) return '--';
+            
+            const typeMap = { 0x10: 'N', 0x20: 'CC', 0x30: 'PC', 0x40: 'AT' };
+            const type = typeMap[data.typeNibble] || '??';
+            const ch = chDisp(data.channel - 1);
+            const mode = data.mode ? 'T' : 'M';
+            
+            if (data.typeNibble === 0x40) {
+                return `${ch}:${type} [${mode}]`;
+            }
+            
+            return `${ch}:${type} ${data.cc} [${mode}]`;
+        }
+        
+        function createEncoderOverviewTable() {
+            const table = document.createElement('table');
+            table.className = 'overview-table';
+            
+            // Header row
+            let headerHtml = '<tr><th class="row-header"></th>';
+            for (let g = 0; g < 8; g++) {
+                const name = getGroupName(currentSetup, g);
+                headerHtml += `<th class="group-header">Group ${g + 1}</th>`;
+            }
+            headerHtml += '</tr>';
+            
+            // Group name row
+            headerHtml += '<tr class="group-name-row"><td></td>';
+            for (let g = 0; g < 8; g++) {
+                const name = getGroupName(currentSetup, g);
+                headerHtml += `<td>${name}</td>`;
+            }
+            headerHtml += '</tr>';
+            
+            table.innerHTML = headerHtml;
+            
+            // Data rows
+            for (let i = 0; i < 8; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<th class="row-header">Enc ${i + 1}</th>`;
+                
+                for (let g = 0; g < 8; g++) {
+                    const data = getEncoderData(currentSetup, g, i);
+                    const cell = document.createElement('td');
+                    cell.innerHTML = `<div class="overview-cell">${formatEncoderCell(data)}</div>`;
+                    cell.onclick = () => jumpToFocusedView('encoder', g, i);
+                    cell.title = createEncoderTooltip(data, g, i);
+                    row.appendChild(cell);
+                }
+                
+                table.appendChild(row);
+            }
+            
+            return table;
+        }
+        
+        function createButtonOverviewTable(type, getData, prefix) {
+            const table = document.createElement('table');
+            table.className = 'overview-table';
+            
+            // Header row
+            let headerHtml = '<tr><th class="row-header"></th>';
+            for (let g = 0; g < 8; g++) {
+                headerHtml += `<th class="group-header">Group ${g + 1}</th>`;
+            }
+            headerHtml += '</tr>';
+            
+            // Group name row
+            headerHtml += '<tr class="group-name-row"><td></td>';
+            for (let g = 0; g < 8; g++) {
+                const name = getGroupName(currentSetup, g);
+                headerHtml += `<td>${name}</td>`;
+            }
+            headerHtml += '</tr>';
+            
+            table.innerHTML = headerHtml;
+            
+            // Data rows
+            for (let i = 0; i < 8; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<th class="row-header">${prefix} ${i + 1}</th>`;
+                
+                for (let g = 0; g < 8; g++) {
+                    const data = getData(currentSetup, g, i);
+                    const cell = document.createElement('td');
+                    cell.innerHTML = `<div class="overview-cell">${formatButtonCell(data)}</div>`;
+                    cell.onclick = () => jumpToFocusedView(type, g, i);
+                    row.appendChild(cell);
+                }
+                
+                table.appendChild(row);
+            }
+            
+            return table;
+        }
+        
+        function createFaderOverviewTable() {
+            const table = document.createElement('table');
+            table.className = 'overview-table';
+            
+            // Header row
+            let headerHtml = '<tr><th class="row-header"></th>';
+            for (let g = 0; g < 8; g++) {
+                headerHtml += `<th class="group-header">Group ${g + 1}</th>`;
+            }
+            headerHtml += '</tr>';
+            
+            // Group name row
+            headerHtml += '<tr class="group-name-row"><td></td>';
+            for (let g = 0; g < 8; g++) {
+                const name = getGroupName(currentSetup, g);
+                headerHtml += `<td>${name}</td>`;
+            }
+            headerHtml += '</tr>';
+            
+            table.innerHTML = headerHtml;
+            
+            // Fader 1-8 rows
+            for (let i = 0; i < 8; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<th class="row-header">Fad ${i + 1}</th>`;
+                
+                for (let g = 0; g < 8; g++) {
+                    const data = getFaderData(currentSetup, g, i);
+                    const cell = document.createElement('td');
+                    cell.innerHTML = `<div class="overview-cell">${formatFaderCell(data)}</div>`;
+                    cell.onclick = () => jumpToFocusedView('fader', g, i);
+                    row.appendChild(cell);
+                }
+                
+                table.appendChild(row);
+            }
+            
+            // Fader 9 row
+            const f9row = document.createElement('tr');
+            f9row.innerHTML = `<th class="row-header">Fad 9</th>`;
+            
+            for (let g = 0; g < 8; g++) {
+                const data = getFader9Data(currentSetup, g);
+                const cell = document.createElement('td');
+                // Fader 9 only has CC type
+                const ch = chDisp(data.channel - 1);
+                cell.innerHTML = `<div class="overview-cell">${ch}:CC ${data.cc}</div>`;
+                cell.onclick = () => jumpToFocusedView('fader9', g, 0);
+                f9row.appendChild(cell);
+            }
+            
+            table.appendChild(f9row);
+            
+            return table;
+        }
+        
+        function createEncoderTooltip(data, group, index) {
+            const types = ['CCr1', 'CCr2', 'CCAb', 'PrGC', 'CCAh', 'Pbnd', 'AFtt'];
+            const accs = ['Acc0', 'Acc1', 'Acc2', 'Acc3'];
+            const disps = ['OFF', 'Std', 'bPoL'];
+            
+            return `Encoder ${index + 1}, Group ${group + 1}
+Channel: ${data.channel}
+Type: ${types[data.type] || '?'}
+CC#: ${data.cc}
+Min: ${data.min}, Max: ${data.max}
+Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
+        }
+        
+        function jumpToFocusedView(type, group, index) {
+            // Switch to the appropriate group
+            if (type === 'encoder' || type === 'push') {
+                selectEncoderGroup(group);
+            } else {
+                selectFaderGroup(group);
+            }
+            
+            // Switch to focused view
+            setView('focused');
+            
+            // Scroll to the control (after view renders)
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.control-card');
+                // Find the right card based on type and index
+                // This is approximate - we'd need better selectors in production
+            }, 100);
         }
         
         // ============================================================
-        // Update Functions
+        // Update Functions (with undo support)
         // ============================================================
         
         function updateEncoder(idx, param, value) {
             const data = getEncoderData(currentSetup, encoderGroup, idx);
-            data[param] = parseInt(value);
+            const before = data[param];
+            const after = parseInt(value, 10);
+            
+            if (before === after) return; // No change
+            
+            data[param] = after;
             setEncoderData(currentSetup, encoderGroup, idx, data);
+            
+            recordUndoCoalesced({
+                type: 'value',
+                controlType: 'encoder',
+                setupIdx: currentSetup,
+                group: encoderGroup,
+                index: idx,
+                param,
+                before,
+                after
+            });
+            
+            if (CONFLICT_PARAMS.has(param)) {
+                scheduleConflictRebuild();
+            }
         }
         
         function updatePush(idx, param, value) {
             const data = getPushData(currentSetup, encoderGroup, idx);
-            data[param] = parseInt(value);
+            const before = data[param];
+            const after = parseInt(value, 10);
+            
+            if (before === after) return;
+            
+            data[param] = after;
             setPushData(currentSetup, encoderGroup, idx, data);
+            
+            recordUndoCoalesced({
+                type: 'value',
+                controlType: 'push',
+                setupIdx: currentSetup,
+                group: encoderGroup,
+                index: idx,
+                param,
+                before,
+                after
+            });
+            
+            if (CONFLICT_PARAMS.has(param)) {
+                scheduleConflictRebuild();
+            }
         }
         
         function updateGreen(idx, param, value) {
             const data = getGreenData(currentSetup, faderGroup, idx);
-            data[param] = parseInt(value);
+            const before = data[param];
+            const after = parseInt(value, 10);
+            
+            if (before === after) return;
+            
+            data[param] = after;
             setGreenData(currentSetup, faderGroup, idx, data);
+            
+            recordUndoCoalesced({
+                type: 'value',
+                controlType: 'green',
+                setupIdx: currentSetup,
+                group: faderGroup,
+                index: idx,
+                param,
+                before,
+                after
+            });
+            
+            if (CONFLICT_PARAMS.has(param)) {
+                scheduleConflictRebuild();
+            }
         }
         
         function updateFader(idx, param, value) {
             const data = getFaderData(currentSetup, faderGroup, idx);
-            data[param] = parseInt(value);
+            const before = data[param];
+            const after = parseInt(value, 10);
+            
+            if (before === after) return;
+            
+            data[param] = after;
             setFaderData(currentSetup, faderGroup, idx, data);
+            
+            recordUndoCoalesced({
+                type: 'value',
+                controlType: 'fader',
+                setupIdx: currentSetup,
+                group: faderGroup,
+                index: idx,
+                param,
+                before,
+                after
+            });
+            
+            if (CONFLICT_PARAMS.has(param)) {
+                scheduleConflictRebuild();
+            }
         }
         
         function updateFader9(param, value) {
             const data = getFader9Data(currentSetup, faderGroup);
-            data[param] = parseInt(value);
+            const before = data[param];
+            const after = parseInt(value, 10);
+            
+            if (before === after) return;
+            
+            data[param] = after;
             setFader9Data(currentSetup, faderGroup, data);
+            
+            recordUndoCoalesced({
+                type: 'value',
+                controlType: 'fader9',
+                setupIdx: currentSetup,
+                group: faderGroup,
+                index: 0,
+                param,
+                before,
+                after
+            });
+            
+            if (CONFLICT_PARAMS.has(param)) {
+                scheduleConflictRebuild();
+            }
         }
         
         // ============================================================
@@ -1484,6 +2100,14 @@
                 
                 sectionIndex = buildIndex(rawBuffer);
                 
+                // Clear previous session - new import is clean slate
+                clearSession();
+                
+                // Clear undo/redo stacks
+                undoStack.length = 0;
+                redoStack.length = 0;
+                updateUndoRedoUI();
+                
                 // Enable UI
                 document.getElementById('setupSelect').disabled = false;
                 document.getElementById('setupSelect').value = '0';
@@ -1534,8 +2158,11 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
+            // Clear session - user saved their work
+            clearSession();
             isModified = false;
             updateStatus('loaded', 'Exported successfully');
+            showToast('SysEx exported', 'success');
         }
         
         function exportJSON() {
@@ -1639,6 +2266,7 @@
         function markModified() {
             isModified = true;
             updateStatus('modified', 'Modified - remember to export');
+            scheduleAutoSave();
         }
         
         function updateStatus(state, text) {
@@ -1648,6 +2276,442 @@
             dot.className = 'status-dot ' + state;
             txt.textContent = text;
         }
+        
+        // ============================================================
+        // Toast Notifications
+        // ============================================================
+        
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.textContent = message;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // ============================================================
+        // Undo/Redo System
+        // ============================================================
+        
+        function recordUndo(action) {
+            if (!action.description) {
+                action.description = generateDescription(action);
+            }
+            action.timestamp = Date.now();
+            
+            undoStack.push(action);
+            
+            // Clear redo stack (new action invalidates redo history)
+            redoStack.length = 0;
+            
+            // Trim if over limit
+            while (undoStack.length > MAX_UNDO) {
+                undoStack.shift();
+            }
+            
+            updateUndoRedoUI();
+        }
+        
+        function recordUndoCoalesced(action) {
+            const last = undoStack[undoStack.length - 1];
+            
+            // Check if we should coalesce with previous action
+            if (last && 
+                last.type === 'value' &&
+                action.type === 'value' &&
+                last.controlType === action.controlType &&
+                last.setupIdx === action.setupIdx &&
+                last.group === action.group &&
+                last.index === action.index &&
+                last.param === action.param &&
+                (Date.now() - last.timestamp) < COALESCE_WINDOW) {
+                
+                // Update the existing action's 'after' value
+                last.after = action.after;
+                last.timestamp = Date.now();
+                // Keep original 'before' value
+                return;
+            }
+            
+            // Otherwise record as new action
+            recordUndo(action);
+        }
+        
+        function generateDescription(action) {
+            const formatControlName = (type, group, index) => {
+                const g = group + 1;
+                const i = index + 1;
+                switch (type) {
+                    case 'encoder': return `Encoder G${g}.${i}`;
+                    case 'push': return `Push G${g}.${i}`;
+                    case 'green': return `Green G${g}.${i}`;
+                    case 'fader': return `Fader G${g}.${i}`;
+                    case 'fader9': return `Fader9 G${g}`;
+                    default: return `${type} G${g}.${i}`;
+                }
+            };
+            
+            switch (action.type) {
+                case 'value':
+                    return `Change ${formatControlName(action.controlType, action.group, action.index)} ${action.param}`;
+                case 'control':
+                    return `Update ${formatControlName(action.controlType, action.group, action.index)}`;
+                case 'batch':
+                    return action.description || 'Batch operation';
+                default:
+                    return 'Unknown action';
+            }
+        }
+        
+        function undo() {
+            if (undoStack.length === 0) return;
+            
+            const action = undoStack.pop();
+            
+            // Apply reverse
+            applyAction(action, true);
+            
+            redoStack.push(action);
+            updateUndoRedoUI();
+            renderCurrentView();
+        }
+        
+        function redo() {
+            if (redoStack.length === 0) return;
+            
+            const action = redoStack.pop();
+            
+            // Apply forward
+            applyAction(action, false);
+            
+            undoStack.push(action);
+            updateUndoRedoUI();
+            renderCurrentView();
+        }
+        
+        function applyAction(action, reverse) {
+            switch (action.type) {
+                case 'value': {
+                    const value = reverse ? action.before : action.after;
+                    applyValueChange(action, value);
+                    break;
+                }
+                    
+                case 'control': {
+                    const data = reverse ? action.before : action.after;
+                    setControlDataSilent(action.controlType, action.setupIdx, action.group, action.index, data);
+                    break;
+                }
+                    
+                case 'batch': {
+                    for (const subAction of action.actions) {
+                        const subData = reverse ? subAction.before : subAction.after;
+                        setControlDataSilent(subAction.controlType, subAction.setupIdx, subAction.group, subAction.index, subData);
+                    }
+                    break;
+                }
+            }
+            
+            // After any change
+            markModified();
+            
+            // Only rebuild conflicts if action affects routing params
+            if (actionAffectsConflicts(action)) {
+                scheduleConflictRebuild();
+            }
+        }
+        
+        function applyValueChange(action, value) {
+            const getData = getControlDataByType(action.controlType);
+            const setData = setControlDataByType(action.controlType);
+            
+            if (!getData || !setData) return;
+            
+            const data = getData(action.setupIdx, action.group, action.index);
+            data[action.param] = value;
+            setData(action.setupIdx, action.group, action.index, data);
+        }
+        
+        function getControlDataByType(type) {
+            switch (type) {
+                case 'encoder': return getEncoderData;
+                case 'push': return getPushData;
+                case 'green': return getGreenData;
+                case 'fader': return getFaderData;
+                case 'fader9': return (s, g, i) => getFader9Data(s, g);
+                default: return null;
+            }
+        }
+        
+        function setControlDataByType(type) {
+            switch (type) {
+                case 'encoder': return setEncoderData;
+                case 'push': return setPushData;
+                case 'green': return setGreenData;
+                case 'fader': return setFaderData;
+                case 'fader9': return (s, g, i, d) => setFader9Data(s, g, d);
+                default: return null;
+            }
+        }
+        
+        // Silent setters that don't trigger markModified (for undo/redo)
+        function setControlDataSilent(type, setupIdx, group, index, data) {
+            const setData = setControlDataByType(type);
+            if (setData) {
+                // Temporarily disable markModified in setValue
+                const originalMarkModified = markModified;
+                // setValue calls markModified, so we need to track dirty banks without it
+                setData(setupIdx, group, index, data);
+            }
+        }
+        
+        function actionAffectsConflicts(action) {
+            if (action.type === 'value') {
+                return CONFLICT_PARAMS.has(action.param);
+            }
+            // control and batch actions are conservative - always rebuild
+            return true;
+        }
+        
+        function updateUndoRedoUI() {
+            const undoBtn = document.getElementById('undoBtn');
+            const redoBtn = document.getElementById('redoBtn');
+            
+            undoBtn.disabled = undoStack.length === 0;
+            redoBtn.disabled = redoStack.length === 0;
+            
+            // Update tooltips
+            if (undoStack.length > 0) {
+                undoBtn.title = `Undo: ${undoStack[undoStack.length - 1].description}`;
+            } else {
+                undoBtn.title = 'Undo (Ctrl+Z)';
+            }
+            
+            if (redoStack.length > 0) {
+                redoBtn.title = `Redo: ${redoStack[redoStack.length - 1].description}`;
+            } else {
+                redoBtn.title = 'Redo (Ctrl+Y)';
+            }
+        }
+        
+        // ============================================================
+        // Session Persistence
+        // ============================================================
+        
+        function scheduleAutoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                saveSession();
+            }, AUTO_SAVE_DELAY);
+        }
+        
+        function saveSession() {
+            if (!rawBuffer) return;
+            
+            try {
+                const sessionData = {
+                    version: SESSION_VERSION,
+                    timestamp: Date.now(),
+                    buffer: Array.from(rawBuffer),
+                    uiState: {
+                        currentSetup,
+                        encoderGroup,
+                        faderGroup,
+                        currentView
+                    },
+                    dirtyBanks: Array.from(dirtyBanks)
+                };
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionData));
+            } catch (e) {
+                console.warn('Session save failed:', e);
+                if (e.name === 'QuotaExceededError') {
+                    showToast('Autosave failed (storage full)', 'error');
+                }
+            }
+        }
+        
+        function loadSession() {
+            try {
+                const json = localStorage.getItem(STORAGE_KEY);
+                if (!json) return null;
+                
+                const session = JSON.parse(json);
+                
+                // Version check
+                if (session.version !== SESSION_VERSION) {
+                    console.warn('Session version mismatch, discarding');
+                    clearSession();
+                    return null;
+                }
+                
+                // Buffer integrity checks
+                if (!session.buffer || session.buffer.length !== EXPECTED_SIZE) {
+                    console.warn('Invalid buffer length, discarding');
+                    clearSession();
+                    return null;
+                }
+                
+                // SysEx framing check
+                if (session.buffer[0] === 0xF0) {
+                    if (session.buffer[session.buffer.length - 1] !== 0xF7) {
+                        console.warn('Invalid SysEx framing, discarding');
+                        clearSession();
+                        return null;
+                    }
+                }
+                
+                return session;
+            } catch (e) {
+                console.error('Failed to parse session:', e);
+                clearSession();
+                return null;
+            }
+        }
+        
+        function clearSession() {
+            try {
+                localStorage.removeItem(STORAGE_KEY);
+            } catch (e) {
+                console.warn('Failed to clear session:', e);
+            }
+        }
+        
+        function restoreSession(session) {
+            rawBuffer = new Uint8Array(session.buffer);
+            sectionIndex = buildIndex(rawBuffer);
+            
+            // Restore UI state
+            currentSetup = session.uiState.currentSetup || 0;
+            encoderGroup = session.uiState.encoderGroup || 0;
+            faderGroup = session.uiState.faderGroup || 0;
+            currentView = session.uiState.currentView || 'focused';
+            
+            // Restore dirty banks
+            dirtyBanks = new Set(session.dirtyBanks || []);
+            isModified = dirtyBanks.size > 0;
+            
+            // Enable UI
+            document.getElementById('setupSelect').disabled = false;
+            document.getElementById('setupSelect').value = currentSetup.toString();
+            document.getElementById('exportBtn').disabled = false;
+            document.getElementById('exportJsonBtn').disabled = false;
+            
+            updateGroupTabs('encoderGroupTabs', encoderGroup);
+            updateGroupTabs('faderGroupTabs', faderGroup);
+            updateGroupNames();
+            setView(currentView);
+            
+            if (isModified) {
+                updateStatus('modified', 'Session restored - changes pending');
+            } else {
+                updateStatus('loaded', 'Session restored');
+            }
+            
+            document.getElementById('fileInfo').textContent = `Restored session (${rawBuffer.length.toLocaleString()} bytes)`;
+            
+            showToast('Session restored', 'success');
+        }
+        
+        function formatTimeSince(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            if (seconds < 60) return 'just now';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            const days = Math.floor(hours / 24);
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        }
+        
+        function showRestoreDialog(timeSince, session) {
+            return new Promise((resolve) => {
+                const overlay = document.createElement('div');
+                overlay.className = 'modal-overlay';
+                
+                const dirtyCount = session.dirtyBanks ? session.dirtyBanks.length : 0;
+                const setupInfo = session.uiState ? `Setup ${(session.uiState.currentSetup || 0) + 1}` : 'Unknown setup';
+                
+                overlay.innerHTML = `
+                    <div class="modal-dialog">
+                        <h3>Restore Previous Session?</h3>
+                        <p>Found unsaved changes from ${timeSince}.</p>
+                        <div class="info">
+                            ${setupInfo}<br>
+                            ${dirtyCount} modified bank${dirtyCount !== 1 ? 's' : ''}
+                        </div>
+                        <label>
+                            <input type="checkbox" id="skipRestoreCheck">
+                            Don't ask again this session
+                        </label>
+                        <div class="modal-actions">
+                            <button class="btn" id="discardBtn">Discard & Load Factory</button>
+                            <button class="btn btn-primary" id="restoreBtn">Restore Session</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(overlay);
+                
+                document.getElementById('restoreBtn').onclick = () => {
+                    overlay.remove();
+                    resolve('restore');
+                };
+                
+                document.getElementById('discardBtn').onclick = () => {
+                    const skipCheck = document.getElementById('skipRestoreCheck').checked;
+                    overlay.remove();
+                    if (skipCheck) {
+                        resolve('discard-permanently');
+                    } else {
+                        resolve('discard');
+                    }
+                };
+            });
+        }
+        
+        // ============================================================
+        // Conflict Detection (Placeholder for Phase 3)
+        // ============================================================
+        
+        function scheduleConflictRebuild() {
+            clearTimeout(conflictRebuildTimer);
+            conflictRebuildTimer = setTimeout(() => {
+                // Conflict detection will be implemented in Phase 3
+                // For now, just a placeholder
+            }, CONFLICT_REBUILD_DELAY);
+        }
+        
+        // ============================================================
+        // Keyboard Shortcuts
+        // ============================================================
+        
+        document.addEventListener('keydown', (e) => {
+            // Check if we're in an input field
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+            
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+            const ctrlKey = isMac ? e.metaKey : e.ctrlKey;
+            
+            if (ctrlKey && e.key === 'z' && !e.shiftKey) {
+                e.preventDefault();
+                undo();
+            } else if (ctrlKey && e.key === 'z' && e.shiftKey) {
+                e.preventDefault();
+                redo();
+            } else if (ctrlKey && e.key === 'y') {
+                e.preventDefault();
+                redo();
+            }
+        });
         
         // ============================================================
         // Init
@@ -1694,6 +2758,11 @@
                 isModified = false;
                 dirtyBanks.clear();
                 
+                // Clear undo/redo stacks on fresh load
+                undoStack.length = 0;
+                redoStack.length = 0;
+                updateUndoRedoUI();
+                
                 updateGroupTabs('encoderGroupTabs', 0);
                 updateGroupTabs('faderGroupTabs', 0);
                 updateGroupNames();
@@ -1707,8 +2776,48 @@
             }
         }
         
+        async function initializeEditor() {
+            // Check if user previously said "don't ask again"
+            if (sessionStorage.getItem('uc4-skip-restore') === 'true') {
+                clearSession();
+                dirtyBanks.clear();
+                await loadDefaultSysEx();
+                return;
+            }
+            
+            // Check for saved session with actual unsaved changes
+            const savedSession = loadSession();
+            
+            // Only prompt if there are dirty banks (actual unsaved edits)
+            if (savedSession && savedSession.dirtyBanks && savedSession.dirtyBanks.length > 0) {
+                const timeSince = formatTimeSince(savedSession.timestamp);
+                
+                // Show restore prompt
+                const result = await showRestoreDialog(timeSince, savedSession);
+                
+                if (result === 'restore') {
+                    restoreSession(savedSession);
+                    return;
+                } else if (result === 'discard-permanently') {
+                    clearSession();
+                    dirtyBanks.clear();
+                    // Don't prompt again this browser session
+                    sessionStorage.setItem('uc4-skip-restore', 'true');
+                } else {
+                    clearSession();
+                    dirtyBanks.clear();
+                }
+            } else if (savedSession) {
+                // Session exists but no dirty banks = clean baseline, just clear it
+                clearSession();
+            }
+            
+            // Load factory defaults
+            await loadDefaultSysEx();
+        }
+        
         initUI();
-        loadDefaultSysEx();
+        initializeEditor();
     </script>
 </body>
 </html>
