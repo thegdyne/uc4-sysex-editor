@@ -324,6 +324,116 @@
             padding: 0.2rem 0.5rem;
         }
         
+        /* Conflict Filter Chips */
+        .conflict-filters {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+        }
+        
+        .conflict-filters-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 0.5rem;
+        }
+        
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.7rem;
+            border: 1px solid var(--border);
+            background: var(--bg-control);
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        
+        .filter-chip:hover {
+            border-color: var(--accent);
+        }
+        
+        .filter-chip.active {
+            background: var(--warning);
+            border-color: var(--warning);
+            color: var(--bg-dark);
+        }
+        
+        .filter-chip.active.dim {
+            background: rgba(255, 170, 0, 0.3);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+        
+        .filter-chip .count {
+            font-weight: 600;
+        }
+        
+        .filter-chip .checkmark {
+            font-size: 0.8rem;
+        }
+        
+        /* Conflict Panel */
+        .conflict-panel {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .conflict-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .conflict-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
+        }
+        
+        .conflict-item:last-child {
+            border-bottom: none;
+        }
+        
+        .conflict-item .warning-icon {
+            color: var(--warning);
+            flex-shrink: 0;
+        }
+        
+        .conflict-item.dim .warning-icon {
+            opacity: 0.5;
+        }
+        
+        .conflict-key {
+            color: var(--accent);
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .conflict-refs {
+            color: var(--text-dim);
+        }
+        
         /* Navigation */
         .nav-bar {
             background: var(--bg-panel);
@@ -813,6 +923,11 @@
         const CONFLICT_REBUILD_DELAY = 200; // 200ms
         let conflictRebuildTimer = null;
         let conflicts = { concurrent: new Map(), mutuallyExclusive: new Map() };
+        let conflictsByControl = new Map(); // Quick lookup: "type-group-index" -> [conflict keys]
+        
+        // Conflict filter state
+        let showConcurrentConflicts = true;
+        let showMutuallyExclusiveConflicts = false;
         
         // Parameters that affect conflict detection
         const CONFLICT_PARAMS = new Set([
@@ -1626,6 +1741,24 @@
             `;
             container.appendChild(tabs);
             
+            // Conflict filter chips
+            const filters = document.createElement('div');
+            filters.className = 'conflict-filters';
+            filters.innerHTML = `
+                <span class="conflict-filters-label">Conflicts:</span>
+                <div class="filter-chip ${showConcurrentConflicts ? 'active' : ''}" onclick="toggleConcurrentFilter()">
+                    <span class="checkmark">${showConcurrentConflicts ? '✓' : ''}</span>
+                    Concurrent
+                    <span class="count" id="concurrentCount">${conflicts.concurrent.size}</span>
+                </div>
+                <div class="filter-chip ${showMutuallyExclusiveConflicts ? 'active dim' : ''}" onclick="toggleMEFilter()">
+                    <span class="checkmark">${showMutuallyExclusiveConflicts ? '✓' : ''}</span>
+                    Mutually-Exclusive
+                    <span class="count" id="meCount">${conflicts.mutuallyExclusive.size}</span>
+                </div>
+            `;
+            container.appendChild(filters);
+            
             // Grid based on active tab
             const grid = document.createElement('div');
             grid.className = 'overview-grid';
@@ -1646,6 +1779,51 @@
             }
             
             container.appendChild(grid);
+            
+            // Conflict panel (show only if there are conflicts to display)
+            const visibleConflicts = [];
+            if (showConcurrentConflicts) {
+                for (const [key, entry] of conflicts.concurrent) {
+                    visibleConflicts.push({ key, entry, type: 'concurrent' });
+                }
+            }
+            if (showMutuallyExclusiveConflicts) {
+                for (const [key, entry] of conflicts.mutuallyExclusive) {
+                    visibleConflicts.push({ key, entry, type: 'me' });
+                }
+            }
+            
+            if (visibleConflicts.length > 0) {
+                const panel = document.createElement('div');
+                panel.className = 'conflict-panel';
+                panel.innerHTML = `
+                    <div class="conflict-panel-header">
+                        <span>⚠ ${visibleConflicts.length} Conflict${visibleConflicts.length !== 1 ? 's' : ''}</span>
+                    </div>
+                `;
+                
+                for (const { key, entry, type } of visibleConflicts.slice(0, 20)) {
+                    const item = document.createElement('div');
+                    item.className = `conflict-item ${type === 'me' ? 'dim' : ''}`;
+                    const refsStr = entry.refs.map(formatControlRef).join(', ');
+                    item.innerHTML = `
+                        <span class="warning-icon">⚠</span>
+                        <span class="conflict-key">${formatConflictKey(key)}:</span>
+                        <span class="conflict-refs">${refsStr}</span>
+                    `;
+                    panel.appendChild(item);
+                }
+                
+                if (visibleConflicts.length > 20) {
+                    const more = document.createElement('div');
+                    more.className = 'conflict-item';
+                    more.innerHTML = `<span class="conflict-refs">...and ${visibleConflicts.length - 20} more</span>`;
+                    panel.appendChild(more);
+                }
+                
+                container.appendChild(panel);
+            }
+            
             main.appendChild(container);
         }
         
@@ -1747,7 +1925,17 @@
                 for (let g = 0; g < 8; g++) {
                     const data = getEncoderData(currentSetup, g, i);
                     const cell = document.createElement('td');
-                    cell.innerHTML = `<div class="overview-cell">${formatEncoderCell(data)}</div>`;
+                    
+                    // Check for conflicts
+                    const conflictType = getControlConflictType('encoder', g, i);
+                    if (conflictType === 'concurrent') {
+                        cell.className = 'conflict';
+                    } else if (conflictType === 'mutuallyExclusive') {
+                        cell.className = 'conflict-dim';
+                    }
+                    
+                    const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
+                    cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatEncoderCell(data)}</div>`;
                     cell.onclick = () => jumpToFocusedView('encoder', g, i);
                     cell.title = createEncoderTooltip(data, g, i);
                     row.appendChild(cell);
@@ -1788,7 +1976,17 @@
                 for (let g = 0; g < 8; g++) {
                     const data = getData(currentSetup, g, i);
                     const cell = document.createElement('td');
-                    cell.innerHTML = `<div class="overview-cell">${formatButtonCell(data)}</div>`;
+                    
+                    // Check for conflicts
+                    const conflictType = getControlConflictType(type, g, i);
+                    if (conflictType === 'concurrent') {
+                        cell.className = 'conflict';
+                    } else if (conflictType === 'mutuallyExclusive') {
+                        cell.className = 'conflict-dim';
+                    }
+                    
+                    const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
+                    cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatButtonCell(data)}</div>`;
                     cell.onclick = () => jumpToFocusedView(type, g, i);
                     row.appendChild(cell);
                 }
@@ -1828,7 +2026,17 @@
                 for (let g = 0; g < 8; g++) {
                     const data = getFaderData(currentSetup, g, i);
                     const cell = document.createElement('td');
-                    cell.innerHTML = `<div class="overview-cell">${formatFaderCell(data)}</div>`;
+                    
+                    // Check for conflicts
+                    const conflictType = getControlConflictType('fader', g, i);
+                    if (conflictType === 'concurrent') {
+                        cell.className = 'conflict';
+                    } else if (conflictType === 'mutuallyExclusive') {
+                        cell.className = 'conflict-dim';
+                    }
+                    
+                    const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
+                    cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatFaderCell(data)}</div>`;
                     cell.onclick = () => jumpToFocusedView('fader', g, i);
                     row.appendChild(cell);
                 }
@@ -1843,9 +2051,19 @@
             for (let g = 0; g < 8; g++) {
                 const data = getFader9Data(currentSetup, g);
                 const cell = document.createElement('td');
+                
+                // Check for conflicts
+                const conflictType = getControlConflictType('fader9', g, 0);
+                if (conflictType === 'concurrent') {
+                    cell.className = 'conflict';
+                } else if (conflictType === 'mutuallyExclusive') {
+                    cell.className = 'conflict-dim';
+                }
+                
                 // Fader 9 only has CC type
                 const ch = chDisp(data.channel - 1);
-                cell.innerHTML = `<div class="overview-cell">${ch}:CC ${data.cc}</div>`;
+                const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
+                cell.innerHTML = `<div class="overview-cell">${warningIcon}${ch}:CC ${data.cc}</div>`;
                 cell.onclick = () => jumpToFocusedView('fader9', g, 0);
                 f9row.appendChild(cell);
             }
@@ -2028,6 +2246,8 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         function selectSetup(idx) {
             currentSetup = parseInt(idx);
             updateGroupNames();
+            // Rebuild conflict map for new setup
+            rebuildConflictMap();
             renderCurrentView();
         }
         
@@ -2125,6 +2345,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 updateGroupNames();
                 updateStatus('loaded', `Loaded: ${file.name}`);
                 document.getElementById('fileInfo').textContent = `${file.name} (${rawBuffer.length.toLocaleString()} bytes)`;
+                
+                // Build initial conflict map
+                rebuildConflictMap();
                 
                 renderFocusedView();
             } catch (err) {
@@ -2606,6 +2829,10 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             updateGroupTabs('encoderGroupTabs', encoderGroup);
             updateGroupTabs('faderGroupTabs', faderGroup);
             updateGroupNames();
+            
+            // Build conflict map for restored setup
+            rebuildConflictMap();
+            
             setView(currentView);
             
             if (isModified) {
@@ -2677,15 +2904,306 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         }
         
         // ============================================================
-        // Conflict Detection (Placeholder for Phase 3)
+        // Conflict Detection
         // ============================================================
         
         function scheduleConflictRebuild() {
             clearTimeout(conflictRebuildTimer);
             conflictRebuildTimer = setTimeout(() => {
-                // Conflict detection will be implemented in Phase 3
-                // For now, just a placeholder
+                rebuildConflictMap();
+                updateConflictUI();
             }, CONFLICT_REBUILD_DELAY);
+        }
+        
+        function rebuildConflictMap() {
+            if (!rawBuffer) return;
+            
+            const result = buildConflictMap(currentSetup);
+            conflicts = result;
+            
+            // Build reverse lookup for quick cell highlighting
+            conflictsByControl.clear();
+            
+            for (const [key, entry] of conflicts.concurrent) {
+                for (const ref of entry.refs) {
+                    const controlKey = `${ref.type}-${ref.group}-${ref.index}`;
+                    if (!conflictsByControl.has(controlKey)) {
+                        conflictsByControl.set(controlKey, { concurrent: [], mutuallyExclusive: [] });
+                    }
+                    conflictsByControl.get(controlKey).concurrent.push(key);
+                }
+            }
+            
+            for (const [key, entry] of conflicts.mutuallyExclusive) {
+                for (const ref of entry.refs) {
+                    const controlKey = `${ref.type}-${ref.group}-${ref.index}`;
+                    if (!conflictsByControl.has(controlKey)) {
+                        conflictsByControl.set(controlKey, { concurrent: [], mutuallyExclusive: [] });
+                    }
+                    conflictsByControl.get(controlKey).mutuallyExclusive.push(key);
+                }
+            }
+        }
+        
+        function buildConflictMap(setupIdx) {
+            const assignments = new Map(); // conflictKey -> [controlRef, ...]
+            
+            // Collect all assignments
+            for (let group = 0; group < 8; group++) {
+                // Encoders
+                for (let i = 0; i < 8; i++) {
+                    const data = getEncoderData(setupIdx, group, i);
+                    const keys = getEncoderConflictKeys(data);
+                    for (const key of keys) {
+                        if (!assignments.has(key)) assignments.set(key, []);
+                        assignments.get(key).push({
+                            type: 'encoder', group, index: i,
+                            groupSelector: 'encoder',
+                            subtype: ['r1', 'r2', 'CC', 'PC', 'Hi', 'PB', 'AT'][data.type] || 'CC'
+                        });
+                    }
+                }
+                
+                // Push buttons (same group selector as encoders)
+                for (let i = 0; i < 8; i++) {
+                    const data = getPushData(setupIdx, group, i);
+                    const keys = getButtonConflictKeys(data);
+                    for (const key of keys) {
+                        if (!assignments.has(key)) assignments.set(key, []);
+                        assignments.get(key).push({
+                            type: 'push', group, index: i,
+                            groupSelector: 'encoder',
+                            subtype: { 0x10: 'N', 0x20: 'CC', 0x30: 'PC', 0x40: 'AT' }[data.typeNibble] || '?'
+                        });
+                    }
+                }
+                
+                // Green buttons (fader/button group selector)
+                for (let i = 0; i < 8; i++) {
+                    const data = getGreenData(setupIdx, group, i);
+                    const keys = getButtonConflictKeys(data);
+                    for (const key of keys) {
+                        if (!assignments.has(key)) assignments.set(key, []);
+                        assignments.get(key).push({
+                            type: 'green', group, index: i,
+                            groupSelector: 'fader',
+                            subtype: { 0x10: 'N', 0x20: 'CC', 0x30: 'PC', 0x40: 'AT' }[data.typeNibble] || '?'
+                        });
+                    }
+                }
+                
+                // Faders 1-8
+                for (let i = 0; i < 8; i++) {
+                    const data = getFaderData(setupIdx, group, i);
+                    const keys = getFaderConflictKeys(data);
+                    for (const key of keys) {
+                        if (!assignments.has(key)) assignments.set(key, []);
+                        assignments.get(key).push({
+                            type: 'fader', group, index: i,
+                            groupSelector: 'fader',
+                            subtype: ['CC', 'PC', 'PB', 'AT'][data.type] || 'CC'
+                        });
+                    }
+                }
+                
+                // Fader 9
+                const f9data = getFader9Data(setupIdx, group);
+                const f9key = `${f9data.channel}-cc-${f9data.cc}`;
+                if (!assignments.has(f9key)) assignments.set(f9key, []);
+                assignments.get(f9key).push({
+                    type: 'fader9', group, index: 0,
+                    groupSelector: 'fader',
+                    subtype: 'CC'
+                });
+            }
+            
+            // Build key-centric conflict structure
+            const result = {
+                concurrent: new Map(),
+                mutuallyExclusive: new Map()
+            };
+            
+            for (const [key, refs] of assignments) {
+                if (refs.length < 2) continue;
+                
+                // Check if ANY pair in this key is concurrent
+                let hasConcurrent = false;
+                for (let i = 0; i < refs.length && !hasConcurrent; i++) {
+                    for (let j = i + 1; j < refs.length && !hasConcurrent; j++) {
+                        if (isConcurrentConflict(refs[i], refs[j])) {
+                            hasConcurrent = true;
+                        }
+                    }
+                }
+                
+                // Whole key goes into one bucket
+                if (hasConcurrent) {
+                    result.concurrent.set(key, { key, refs });
+                } else {
+                    result.mutuallyExclusive.set(key, { key, refs });
+                }
+            }
+            
+            return result;
+        }
+        
+        function isConcurrentConflict(a, b) {
+            // Different selector domains = can be active simultaneously = concurrent
+            if (a.groupSelector !== b.groupSelector) {
+                return true;
+            }
+            // Same selector domain + same group = concurrent (both active when that group selected)
+            // Same selector domain + different groups = mutually exclusive
+            return a.group === b.group;
+        }
+        
+        function getEncoderConflictKeys(data) {
+            const ch = data.channel; // Already 1-based from getEncoderData
+            switch (data.type) {
+                case 0: // CCr1
+                case 1: // CCr2
+                case 2: // CCAb
+                    return [`${ch}-cc-${data.cc}`];
+                case 3: { // PrGC - encoder sweeps a program range
+                    const lo = Math.max(0, Math.min(127, data.min | 0));
+                    const hi = Math.max(0, Math.min(127, data.max | 0));
+                    const a = Math.min(lo, hi), b = Math.max(lo, hi);
+                    const keys = [];
+                    for (let p = a; p <= b; p++) keys.push(`${ch}-pc-${p}`);
+                    return keys;
+                }
+                case 4: // CCAh (14-bit) - occupies CC and CC+32
+                    if (data.cc < 0 || data.cc > 31) return [];
+                    return [`${ch}-cc-${data.cc}`, `${ch}-cc-${data.cc + 32}`];
+                case 5: // Pbnd
+                    return [`${ch}-pb-null`];
+                case 6: // AFtt
+                    return [`${ch}-at-null`];
+                default:
+                    return [];
+            }
+        }
+        
+        function getButtonConflictKeys(data) {
+            if (data.typeNibble === 0x00) return []; // OFF
+            const ch = data.channel; // Already 1-based
+            switch (data.typeNibble) {
+                case 0x10: // Note
+                    return [`${ch}-note-${data.cc}`];
+                case 0x20: // CC
+                    return [`${ch}-cc-${data.cc}`];
+                case 0x30: // PrGC - button sends upper on press, lower on release
+                    const keys = [`${ch}-pc-${data.upper}`];
+                    if (data.lower !== data.upper) {
+                        keys.push(`${ch}-pc-${data.lower}`);
+                    }
+                    return keys;
+                case 0x40: // AFtt
+                    return [`${ch}-at-null`];
+                default:
+                    return [];
+            }
+        }
+        
+        function getFaderConflictKeys(data) {
+            const ch = data.channel; // Already 1-based
+            switch (data.type) {
+                case 0: // CCAb
+                    return [`${ch}-cc-${data.cc}`];
+                case 1: { // PrGC - fader sweeps a program range
+                    const lo = Math.max(0, Math.min(127, data.min | 0));
+                    const hi = Math.max(0, Math.min(127, data.max | 0));
+                    const a = Math.min(lo, hi), b = Math.max(lo, hi);
+                    const keys = [];
+                    for (let p = a; p <= b; p++) keys.push(`${ch}-pc-${p}`);
+                    return keys;
+                }
+                case 2: // Pbnd
+                    return [`${ch}-pb-null`];
+                case 3: // AFtt
+                    return [`${ch}-at-null`];
+                default:
+                    return [];
+            }
+        }
+        
+        function getControlConflictType(type, group, index) {
+            const controlKey = `${type}-${group}-${index}`;
+            const conflicts = conflictsByControl.get(controlKey);
+            if (!conflicts) return null;
+            
+            if (showConcurrentConflicts && conflicts.concurrent.length > 0) {
+                return 'concurrent';
+            }
+            if (showMutuallyExclusiveConflicts && conflicts.mutuallyExclusive.length > 0) {
+                return 'mutuallyExclusive';
+            }
+            return null;
+        }
+        
+        function formatConflictKey(key) {
+            // Parse key like "1-cc-64" or "2-pb-null"
+            const parts = key.split('-');
+            const ch = parts[0];
+            const type = parts[1];
+            const num = parts[2];
+            
+            const typeNames = {
+                'cc': 'CC',
+                'note': 'Note',
+                'pc': 'PC',
+                'pb': 'PB',
+                'at': 'AT'
+            };
+            
+            if (num === 'null') {
+                return `Ch${ch} ${typeNames[type] || type}`;
+            }
+            return `Ch${ch} ${typeNames[type] || type} ${num}`;
+        }
+        
+        function formatControlRef(ref) {
+            const typeNames = {
+                'encoder': 'Enc',
+                'push': 'Push',
+                'green': 'Grn',
+                'fader': 'Fad',
+                'fader9': 'F9'
+            };
+            const name = typeNames[ref.type] || ref.type;
+            return `${name} G${ref.group + 1}.${ref.index + 1} (${ref.subtype})`;
+        }
+        
+        function updateConflictUI() {
+            // Update filter chip counts
+            updateConflictFilterCounts();
+            
+            // Re-render overview if in that view
+            if (currentView === 'overview') {
+                renderOverview();
+            }
+        }
+        
+        function updateConflictFilterCounts() {
+            const concurrentCount = document.getElementById('concurrentCount');
+            const meCount = document.getElementById('meCount');
+            
+            if (concurrentCount) {
+                concurrentCount.textContent = conflicts.concurrent.size;
+            }
+            if (meCount) {
+                meCount.textContent = conflicts.mutuallyExclusive.size;
+            }
+        }
+        
+        function toggleConcurrentFilter() {
+            showConcurrentConflicts = !showConcurrentConflicts;
+            updateConflictUI();
+        }
+        
+        function toggleMEFilter() {
+            showMutuallyExclusiveConflicts = !showMutuallyExclusiveConflicts;
+            updateConflictUI();
         }
         
         // ============================================================
@@ -2768,6 +3286,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 updateGroupNames();
                 updateStatus('loaded', 'Loaded: factory_default.syx');
                 document.getElementById('fileInfo').textContent = `factory_default.syx (${rawBuffer.length.toLocaleString()} bytes)`;
+                
+                // Build initial conflict map
+                rebuildConflictMap();
                 
                 renderFocusedView();
             } catch (err) {
