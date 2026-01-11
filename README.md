@@ -1,202 +1,216 @@
-# Faderfox UC4 SysEx Editor
+# UC4 SysEx Editor
 
-A web-based editor for creating and editing Faderfox UC4 MIDI controller configuration files.
+A web-based configuration editor for the **Faderfox UC4** MIDI controller. Edit all 18 setups, 8 groups, and every parameter without navigating the hardware menus.
 
-**[🚀 Launch Editor](https://thegdyne.github.io/uc4-sysex-editor/)**
-
-![UC4 Editor Screenshot](screenshot.png)
-
-## Features
-
-- **Dual View Modes** - Card View for detailed editing, Grid View for quick overview
-- **Real-time Conflict Detection** - Highlights CC/Channel conflicts as you edit
-- **All Control Types** - Encoders, faders, green buttons, and push buttons
-- **8 Groups** - Full support for all 8 encoder and fader/button groups
-- **Templates** - Factory Defaults, Channel Per Group, DAW Mixer, Multi-Synth, Noise Engineering, Blank Slate
-- **JSON Import/Export** - Save, share, and version control your configurations
-- **Validation Report** - Check for conflicts and issues before downloading
-- **Copy with Preview** - Copy CCs/Channels between groups with visual preview
-- **Export** - Download configurations as .syx files
-
-## View Modes
-
-### Card View (Default)
-Detailed editing of all parameters per control:
-- Select control type: Encoders, Faders, Green Buttons, Push Buttons
-- Switch between groups 1-8
-- Edit CC, Channel, Type, Mode, Acceleration, Display, Lower/Upper values
-
-### Grid View
-Quick overview of CC assignments across all groups:
-- **All Grid** - See all controls at once
-- **Fader Grid** - Focus on faders only
-- **Encoder Grid** - Focus on encoders only
-- **Button Grid** - Focus on buttons only
-
-Conflict cells highlighted in red with ⚠ indicator.
-
-## Supported Parameters
-
-### Encoders
-| Parameter | Options |
-|-----------|---------|
-| Type | CC Absolute, CC Relative 1/2, CC 14-bit, Program Change, Pitch Bend, Aftertouch |
-| Acceleration | None, Low, Medium, Maximum |
-| Display | Standard, Bipolar, Off |
-| CC Number | 0-127 |
-| Channel | 1-16 |
-| Value Range | Lower/Upper 0-127 |
-
-### Faders
-| Parameter | Options |
-|-----------|---------|
-| Type | CC Absolute, Program Change, Pitch Bend, Aftertouch |
-| Mode | Jump, Snap |
-| CC Number | 0-127 |
-| Channel | 1-16 |
-| Value Range | Lower/Upper 0-127 |
-
-### Buttons (Green & Push)
-| Parameter | Options |
-|-----------|---------|
-| Type | Note, CC, Program Change, Aftertouch, Off |
-| Mode | Momentary, Toggle |
-| Note/CC Number | 0-127 |
-| Channel | 1-16 |
-| Value Range | Lower/Upper 0-127 |
-
-## Encoding Reference
-
-These encodings were verified through systematic testing of UC4 hardware:
-
-### Encoder Types (4D XX YY - XX low nibble)
-| Value | Type |
-|-------|------|
-| 0 | CCr1 (Relative Mode 1) |
-| 1 | CCr2 (Relative Mode 2) |
-| 2 | CCAb (Absolute) ✓ |
-| 3 | PrGC (Program Change) ✓ |
-| 4 | CCAh (14-bit High Res) ✓ |
-| 5 | Pbnd (Pitch Bend) ✓ |
-| 6 | AFtt (Aftertouch) ✓ |
-
-### Button Types (4D XX YY - XX low nibble)
-| Value | Type |
-|-------|------|
-| 0 | OFF |
-| 1 | Note ✓ |
-| 2 | CC ✓ |
-| 3 | PrGC ✓ |
-| 4 | AFtt ✓ |
-
-### Fader Types
-| Value | Type |
-|-------|------|
-| 0 | CCAb (CC Absolute) ✓ |
-| 1 | PrGC (Program Change) |
-| 2 | Pbnd (Pitch Bend) ✓ |
-| 3 | AFtt (Aftertouch) ✓ |
-
-### Acceleration Modes
-| Value | Mode |
-|-------|------|
-| 0 | Acc0 (None) ✓ |
-| 1 | Acc1 (Low) ✓ |
-| 2 | Acc2 (Medium) ✓ |
-| 3 | Acc3 (Maximum) ✓ |
-
-### Display Scale
-| Value | Mode |
-|-------|------|
-| 0 | OFF ✓ |
-| 1 | Std (Standard) ✓ |
-| 2 | bPoL (Bipolar) ✓ |
-
-### Button/Encoder Modes
-| Value | Mode |
-|-------|------|
-| 0 | Momentary ✓ |
-| 1 | Toggle ✓ |
-
-## Usage
-
-### Online
-Visit the [GitHub Pages site](https://thegdyne.github.io/uc4-sysex-editor/) to use the editor directly in your browser.
-
-### Local
-1. Clone this repository
-2. Open `index.html` in any modern web browser
-3. No build step or server required
-
-### Workflow
-1. Select your setup number (1-16)
-2. Choose a template or start from scratch
-3. **Card View**: Edit detailed parameters for each control
-4. **Grid View**: Quick overview and CC assignment
-5. Use "Copy CCs →" to copy settings between groups
-6. Check the validation bar for conflicts
-7. Click "Download .syx" to save your configuration
-8. Send the .syx file to your UC4 using SysEx Librarian or similar tool
-
-### Quick Actions
-- **Templates** - Load preset configurations
-- **Import JSON** - Load a previously exported configuration
-- **Export JSON** - Save configuration for backup/sharing
-- **Validate** - Full validation report
-- **Factory Reset** - Load original Faderfox defaults
-- **Clear All** - Blank out all CC assignments
-
-## Technical Details
-
-See [SPECIFICATION.md](SPECIFICATION.md) for the complete reverse-engineered SysEx format documentation.
-
-### File Structure
-```
-├── index.html          # Main editor application
-├── README.md           # This file
-├── HOWTO.md            # Complete user guide
-├── SPECIFICATION.md    # SysEx format specification
-└── LICENSE             # MIT License
-```
-
-### Browser Compatibility
-- Chrome/Chromium ✓
-- Firefox ✓
-- Safari ✓
-- Edge ✓
-
-## Contributing
-
-Contributions are welcome! If you discover additional encoding details or find bugs:
-
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
-
-### Areas for Improvement
-- [ ] SysEx file loading/parsing (.syx import)
-- [ ] Group name editing
-- [ ] Full 18-setup support
-- [ ] MIDI WebMIDI integration for direct transfer
-- [ ] Verified SysEx encoding (current export is placeholder format)
-- [ ] Export cheatsheet (PDF/PNG reference card)
-
-## Disclaimer
-
-This is an unofficial, community-developed tool based on reverse-engineered specifications. It is not affiliated with or endorsed by Faderfox.
-
-**Use at your own risk.** Always backup your UC4 configurations before loading new SysEx files.
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Faderfox for creating the excellent UC4 controller
-- The MIDI community for SysEx documentation resources
-- Everyone who contributed to testing and verification
+**[→ Open Editor](uc4-editor.html)** · **[→ Usage Guide](UC4_EDITOR_GUIDE.html)**
 
 ---
 
-Made with ☕ and reverse engineering.
+## Features
+
+### Core Editing
+- **18 Setups × 8 Groups** — Full access to all 4,752 controls
+- **Focused View** — Detailed parameter cards for encoders, buttons, and faders
+- **Overview Mode** — See all 64 controls per type in an 8×8 grid
+- **All View** — See all control types stacked in one scrollable view
+
+### Workflow
+- **Import/Export SysEx** — Load from and save to your UC4
+- **Import/Export JSON** — Human-readable backups (great for git)
+- **Undo/Redo** — Full edit history with coalescing
+- **Session Persistence** — Auto-saves to browser storage
+
+### Power Features
+- **Conflict Detection** — Find duplicate MIDI assignments automatically
+- **Copy/Paste** — Single controls, rows, or columns
+- **Paste Special** — Channel offset, CC offset, auto-increment
+- **Keyboard Navigation** — Arrow keys, Enter, Tab in Overview mode
+- **Link Groups** — Sync encoder and fader group selectors
+
+---
+
+## Quick Start
+
+```
+1. Open uc4-editor.html in your browser
+2. Factory defaults load automatically
+3. Edit in Focused view or navigate with Overview
+4. Export SysEx → send to UC4 via MIDI
+```
+
+No installation required. Works entirely in the browser.
+
+---
+
+## Screenshots
+
+### Focused View
+Edit individual control parameters with full detail:
+
+```
+┌─ FADERS ─────────────────────────────────────── GrP1 ─┐
+│                                                       │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐   │
+│  │ Fader 1     │  │ Fader 2     │  │ Fader 3     │   │
+│  │ Chan [1 ▾]  │  │ Chan [1 ▾]  │  │ Chan [1 ▾]  │   │
+│  │ CC   [ 1  ] │  │ CC   [ 2  ] │  │ CC   [ 3  ] │   │
+│  │ Type [CCAb] │  │ Type [CCAb] │  │ Type [CCAb] │   │
+│  │ Min  [ 0  ] │  │ Min  [ 0  ] │  │ Min  [ 0  ] │   │
+│  │ Max  [127 ] │  │ Max  [127 ] │  │ Max  [127 ] │   │
+│  └─────────────┘  └─────────────┘  └─────────────┘   │
+└───────────────────────────────────────────────────────┘
+```
+
+### Overview Mode
+See all controls at once, spot conflicts instantly:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ [All] [Encoders] [Push] [Green] [Faders]               │
+│                                                         │
+│ [✓ Concurrent (3)] [Mutually-Exclusive (12)]           │
+├─────────────────────────────────────────────────────────┤
+│         │ GrP1    │ GrP2    │ GrP3    │ GrP4    │ ...  │
+│ Enc 1   │ 1:CC 1  │ 1:CC 1  │ 1:CC 1  │⚠1:CC 1 │      │
+│ Enc 2   │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │      │
+│ ...     │         │         │         │         │      │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## File Formats
+
+### SysEx (.syx)
+- **Size:** 100,640 bytes (full dump of all 18 setups)
+- **Use:** Transfer to/from UC4 hardware via MIDI
+
+### JSON
+- **Use:** Human-readable backup, version control, sharing
+- **Structure:** All setups, groups, and control parameters
+
+```json
+{
+  "version": 1,
+  "exportDate": "2026-01-11T20:00:00Z",
+  "setups": [
+    {
+      "index": 0,
+      "groups": [
+        {
+          "name": "GrP1",
+          "encoders": [...],
+          "faders": [...],
+          ...
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## Conflict Detection
+
+The editor automatically detects MIDI assignment conflicts:
+
+| Type | Description | Severity |
+|------|-------------|----------|
+| **Concurrent** | Same message from controls active simultaneously | ⚠️ Fix these |
+| **Mutually-Exclusive** | Same message in different groups | Usually OK |
+
+Filter chips in Overview mode let you show/hide each type.
+
+---
+
+## Keyboard Shortcuts
+
+| Action | Key |
+|--------|-----|
+| Undo | Ctrl+Z |
+| Redo | Ctrl+Shift+Z / Ctrl+Y |
+| Copy (Overview) | Ctrl+C |
+| Paste (Overview) | Ctrl+V |
+| Navigate grid | Arrow keys |
+| Jump to Focused | Enter |
+| Clear selection | Escape |
+
+---
+
+## Browser Compatibility
+
+Tested in:
+- Chrome 90+
+- Firefox 90+
+- Safari 15+
+- Edge 90+
+
+Requires JavaScript enabled. No server needed — runs entirely client-side.
+
+---
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `uc4-editor.html` | The editor application |
+| `UC4_EDITOR_GUIDE.html` | Comprehensive usage guide |
+| `UC4_EDITOR_GUIDE.md` | Guide in Markdown format |
+| `factory_default.syx` | UC4 factory defaults (auto-loaded) |
+
+---
+
+## UC4 Domain Mapping
+
+Understanding how the UC4 organizes controls:
+
+```
+ENCODER DOMAIN (Shift + Encoder 1-8 to switch groups)
+├── 8 Encoders
+└── 8 Push Buttons (under encoders)
+
+FADER/BUTTON DOMAIN (Shift + Green 1-8 to switch groups)
+├── 8 Faders
+├── 8 Green Buttons
+└── Fader 9 (expression)
+```
+
+The editor mirrors this with separate group selectors. Use **🔗 Link** to sync them.
+
+---
+
+## Documentation
+
+- **[Usage Guide](UC4_EDITOR_GUIDE.html)** — Complete walkthrough with examples
+- **[UC4 SysEx Protocol](UC4_SYSEX_PROTOCOL_COMPLETE.md)** — Technical protocol details
+- **[Editor Specification](UC4_EDITOR_IMPROVEMENTS_SPEC.md)** — Feature specifications
+
+---
+
+## Version History
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
+
+### Current Features
+- ✅ Full SysEx editing (all 18 setups, 8 groups)
+- ✅ JSON import/export
+- ✅ Undo/Redo with coalescing
+- ✅ Session persistence
+- ✅ Overview mode with All view
+- ✅ Conflict detection (concurrent + mutually-exclusive)
+- ✅ Copy/paste with transforms
+- ✅ Keyboard navigation
+- ✅ Link groups toggle
+
+---
+
+## License
+
+MIT
+
+---
+
+## Acknowledgments
+
+Built for the Faderfox UC4. Not affiliated with Faderfox.

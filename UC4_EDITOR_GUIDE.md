@@ -167,7 +167,7 @@ JSON creates a **human-readable** backup of your entire configuration.
 ```json
 {
   "version": 1,
-  "exportDate": "2025-01-11T20:30:00.000Z",
+  "exportDate": "2026-01-11T20:30:00.000Z",
   "setups": [
     {
       "index": 0,
@@ -697,7 +697,7 @@ Your work is **automatically saved** to browser storage.
 │   Restore Previous Session?                                     │
 │                                                                 │
 │   Found auto-saved session from:                                │
-│   January 11, 2025 at 8:45 PM                                  │
+│   January 11, 2026 at 8:45 PM                                  │
 │                                                                 │
 │   [Discard]                    [Restore]                        │
 │                                                                 │

@@ -1,322 +1,382 @@
-# Faderfox UC4 SysEx Editor - Complete Guide
+# UC4 Editor HOWTO
 
-## 🚀 Quick Links
-
-| Resource | Link |
-|----------|------|
-| **UC4 SysEx Editor** | [thegdyne.github.io/uc4-sysex-editor](https://thegdyne.github.io/uc4-sysex-editor/) |
-| **GitHub Repository** | [github.com/thegdyne/uc4-sysex-editor](https://github.com/thegdyne/uc4-sysex-editor) |
-| **Faderfox Official Site** | [faderfox.de](https://www.faderfox.de/) |
-| **UC4 Product Page** | [faderfox.de/uc4.html](http://www.faderfox.de/uc4.html) |
-| **UC4 Manual (PDF)** | [faderfox.de/PDF/UC4-Manual-V03.pdf](http://www.faderfox.de/PDF/UC4-Manual-V03.pdf) |
+Practical workflows for common UC4 configuration tasks.
 
 ---
 
-## What Is This?
+## Getting Started
 
-The **UC4 SysEx Editor** is a free, browser-based tool for creating custom MIDI mappings for the [Faderfox UC4](http://www.faderfox.de/uc4.html) controller. Instead of manually programming each parameter on the device, you can:
+### First Time Setup
 
-1. **Visually edit** all 264 control parameters
-2. **Download a .syx file** with your configuration
-3. **Send it to your UC4** using a SysEx transfer tool
+1. **Open the editor** — Load `uc4-editor.html` in your browser
+2. **Factory defaults load** — Editor is immediately usable
+3. **Optional:** Import your existing UC4 dump to edit your actual config
 
-No installation required - it runs entirely in your web browser.
+### Import Your UC4 Configuration
 
----
+```
+1. Connect UC4 to computer (USB or MIDI)
+2. Use SysEx librarian to dump UC4 → save as .syx
+3. Click [Import SysEx] in editor
+4. Select your .syx file (must be 100,640 bytes)
+```
 
-## What You'll Need
+### Save Your Work
 
-### Hardware
-- Faderfox UC4 controller
-- USB cable (included with UC4)
+```
+[Export SysEx]  → .syx file to send back to UC4
+[Export JSON]   → Human-readable backup (recommended!)
+```
 
-### Software (choose one SysEx transfer tool)
-
-| Platform | Tool | Link |
-|----------|------|------|
-| **macOS** | SysEx Librarian (recommended) | [snoize.com/sysexlibrarian](https://www.snoize.com/sysexlibrarian/) |
-| **macOS** | MIDI Tools | [App Store](https://apps.apple.com/app/midi-tools/id1615instruments) |
-| **Windows** | MIDI-OX | [midiox.com](http://www.midiox.com/) |
-| **Windows** | SendSX | [bome.com/products/sendsx](https://www.bome.com/products/sendsx) |
-| **Linux** | amidi (ALSA) | Included with ALSA utils |
-| **Cross-platform** | Elektron Transfer | [elektron.se/transfer](https://www.elektron.se/support/transfer) |
+**Tip:** Always export JSON before major changes. It's your undo safety net.
 
 ---
 
-## Step-by-Step Guide
+## Common Tasks
 
-### Step 1: Open the Editor
+### Change a Single CC Number
 
-Go to **[thegdyne.github.io/uc4-sysex-editor](https://thegdyne.github.io/uc4-sysex-editor/)**
+**Fastest method:**
+1. Stay in **Focused View**
+2. Find the control card (e.g., "Encoder 3")
+3. Change the CC field directly
+4. Export SysEx
 
-The editor opens in **Card View** by default, showing detailed controls for:
-- **Encoders** (1-8)
-- **Faders** (1-9)
-- **Green Buttons** (1-8)
-- **Push Buttons** (1-8 encoder push buttons)
+**Time:** ~10 seconds
 
-You can switch to **Grid View** for a quick overview of all CC assignments using the View dropdown.
+### Change MIDI Channel for All Controls in a Group
 
-### Step 2: Select Your Setup
+**Using Copy/Paste:**
+1. Switch to **Overview** mode
+2. Click the **Encoders** tab
+3. Right-click any cell in the target group column
+4. Select **Copy Column**
+5. Right-click the same column
+6. Select **Paste Special...**
+7. Set Channel offset (e.g., +1)
+8. Paste to: **Entire column**
+9. Click **Paste**
+10. Repeat for Push, Green, Faders tabs
 
-The UC4 has **16 user setups** (plus 2 Ableton setups). Use the dropdown in the top-right to select which setup you're editing.
+**Time:** ~2 minutes
 
-> **Tip:** Start with Setup 1 for testing. You can always factory reset individual setups on the UC4.
+### Set Up Sequential CCs (1, 2, 3... 8)
 
-### Step 3: Configure Your Controls
+**Using Auto-Increment:**
+1. **Overview** → select control type tab
+2. Click first cell (e.g., Encoder 1, Group 1)
+3. Right-click → **Copy Control**
+4. Right-click → **Paste Special...**
+5. Check **Auto-increment CC by:** `1`
+6. Paste to: **Entire column**
+7. Click **Paste**
 
-#### Encoders
-Each encoder can be configured with:
+Result: CC 1, 2, 3, 4, 5, 6, 7, 8
 
-| Parameter | Description |
-|-----------|-------------|
-| **CC/Note** | MIDI CC number (0-127) |
-| **Channel** | MIDI channel (1-16) |
-| **Type** | CC Absolute, CC Relative 1/2, 14-bit, Program Change, Pitch Bend, Aftertouch |
-| **Acceleration** | How fast values change when turning quickly (None/Low/Medium/Maximum) |
-| **Display** | How values appear on UC4's display (Standard 0-127, Bipolar -63 to +63, Off) |
-| **Lower/Upper** | Value range limits |
+### Clone Group 1 to All Groups with Channel Offset
 
-#### Faders
-| Parameter | Description |
-|-----------|-------------|
-| **CC/Note** | MIDI CC number (0-127) |
-| **Channel** | MIDI channel (1-16) |
-| **Type** | CC Absolute, Program Change, Pitch Bend, Aftertouch |
-| **Mode** | Jump (immediate) or Snap (catch current value first) |
-| **Lower/Upper** | Value range limits |
+**Goal:** Group 1 = Ch1, Group 2 = Ch2, etc.
 
-#### Buttons (Green & Push)
-| Parameter | Description |
-|-----------|-------------|
-| **Note/CC** | Note or CC number (0-127) |
-| **Channel** | MIDI channel (1-16) |
-| **Type** | Note, CC, Program Change, Aftertouch, Off |
-| **Mode** | Momentary (press/release) or Toggle (on/off) |
-| **Lower/Upper** | Off/On values |
+1. Set up Group 1 exactly how you want it
+2. **Overview** → **Encoders** tab
+3. Right-click Group 1, Encoder 1 → **Copy Column**
+4. For each Group 2-8:
+   - Right-click Group N, Row 1
+   - **Paste Special...**
+   - Channel offset: `+(N-1)` (e.g., +1 for Group 2)
+   - Paste to: Entire column
+5. Repeat for Push, Green, Faders
 
-### Step 4: Work with Groups
+**Time:** ~5 minutes for complete setup
 
-The UC4 has **8 groups** for each control type. 
+### Find All Conflicts
 
-**In Card View:** Use the numbered buttons (1-8) above the cards to switch groups.
+1. Switch to **Overview** mode
+2. Look at filter chips: `[✓ Concurrent (N)]`
+3. If N > 0, you have conflicts to fix
+4. Conflicting cells show ⚠️ icon and amber highlight
+5. Click conflict to select, double-click to edit in Focused view
 
-**In Grid View:** All 8 groups are visible at once - each row is a group.
+### Check Conflicts Before a Gig
 
-> **Pro Tip:** Use "Copy CCs →" button to copy settings between groups with a preview of what will change.
-
-### Step 4b: Switch Between Views
-
-| View | Best For |
-|------|----------|
-| **Card View** | Detailed editing of all parameters (type, mode, acceleration, etc.) |
-| **All Grid** | Quick overview of all CC assignments, spotting conflicts |
-| **Fader Grid** | Focus on fader CCs only |
-| **Encoder Grid** | Focus on encoder CCs only |
-| **Button Grid** | Focus on button CCs only |
-
-Conflicts are highlighted in red with ⚠ indicators in Grid View.
-
-### Step 5: Use Templates (Optional)
-
-Click the **"📋 Templates"** button to load a preset configuration:
-
-| Template | Description |
-|----------|-------------|
-| **Factory Defaults** | Original Faderfox factory settings (note: has known CC conflicts) |
-| **Channel Per Group** | Each group on a different MIDI channel (Group 1 = Ch 1, etc.) - no conflicts possible |
-| **DAW Mixer** | All Ch 1, sequential CCs. Faders 1-8, Encoders 9-16 per group |
-| **Multi-Synth** | 8 synths on channels 1-8. Same CCs, different channels |
-| **Noise Engineering** | Optimized for modular/Eurorack. CC 1-8 per group |
-| **Blank Slate** | All controls set to CC 0, Channel 1. Start fresh |
-
-### Step 5b: Import/Export JSON
-
-For backup, sharing, or version control:
-
-- **📤 Export JSON** - Save your configuration as a JSON file
-- **📥 Import JSON** - Load a previously exported configuration
-
-JSON files can be:
-- Stored in Git repositories
-- Shared with other users
-- Diffed to see changes between versions
-
-### Step 6: Validate and Download
-
-1. Check the **validation bar** at the top for any warnings:
-   - ✓ No CC conflicts
-   - ⚠ Fader groups 5-8 are identical (factory default issue)
-   - ✗ CC conflicts detected
-
-2. Click **"✓ Validate"** for a full report
-
-3. Click the green **"⬇ Download .syx"** button
-   - If conflicts exist, you'll be warned before download
-   
-4. Save the file (e.g., `UC4_Setup1.syx`)
-
----
-
-## Transferring to Your UC4
-
-### Using SysEx Librarian (macOS)
-
-1. **Download & Install** [SysEx Librarian](https://www.snoize.com/sysexlibrarian/)
-2. **Connect** your UC4 via USB
-3. **Open** SysEx Librarian
-4. **Set Destination** to "Faderfox UC4" in the dropdown
-5. **Add** your .syx file (drag & drop or File → Add)
-6. **Prepare UC4:**
-   - Hold **Shift + Edit** twice to enter Setup mode
-   - Push & hold **Encoder 7** until "rEc" appears (receive mode)
-7. **Send** from SysEx Librarian (click Play or press ⌘P)
-8. UC4 display will show progress, then the setup number when complete
-
-### Using MIDI-OX (Windows)
-
-1. **Download & Install** [MIDI-OX](http://www.midiox.com/)
-2. **Connect** your UC4 via USB
-3. **Configure** MIDI-OX:
-   - Options → MIDI Devices
-   - Select "Faderfox UC4" as Output
-4. **Prepare UC4** for receiving (see above)
-5. **Send** the file:
-   - SysEx → Send SysEx File
-   - Select your .syx file
-   - Click Send
-
-### Using amidi (Linux)
-
-```bash
-# List MIDI devices
-amidi -l
-
-# Send SysEx (replace hw:1,0 with your UC4's device)
-amidi -p hw:1,0 -s UC4_Setup1.syx
+```
+1. Open editor
+2. Import your .syx
+3. Overview mode → check Concurrent count
+4. If 0: You're good!
+5. If >0: Review and fix
+6. Export clean .syx
 ```
 
 ---
 
-## Backing Up Your UC4
+## Navigation Tips
 
-Before making changes, **always backup your current settings:**
+### Focused View
 
-### On the UC4:
-1. Hold **Shift + Edit** twice → Setup mode
-2. Push & hold **Encoder 8** → "SndA" (Send All)
-3. Wait for progress bar to complete
+- Shows one group at a time (per domain)
+- Best for detailed editing
+- Section order: Faders → Green → Encoders → Push → Fader 9
 
-### In SysEx Librarian:
-1. Click **Record**
-2. Trigger the send from UC4
-3. Save the received data as your backup
+### Overview Mode
+
+- Shows all 8 groups simultaneously
+- Best for comparison and bulk operations
+- Tabs: **All** | Encoders | Push | Green | Faders
+
+### Link Groups 🔗
+
+When checked:
+- Encoder group and Fader group selectors move together
+- Click Group 3 anywhere → both show Group 3
+
+When unchecked:
+- Independent selection (matches UC4 hardware behavior)
+- Can view Encoder Group 1 + Fader Group 5 simultaneously
+
+### Keyboard Navigation (Overview)
+
+| Key | Action |
+|-----|--------|
+| Arrow keys | Move selection |
+| Enter | Jump to Focused view |
+| Tab | Move right |
+| Shift+Tab | Move left |
+| Escape | Clear selection |
+| Ctrl+C | Copy selected |
+| Ctrl+V | Paste to selected |
+
+---
+
+## Copy/Paste Reference
+
+### Copy Scopes
+
+| Menu Item | What's Copied |
+|-----------|---------------|
+| Copy Control | Single cell (one control's params) |
+| Copy Row | One row across all 8 groups |
+| Copy Column | All 8 controls in one group |
+
+### Paste Options
+
+| Option | Effect |
+|--------|--------|
+| Paste | Simple paste, no transforms |
+| Paste Special... | Opens transform dialog |
+
+### Paste Special Transforms
+
+| Transform | Range | Example |
+|-----------|-------|---------|
+| Channel offset | -15 to +15 | Ch1 + 2 = Ch3 |
+| CC/Number offset | -127 to +127 | CC64 + 10 = CC74 |
+| Auto-increment | Any value | CC1, CC2, CC3... |
+| Wrap mode | Clamp / Wrap | Ch15 + 3 = Ch2 (wrap) or Ch16 (clamp) |
+
+---
+
+## Undo/Redo
+
+### How It Works
+
+- Every edit is tracked
+- Rapid edits to same field are coalesced (combined)
+- Batch operations (paste to row/column) = single undo step
+
+### Shortcuts
+
+| Action | Windows/Linux | Mac |
+|--------|---------------|-----|
+| Undo | Ctrl+Z | Cmd+Z |
+| Redo | Ctrl+Shift+Z | Cmd+Shift+Z |
+| Redo (alt) | Ctrl+Y | — |
+
+### Limits
+
+- 100 undo steps maximum
+- Oldest actions dropped when limit reached
+
+---
+
+## Session Persistence
+
+### Auto-Save
+
+- Edits auto-save to browser storage every 2 seconds
+- Survives page refresh and browser restart
+
+### Restore Dialog
+
+On page load, if unsaved session exists:
+```
+┌─────────────────────────────────────────┐
+│  Restore Previous Session?              │
+│                                         │
+│  Found session from: Jan 11, 8:45 PM    │
+│                                         │
+│  [Discard]              [Restore]       │
+└─────────────────────────────────────────┘
+```
+
+### When Session Clears
+
+- After Export SysEx
+- After Export JSON
+- After Import (new file)
+- After clicking Discard
+
+---
+
+## JSON Workflow
+
+### Why Use JSON?
+
+| Benefit | How |
+|---------|-----|
+| Version control | `git diff` shows exact changes |
+| Backup | Save before experiments |
+| Share | Send config to bandmates |
+| Review | Human-readable format |
+
+### JSON + Git Workflow
+
+```bash
+# Before making changes
+cd uc4-configs/
+# Export JSON from editor, save as my-setup.json
+
+git add my-setup.json
+git commit -m "Baseline config"
+
+# Make changes in editor, export again
+git diff my-setup.json  # See exactly what changed
+git commit -m "Changed encoders to Ch2"
+```
+
+### JSON Structure
+
+```json
+{
+  "version": 1,
+  "exportDate": "2026-01-11T20:00:00Z",
+  "setups": [
+    {
+      "index": 0,
+      "groups": [
+        {
+          "index": 0,
+          "name": "GrP1",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 1,
+              "min": 0,
+              "max": 127,
+              "acc": 1,
+              "display": 1
+            }
+          ],
+          "pushButtons": [...],
+          "greenButtons": [...],
+          "faders": [...],
+          "fader9": { "channel": 1, "cc": 9 }
+        }
+      ]
+    }
+  ]
+}
+```
 
 ---
 
 ## Troubleshooting
 
-### "SysEx not received" or no response
+### "Invalid file size" on Import
 
-1. **Check USB connection** - try a different cable or port
-2. **Check MIDI routing** on UC4:
-   - Setup mode → Encoder 2 → Set to "Rou5" or "Rou6"
-3. **Check SysEx Librarian destination** - make sure UC4 is selected
-4. **Reduce SysEx speed** in your transfer tool if available
+**Cause:** File isn't a complete UC4 dump
 
-### Values don't match what I set
+**Fix:** Dump ALL setups from UC4, not just current setup
 
-- The editor generates new configurations - it doesn't modify existing files
-- Some parameters may have slight variations due to encoding
+### Changes Don't Appear on UC4
 
-### UC4 shows "Err"
+**Checklist:**
+1. Did you **Export SysEx**? (not just JSON)
+2. Did you **send** the .syx to UC4 via MIDI?
+3. Is UC4 in receive mode?
 
-- Transfer was interrupted - try again
-- Make sure UC4 is in receive mode before sending
-- Don't send to both USB and MIDI simultaneously
+### Lost My Edits
 
----
+**Check:**
+1. Refresh page — look for restore dialog
+2. Check Downloads folder for exported files
+3. Check for JSON backups
 
-## UC4 Quick Reference
+**Prevention:** Export JSON frequently!
 
-### Enter Edit Mode
-Hold **Shift** + Press **Edit**
+### Conflicts Showing Everywhere
 
-### Enter Setup Mode  
-Hold **Shift** + Press **Edit** twice
+**This is normal for factory defaults.**
 
-### Switch Encoder Group
-Hold **Shift** + Push **Encoder 1-8**
+Factory config has identical settings across groups (intentionally).
 
-### Switch Fader/Button Group
-Hold **Shift** + Press **Green Button 1-8**
+- **Mutually-Exclusive conflicts** = Different groups, same message (usually OK)
+- **Concurrent conflicts** = Same group, same message (fix these!)
 
-### Factory Reset Single Setup
-Setup mode → Push & hold **Encoder 5** ("rESc")
+Use filter chips to show only Concurrent.
 
-### Factory Reset All Setups
-Setup mode → Push & hold **Encoder 6** ("rESA")
+### Editor Feels Slow
 
----
-
-## Example Configurations
-
-### 8 Synth Modules (Channel Per Group)
-Use the "Channel Per Group" preset to control 8 different synths:
-- Group 1 → Synth on Ch 1
-- Group 2 → Synth on Ch 2
-- etc.
-
-### DAW Mixer (Same Channel, Different CCs)
-Keep all controls on Channel 1 with sequential CCs:
-- Encoders: CC 1-8 (pan, sends, etc.)
-- Faders: CC 11-19 (volume)
-- Buttons: Notes 60-67 (mute/solo)
-
-### Live Performance (Grouped by Song)
-Use each group as a different song/scene:
-- Group 1: Song 1 parameters
-- Group 2: Song 2 parameters
-- etc.
+**Try:**
+1. Use individual tabs (Encoders, Faders) instead of All view
+2. Reduce browser tabs
+3. Hard refresh (Ctrl+Shift+R)
 
 ---
 
-## Links & Resources
+## Quick Reference
 
-### Official Faderfox
-- [Faderfox Website](https://www.faderfox.de/)
-- [UC4 Product Page](http://www.faderfox.de/uc4.html)
-- [UC4 Manual PDF](http://www.faderfox.de/PDF/UC4-Manual-V03.pdf)
-- [Faderfox Support](mailto:info@faderfox.de)
+```
+IMPORT/EXPORT
+  [Import SysEx]     Load .syx from UC4
+  [Export SysEx]     Save .syx for UC4
+  [Import JSON]      Load human-readable backup
+  [Export JSON]      Save human-readable backup
 
-### SysEx Tools
-- [SysEx Librarian (macOS)](https://www.snoize.com/sysexlibrarian/)
-- [MIDI-OX (Windows)](http://www.midiox.com/)
-- [SendSX (Windows)](https://www.bome.com/products/sendsx)
+NAVIGATION
+  Setup [01-18]      Select setup to edit
+  [🔗 Link]          Sync group selectors
+  Encoder Grp [1-8]  Select encoder/push group
+  Fader/Btn [1-8]    Select fader/green group
+  [Focused]          Detailed editing view
+  [Overview]         Grid comparison view
 
-### MIDI Resources
-- [MIDI CC List](https://www.midi.org/specifications-old/item/table-3-control-change-messages-data-bytes-2)
-- [MIDI Note Numbers](https://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies)
+OVERVIEW TABS
+  [All]              All control types stacked
+  [Encoders]         8×8 encoder grid
+  [Push Buttons]     8×8 push grid
+  [Green Buttons]    8×8 green grid
+  [Faders]           8×8 fader grid + fader9
 
-### This Project
-- [UC4 SysEx Editor](https://thegdyne.github.io/uc4-sysex-editor/)
-- [GitHub Repository](https://github.com/thegdyne/uc4-sysex-editor)
-- [SysEx Format Specification](https://github.com/thegdyne/uc4-sysex-editor/blob/main/SPECIFICATION.md)
+CONFLICT FILTERS
+  [✓ Concurrent]     Show/hide serious conflicts
+  [Mutually-Excl]    Show/hide cross-group conflicts
+
+KEYBOARD
+  Ctrl+Z             Undo
+  Ctrl+Y             Redo
+  Ctrl+C             Copy (Overview)
+  Ctrl+V             Paste (Overview)
+  Arrows             Navigate grid
+  Enter              Jump to Focused
+  Escape             Clear selection
+  Right-click        Context menu
+```
 
 ---
 
-## Contributing
+## Getting Help
 
-Found a bug? Want to add a feature? Contributions welcome!
-
-1. Fork the [repository](https://github.com/thegdyne/uc4-sysex-editor)
-2. Make your changes
-3. Submit a pull request
-
----
-
-## License
-
-MIT License - Free to use, modify, and distribute.
-
-**Disclaimer:** This is an unofficial community tool. Not affiliated with Faderfox. Use at your own risk. Always backup your UC4 before loading new configurations.
+- **[Usage Guide](UC4_EDITOR_GUIDE.html)** — Complete documentation
+- **[? Guide]** button in editor header — Opens guide in new tab

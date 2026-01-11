@@ -1,255 +1,549 @@
-# Faderfox UC4 SysEx Format Specification
+# UC4 SysEx Editor — Technical Specification
 
-**Version:** 1.0  
-**Date:** January 2026  
-**Status:** Reverse-engineered - Work in Progress
+Version: 2.0.0  
+Date: 2026-01-11  
+Status: Implemented
+
+---
 
 ## Overview
 
-The UC4 stores configuration data in SysEx format. Each single-setup dump is approximately 5KB. A full 18-setup dump is approximately 90KB.
+The UC4 SysEx Editor is a single-page web application for editing Faderfox UC4 MIDI controller configurations. It operates entirely client-side with no server requirements.
 
-## Message Structure
+### Scope
 
-```
-F0 00 00 00 [header bytes] [data blocks] 4F XX YY F7
-```
+| Capability | Description |
+|------------|-------------|
+| **Setups** | All 18 setups fully editable |
+| **Groups** | All 8 groups per setup |
+| **Controls** | Encoders, Push Buttons, Green Buttons, Faders, Fader 9 |
+| **File formats** | SysEx (.syx), JSON |
+| **Persistence** | Browser localStorage |
 
-- `F0` = SysEx Start
-- `00 00 00` = Manufacturer ID placeholder
-- `4F XX YY` = Footer
-- `F7` = SysEx End
-
-## Header Section
-
-```
-41 XX YY  - Setup identifier / Group name char 1
-42 XX YY  - Group name char 2  
-43 XX YY  - Group name char 3
-44 XX YY  - Group name char 4
-```
-
-## Data Block Structure
-
-### Block Marker (49 XX YY)
-Indicates start of a data block:
-- `XX` = Block type identifier (21, 22, etc.)
-- `YY` = Block sub-type / group info
-
-### Section Marker (4A XX 10)
-Indicates data type within block:
-- `4A 20 10` = Encoder Type/Mode/Display data
-- `4A 24 10` = Fader data
-- `4A 28 10` = Green Button data  
-- `4A 2C 10` = Push Button data
-
-### Data Entry (4D XX YY)
-Each control's parameters encoded as 3-byte triplet.
-
-## Encoding Details
-
-### Encoder Type (4D XX YY in 4A 20 section)
-
-**XX byte - Low Nibble = Type:**
-| Value | Type | Description |
-|-------|------|-------------|
-| 0 | CCr1 | CC Relative Mode 1 (values 1/127) |
-| 1 | CCr2 | CC Relative Mode 2 (values 63/65) |
-| 2 | CCAb | CC Absolute 7-bit (0-127) [DEFAULT] |
-| 3 | PrGC | Program Change |
-| 4 | CCAh | CC 14-bit High Resolution |
-| 5 | Pbnd | Pitch Bend (14-bit) |
-| 6 | AFtt | Aftertouch (Channel Pressure) |
-
-**XX byte - High Nibble = Flags (TBD)**
-
-**YY byte - High Nibble = MIDI Channel:**
-- Value 0-15 = Channel 1-16
-
-**YY byte - Low Nibble = Display Scale:**
-| Value | Mode | Description |
-|-------|------|-------------|
-| 0 | OFF | No display |
-| 1 | Std | Standard (0-127) [DEFAULT] |
-| 2 | bPoL | Bipolar (-63 to +63) |
-
-### Encoder Acceleration (in Mode section)
-
-**XX byte - Low Nibble = Acceleration:**
-| Value | Mode | Description |
-|-------|------|-------------|
-| 0 | Acc0 | No acceleration |
-| 1 | Acc1 | Low acceleration |
-| 2 | Acc2 | Medium acceleration |
-| 3 | Acc3 | Maximum acceleration [DEFAULT] |
-
-### Button Type (4D XX YY in 4A 28 section)
-
-**XX byte - Low Nibble = Type:**
-| Value | Type | Description |
-|-------|------|-------------|
-| 0 | OFF | Button disabled |
-| 1 | notE | Note [DEFAULT] |
-| 2 | CC | Control Change |
-| 3 | PrGC | Program Change |
-| 4 | AFtt | Aftertouch |
-
-### Button Mode
-
-**XX byte encoding:**
-| Value | Mode | Description |
-|-------|------|-------------|
-| 0 | btn | Momentary (press/release) [DEFAULT] |
-| 1 | toGL | Toggle (on/off) |
-
-### Fader Type (4D XX YY in 4A 2C section)
-
-**XX byte - Low Nibble = Type:**
-| Value | Type | Description |
-|-------|------|-------------|
-| 0 | CCAb | CC Absolute [DEFAULT] |
-| 1 | PrGC | Program Change (assumed) |
-| 2 | Pbnd | Pitch Bend ✓ |
-| 3 | AFtt | Aftertouch ✓ |
-
-**Note:** Fader type/mode data is stored in the 4A 2C section, same location as push button data. Entry position determines which fader (1-8).
-
-### Fader Mode
-| Value | Mode | Description |
-|-------|------|-------------|
-| ? | JMP | Jump (immediate) [DEFAULT per manual] |
-| ? | SnAP | Snap (catch value first) |
-
-*Note: Fader mode encoding could not be confirmed through testing. The mode may be encoded in the high nibble of the type byte or in a different section.*
-
-### Value Encoding (Lower/Upper Values)
-
-Values 0-127 encoded in 4D XX YY format:
-- XX low nibble = Value >> 4 (high nibble)
-- YY low nibble = Value & 0x0F (low nibble)
-
-**Examples:**
-| Value | Decimal | Encoding |
-|-------|---------|----------|
-| 0x00 | 0 | 4D 20 10 |
-| 0x40 | 64 | 4D 24 10 |
-| 0x7F | 127 | 4D 27 1F |
-
-### CC Number Encoding
-
-CC numbers 0-127 use same encoding as values:
-- XX low nibble = CC >> 4
-- YY low nibble = CC & 0x0F
-
-Combined with channel in YY high nibble.
-
-### MIDI Channel Encoding
-
-Channel 1-16 encoded as 0-15 in YY high nibble:
-- Channel 1 = 0x0_
-- Channel 5 = 0x4_
-- Channel 9 = 0x8_
-- Channel 16 = 0xF_
-
-## Block End Markers
-
-- `4B XX YY` = Fader 9 special entry
-- `4C XX YY` = End of section marker
-
-## Group Structure
-
-Each setup contains 8 encoder groups and 8 fader/button groups.
-
-Block identifiers:
-- `49 21 14` = Special header block
-- `49 21 17` = ?
-- `49 21 1C` = Group 1 data
-- `49 21 1D` = Group 2 data  
-- `49 21 1E` = Group 3 data
-- `49 21 1F` = Group 4 data
-- `49 22 10` = Groups 5-8 data
-
-## Test Data Summary
-
-### Phase 1 Tests (Types, Modes, Values)
-
-| Test | Parameter Changed | Position | From | To |
-|------|-------------------|----------|------|-----|
-| 05 | Enc Type → AFtt | 395 | 22 | 26 |
-| 06 | Enc Type → CCAh | 395 | 22 | 24 |
-| 07 | Enc Mode → Acc0 | 1331 | 23 | 20 |
-| 08 | Enc Mode → Acc1 | 1331 | 23 | 21 |
-| 09 | Enc Mode → Acc2 | 1331 | 23 | 22 |
-| 11 | Btn Type → CC | 2735 | 21 | 22 |
-| 12 | Btn Type → PrGC | 2735 | 21 | 23 |
-| 13 | Btn Type → AFtt | 2735 | 21 | 24 |
-| 14 | Btn Mode → toGL | 3671 | 20 | 21 |
-| 15 | Enc Lower → 64 | 3203 | 20 | 24 |
-| 16 | Enc Upper → 64 | 3437 | 27 | 24 |
-| 17 | Enc Disp → bPoL | 1332 | 11 | 12 |
-| 18 | Enc Disp → OFF | 1332 | 11 | 10 |
-
-### Phase 2 Tests (Push Buttons, Faders, Names)
-
-| Test | Parameter Changed | Position | From | To | Notes |
-|------|-------------------|----------|------|-----|-------|
-| 19 | Fad1 → SnAP | - | - | - | No change - SNAP is default |
-| 20 | Pbt1 Type → CC | 1565 | 21 | 22 | Push btn type confirmed |
-| 21 | Pbt1 Type → notE | - | - | - | No change - Note is default |
-| 22 | Pbt1 Mode → toGL | 2501 | 20 | 21 | Push btn mode confirmed |
-| 23 | Group Name | 23,24,27,30,33 | various | various | Custom 7-seg encoding |
-| 24 | Fad1 Type → Pbnd | 3905 | 20 | 22 | Test error - wrong control |
-| 25 | Btn1 Lower → 64 | 3203 | 20 | 24 | Value encoding confirmed |
-
-### Phase 3 Tests (Fader Types - Corrected)
-
-| Test | Parameter Changed | Position | From | To | Notes |
-|------|-------------------|----------|------|-----|-------|
-| 26 | Fad1 Type → Pbnd | 3905 | 20 | 22 | In Group 4, 4A 2C section |
-| 27 | Fad1 Mode → JMP | - | - | - | No change - JMP is default |
-| 28 | Fad1 Type → AFtt | 3905 | 20 | 23 | Confirmed type encoding |
-
-**Key Discovery:** Fader type data is stored in the 4A 2C section. The default fader group after factory reset appears to be Group 4, not Group 1.
-
-## Data Block Structure
-
-Each group has 4 separate data blocks with same group ID but different subsections:
+### Architecture
 
 ```
-49 21 1C 4A 20 ... (Group 1 Encoder data)
-49 21 1C 4A 24 ... (Group 1 Fader data)
-49 21 1C 4A 28 ... (Group 1 Green Button data)
-49 21 1C 4A 2C ... (Group 1 Push Button data)
+┌─────────────────────────────────────────────────────────┐
+│                    UC4 SysEx Editor                     │
+├─────────────────────────────────────────────────────────┤
+│  UI Layer                                               │
+│  ├── Header (file ops, undo/redo, guide link)          │
+│  ├── Navigation (setup, groups, view toggle)           │
+│  ├── Main Content (Focused or Overview)                │
+│  └── Status Bar (modified indicator, file info)        │
+├─────────────────────────────────────────────────────────┤
+│  State Management                                       │
+│  ├── rawBuffer (Uint8Array, 100,640 bytes)             │
+│  ├── sectionIndex (byte offset lookup)                 │
+│  ├── undoStack / redoStack                             │
+│  ├── clipboard / selection                             │
+│  ├── conflicts (concurrent / mutuallyExclusive)        │
+│  └── session (localStorage persistence)                │
+├─────────────────────────────────────────────────────────┤
+│  Data Layer                                             │
+│  ├── getValue / setValue (SysEx byte access)           │
+│  ├── getEncoderData / getFaderData / etc.              │
+│  ├── exportJSON / importJSON                           │
+│  └── detectConflicts                                   │
+└─────────────────────────────────────────────────────────┘
 ```
 
-Group ID encoding (3rd byte of 49 marker):
-- 1C = Group 1
-- 1D = Group 2
-- 1E = Group 3
-- 1F = Group 4
-- 22 10 = Groups 5-8
+---
 
-## Confirmed Defaults
+## Data Model
 
-- Fader Mode: JMP (per manual, but see note below)
-- Fader Type: CCAb (CC Absolute)
-- Push Button Type: Note
-- Push Button Mode: Momentary (btn)
-- Encoder Type: CCAb (CC Absolute)
-- Encoder Acceleration: Acc3 (max)
-- Display Scale: Std
+### SysEx Structure
 
-**Note:** Manual states JMP is default for setups 1-16, SNAP for setups 17-18. Testing showed no change when switching modes, suggesting either the mode is stored elsewhere or the encoding is combined with type.
+| Field | Value |
+|-------|-------|
+| Total size | 100,640 bytes |
+| Setups | 18 |
+| Groups per setup | 8 |
+| Controls per group | 33 (8 enc + 8 push + 8 green + 8 fader + 1 fader9) |
 
-## Known Limitations
+### Control Types
 
-1. Fader mode encoding not confirmed (SNAP vs JMP)
-2. Group name uses custom 7-segment character encoding (not ASCII)
-3. 14-bit high-res CC LSB handling unclear
-4. Fader 9 special encoding (4B marker) needs more testing
-5. Default fader group after factory reset is Group 4, not Group 1
+| Type | Count | Parameters |
+|------|-------|------------|
+| **Encoder** | 8 per group | channel, cc, type, acc, display, min, max |
+| **Push Button** | 8 per group | channel, typeNibble, note/cc, lower, upper, mode |
+| **Green Button** | 8 per group | channel, typeNibble, note/cc, lower, upper, mode |
+| **Fader** | 8 per group | channel, cc, type, min, max |
+| **Fader 9** | 1 per group | channel, cc |
 
-## References
+### Indexing Convention
 
-- UC4 User Manual V03
-- Test dumps from systematic parameter changes
-- Previous reverse engineering session data
+| Concept | Internal | Display |
+|---------|----------|---------|
+| Setup | 0-17 | 1-18 |
+| Group | 0-7 | 1-8 |
+| Control | 0-7 | 1-8 |
+| Channel | 0-15 (stored) | 1-16 (displayed) |
+
+---
+
+## Features
+
+### 1. Dual View System
+
+#### Focused View
+Full parameter editing for selected groups.
+
+**Section Order:**
+1. Faders (fader group)
+2. Green Buttons (fader group)
+3. Encoders (encoder group)
+4. Push Buttons (encoder group)
+5. Fader 9 (fader group)
+
+**Section Header Format:**
+```
+┌─ SECTION_NAME ─────────────────────── GrPN ─┐
+```
+Where `GrPN` is the 4-character group name in accent color.
+
+#### Overview Mode
+8×8 grid display with tabs.
+
+**Tabs:**
+- **All** (default) — All control types stacked vertically
+- **Encoders** — 8×8 encoder grid
+- **Push Buttons** — 8×8 push grid
+- **Green Buttons** — 8×8 green grid
+- **Faders** — 8×8 fader grid + fader9 row
+
+**Cell Format:**
+```
+Ch:Type CC#
+```
+Examples: `1:CC 64`, `2:Nt 60`, `1:PB --`
+
+**Interactions:**
+| Action | Result |
+|--------|--------|
+| Single-click | Select cell (green outline) |
+| Double-click | Jump to Focused view |
+| Right-click | Context menu + select |
+| Arrow keys | Move selection |
+| Enter | Jump to Focused view |
+
+---
+
+### 2. Conflict Detection
+
+#### Classification
+
+| Type | Key | Severity |
+|------|-----|----------|
+| **Concurrent** | Same message, active simultaneously | High — fix required |
+| **Mutually-Exclusive** | Same message, different groups | Low — usually intentional |
+
+#### Concurrent Conflicts
+Controls in the SAME active domain that send identical messages:
+- Encoder + Encoder (same encoder group)
+- Push + Push (same encoder group)
+- Fader + Fader (same fader group)
+- Green + Green (same fader group)
+- Encoder + Push (same encoder group)
+- Fader + Green (same fader group)
+- Any control + Fader9 (same fader group)
+
+#### Mutually-Exclusive Conflicts
+Same message type across different groups (only one group active at a time).
+
+#### Conflict Key Format
+```
+Ch{channel} {type} {number}
+```
+Examples:
+- `Ch1 CC 64`
+- `Ch2 Note 60`
+- `Ch1 PB` (pitch bend, no number)
+- `Ch3 PC 0-127` (program change range)
+
+#### UI Representation
+
+**Filter Chips:**
+```
+[✓ Concurrent (3)] [□ Mutually-Exclusive (12)]
+```
+
+**Cell Highlighting:**
+- Concurrent: Bright amber background
+- Mutually-Exclusive: Dim amber background (when filter enabled)
+- Both: Warning icon (⚠️) prefix
+
+**Conflict Panel:**
+```
+⚠ Conflicts:
+⚠ Ch1 CC 64: Enc G1.1 (CC), Fad G1.1 (CC)
+⚠ Ch2 Note 60: Push G1.3 (Note), Green G1.5 (Note)
+```
+
+---
+
+### 3. Copy/Paste Operations
+
+#### Clipboard Structure
+```javascript
+{
+    type: 'control' | 'row' | 'column',
+    controlType: 'encoder' | 'push' | 'green' | 'fader' | 'fader9',
+    sourceSetup: number,
+    sourceGroup: number,
+    sourceIndex: number,
+    data: object | object[]
+}
+```
+
+#### Copy Scopes
+
+| Scope | Description |
+|-------|-------------|
+| **Control** | Single cell, all parameters |
+| **Row** | One control index across all 8 groups |
+| **Column** | All controls in one group |
+
+#### Paste Operations
+
+**Simple Paste:** Direct copy of parameters to target.
+
+**Paste Special Transforms:**
+| Transform | Range | Description |
+|-----------|-------|-------------|
+| Channel offset | -15 to +15 | Shift MIDI channel |
+| CC/Number offset | -127 to +127 | Shift CC or note number |
+| Auto-increment | Any integer | Sequential values per target |
+| Wrap mode | clamp / wrap | Out-of-range handling |
+
+**Transform Logic:**
+```javascript
+// Channel (1-based in UI, stored as 0-15)
+newChannel = applyOffset(channel, offset, 1, 16, wrapMode);
+
+// CC/Note (0-127)
+newCC = applyOffset(cc, offset + (autoInc * index), 0, 127, wrapMode);
+```
+
+#### Context Menu
+
+```
+┌─────────────────────────────────┐
+│ Copy Control                    │
+│ Copy Row (3 × 8 groups)         │
+│ Copy Column (Group 2)           │
+├─────────────────────────────────┤
+│ Paste                           │  ← Disabled if incompatible
+│ Paste Special...                │
+└─────────────────────────────────┘
+```
+
+---
+
+### 4. Undo/Redo System
+
+#### Stack Structure
+```javascript
+{
+    type: 'single' | 'batch',
+    timestamp: number,
+    // For single:
+    param: string,
+    controlType: string,
+    setup: number,
+    group: number,
+    index: number,
+    oldValue: any,
+    newValue: any,
+    // For batch:
+    operations: array
+}
+```
+
+#### Coalescing
+Rapid edits to the same parameter (within 1 second) are merged into one undo step.
+
+#### Batch Operations
+Paste-to-row and paste-to-column create single batch undo entries.
+
+#### Limits
+- Maximum stack size: 100 entries
+- Oldest entries dropped when limit exceeded
+
+#### Shortcuts
+| Action | Windows/Linux | Mac |
+|--------|---------------|-----|
+| Undo | Ctrl+Z | Cmd+Z |
+| Redo | Ctrl+Shift+Z | Cmd+Shift+Z |
+| Redo (alt) | Ctrl+Y | — |
+
+---
+
+### 5. Session Persistence
+
+#### Storage Key
+```
+uc4_editor_session
+```
+
+#### Stored Data
+```javascript
+{
+    rawBuffer: base64-encoded Uint8Array,
+    timestamp: ISO date string,
+    currentSetup: number,
+    encoderGroup: number,
+    faderGroup: number
+}
+```
+
+#### Auto-Save Trigger
+- Debounced: 2 seconds after last edit
+- On any data modification
+
+#### Restore Flow
+1. Page loads
+2. Check localStorage for session
+3. If exists and rawBuffer valid:
+   - Show restore dialog
+   - User chooses Restore or Discard
+4. If restored: Load session state
+5. If discarded or no session: Load factory defaults
+
+#### Session Clear Triggers
+- Export SysEx
+- Export JSON
+- Import new file
+- User clicks Discard
+
+---
+
+### 6. Link Groups
+
+#### Purpose
+Synchronize encoder and fader group selectors for setups where groups map to channels.
+
+#### State
+```javascript
+let linkGroups = false;  // Checkbox state
+```
+
+#### Behavior
+When `linkGroups === true`:
+- Clicking encoder group N → sets fader group to N
+- Clicking fader group N → sets encoder group to N
+- On enable: Syncs fader group to match encoder group
+
+---
+
+### 7. Keyboard Navigation
+
+#### Overview Mode Shortcuts
+
+| Key | Action |
+|-----|--------|
+| ↑↓←→ | Move selection |
+| Enter | Jump to Focused view |
+| Tab | Move right |
+| Shift+Tab | Move left |
+| Escape | Clear selection |
+| Ctrl+C | Copy selected control |
+| Ctrl+V | Paste to selected |
+
+#### Selection State
+```javascript
+let selection = {
+    mode: 'none' | 'single',
+    controlType: string | null,
+    group: number | null,
+    index: number | null
+};
+```
+
+#### Navigation in "All" Tab
+Arrow up/down at section boundaries moves to adjacent section:
+- Down from Encoder row 8 → Push row 1
+- Up from Push row 1 → Encoder row 8
+- etc.
+
+---
+
+## File Formats
+
+### SysEx (.syx)
+
+Binary format matching UC4 hardware dump.
+
+| Offset | Size | Content |
+|--------|------|---------|
+| 0 | 100,640 | Raw SysEx data |
+
+Validation: File size must equal 100,640 bytes.
+
+### JSON
+
+```json
+{
+  "version": 1,
+  "exportDate": "2026-01-11T20:00:00.000Z",
+  "setups": [
+    {
+      "index": 0,
+      "groups": [
+        {
+          "index": 0,
+          "name": "GrP1",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 1,
+              "min": 0,
+              "max": 127,
+              "acc": 1,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 144,
+              "note": 36,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [...],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 1,
+              "min": 0,
+              "max": 127
+            }
+          ],
+          "fader9": {
+            "channel": 1,
+            "cc": 9
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## UI Components
+
+### Header Bar
+- Logo/title
+- File operations: Import SysEx, Export SysEx, Import JSON, Export JSON
+- Undo/Redo buttons
+- Guide link
+
+### Navigation Bar
+- Setup selector (dropdown, 1-18)
+- Link groups checkbox
+- Encoder group tabs (1-8) + group name display
+- Fader group tabs (1-8) + group name display
+- View toggle (Focused / Overview)
+
+### Status Bar
+- Modified indicator (green/amber dot)
+- File info (byte count)
+
+### Toast Notifications
+- Position: Top-right
+- Auto-dismiss: 3 seconds
+- Types: info, success, warning, error
+
+### Context Menu
+- Position: At cursor
+- Dismiss: Click outside, Escape key
+- Items: Copy Control, Copy Row, Copy Column, separator, Paste, Paste Special
+
+### Paste Special Dialog
+- Modal overlay
+- Sections: Source info, Paste target, Transforms
+- Buttons: Cancel, Paste
+
+---
+
+## CSS Variables
+
+```css
+:root {
+    --bg-dark: #0a0a0f;
+    --bg-panel: #12121a;
+    --bg-card: #1a1a24;
+    --bg-input: #0d0d12;
+    --bg-control: #15151f;
+    --border: #2a2a3a;
+    --text: #e8e8e8;
+    --text-dim: #888;
+    --text-muted: #666;
+    --accent: #00ffaa;
+    --encoder: #00d4ff;
+    --push: #ff6b9d;
+    --green-btn: #7fff00;
+    --fader: #ffaa00;
+    --warning: #ffaa00;
+    --conflict-concurrent: rgba(255, 170, 0, 0.3);
+    --conflict-me: rgba(255, 170, 0, 0.15);
+}
+```
+
+---
+
+## Browser Requirements
+
+| Feature | Requirement |
+|---------|-------------|
+| JavaScript | ES6+ |
+| localStorage | Required for session persistence |
+| File API | Required for import/export |
+| Fetch API | Required for factory default loading |
+| CSS Grid | Required for layouts |
+| CSS Custom Properties | Required for theming |
+
+**Tested Browsers:**
+- Chrome 90+
+- Firefox 90+
+- Safari 15+
+- Edge 90+
+
+---
+
+## Performance Considerations
+
+| Operation | Complexity | Notes |
+|-----------|------------|-------|
+| Conflict detection | O(n²) | Runs on setup change, cached |
+| Overview render | O(n) | 64 cells per tab, 256 for All |
+| Undo/redo | O(1) | Stack operations |
+| JSON export | O(n) | Full traversal |
+| Session save | O(1) | Debounced, async |
+
+---
+
+## Security
+
+- No network requests except factory_default.syx fetch
+- No cookies
+- localStorage scoped to origin
+- No eval() or dynamic code execution
+- User files processed client-side only
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | — | Initial release |
+| 2.0.0 | 2026-01-11 | Undo/redo, session persistence, overview mode, conflict detection, copy/paste, keyboard navigation, link groups, All tab |
