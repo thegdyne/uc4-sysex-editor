@@ -304,6 +304,20 @@
             background: rgba(255, 170, 0, 0.1);
         }
         
+        .overview-table td.selected {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
+            background: rgba(0, 255, 170, 0.15);
+        }
+        
+        .overview-table td.selected.conflict {
+            background: rgba(255, 170, 0, 0.3);
+        }
+        
+        .overview-table td.selected.conflict-dim {
+            background: rgba(255, 170, 0, 0.2);
+        }
+        
         .overview-cell {
             display: flex;
             align-items: center;
@@ -2048,6 +2062,11 @@
                     const data = getEncoderData(currentSetup, g, i);
                     const cell = document.createElement('td');
                     
+                    // Add data attributes for keyboard navigation
+                    cell.dataset.type = 'encoder';
+                    cell.dataset.group = g;
+                    cell.dataset.index = i;
+                    
                     // Check for conflicts
                     const conflictType = getControlConflictType('encoder', g, i);
                     if (conflictType === 'concurrent') {
@@ -2056,9 +2075,18 @@
                         cell.className = 'conflict-dim';
                     }
                     
+                    // Check if this cell is selected
+                    if (selection.mode !== 'none' && 
+                        selection.controlType === 'encoder' && 
+                        selection.group === g && 
+                        selection.index === i) {
+                        cell.classList.add('selected');
+                    }
+                    
                     const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                     cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatEncoderCell(data)}</div>`;
-                    cell.onclick = () => jumpToFocusedView('encoder', g, i);
+                    cell.onclick = () => { setSelection('encoder', g, i); };
+                    cell.ondblclick = () => jumpToFocusedView('encoder', g, i);
                     cell.oncontextmenu = (e) => showContextMenu(e, 'encoder', g, i);
                     cell.title = createEncoderTooltip(data, g, i);
                     row.appendChild(cell);
@@ -2100,6 +2128,11 @@
                     const data = getData(currentSetup, g, i);
                     const cell = document.createElement('td');
                     
+                    // Add data attributes for keyboard navigation
+                    cell.dataset.type = type;
+                    cell.dataset.group = g;
+                    cell.dataset.index = i;
+                    
                     // Check for conflicts
                     const conflictType = getControlConflictType(type, g, i);
                     if (conflictType === 'concurrent') {
@@ -2108,9 +2141,18 @@
                         cell.className = 'conflict-dim';
                     }
                     
+                    // Check if this cell is selected
+                    if (selection.mode !== 'none' && 
+                        selection.controlType === type && 
+                        selection.group === g && 
+                        selection.index === i) {
+                        cell.classList.add('selected');
+                    }
+                    
                     const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                     cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatButtonCell(data)}</div>`;
-                    cell.onclick = () => jumpToFocusedView(type, g, i);
+                    cell.onclick = () => { setSelection(type, g, i); };
+                    cell.ondblclick = () => jumpToFocusedView(type, g, i);
                     cell.oncontextmenu = (e) => showContextMenu(e, type, g, i);
                     row.appendChild(cell);
                 }
@@ -2151,6 +2193,11 @@
                     const data = getFaderData(currentSetup, g, i);
                     const cell = document.createElement('td');
                     
+                    // Add data attributes for keyboard navigation
+                    cell.dataset.type = 'fader';
+                    cell.dataset.group = g;
+                    cell.dataset.index = i;
+                    
                     // Check for conflicts
                     const conflictType = getControlConflictType('fader', g, i);
                     if (conflictType === 'concurrent') {
@@ -2159,9 +2206,18 @@
                         cell.className = 'conflict-dim';
                     }
                     
+                    // Check if this cell is selected
+                    if (selection.mode !== 'none' && 
+                        selection.controlType === 'fader' && 
+                        selection.group === g && 
+                        selection.index === i) {
+                        cell.classList.add('selected');
+                    }
+                    
                     const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                     cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatFaderCell(data)}</div>`;
-                    cell.onclick = () => jumpToFocusedView('fader', g, i);
+                    cell.onclick = () => { setSelection('fader', g, i); };
+                    cell.ondblclick = () => jumpToFocusedView('fader', g, i);
                     cell.oncontextmenu = (e) => showContextMenu(e, 'fader', g, i);
                     row.appendChild(cell);
                 }
@@ -2177,6 +2233,11 @@
                 const data = getFader9Data(currentSetup, g);
                 const cell = document.createElement('td');
                 
+                // Add data attributes for keyboard navigation
+                cell.dataset.type = 'fader9';
+                cell.dataset.group = g;
+                cell.dataset.index = 0;
+                
                 // Check for conflicts
                 const conflictType = getControlConflictType('fader9', g, 0);
                 if (conflictType === 'concurrent') {
@@ -2185,11 +2246,19 @@
                     cell.className = 'conflict-dim';
                 }
                 
+                // Check if this cell is selected
+                if (selection.mode !== 'none' && 
+                    selection.controlType === 'fader9' && 
+                    selection.group === g) {
+                    cell.classList.add('selected');
+                }
+                
                 // Fader 9 only has CC type
                 const ch = chDisp(data.channel - 1);
                 const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                 cell.innerHTML = `<div class="overview-cell">${warningIcon}${ch}:CC ${data.cc}</div>`;
-                cell.onclick = () => jumpToFocusedView('fader9', g, 0);
+                cell.onclick = () => { setSelection('fader9', g, 0); };
+                cell.ondblclick = () => jumpToFocusedView('fader9', g, 0);
                 cell.oncontextmenu = (e) => showContextMenu(e, 'fader9', g, 0);
                 f9row.appendChild(cell);
             }
@@ -2407,6 +2476,12 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             currentView = view;
             document.getElementById('focusedViewBtn').classList.toggle('active', view === 'focused');
             document.getElementById('overviewBtn').classList.toggle('active', view === 'overview');
+            
+            // Clear selection when leaving overview
+            if (view === 'focused') {
+                clearSelection();
+            }
+            
             renderCurrentView();
         }
         
@@ -3596,19 +3671,109 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             showToast(`Pasted to Group ${group + 1}`);
         }
         
-        // Set selection (for overview click)
+        // Set selection (for overview click/keyboard)
         function setSelection(controlType, group, index) {
+            // Clear previous selection highlight
+            clearSelectionHighlight();
+            
             selection = {
                 mode: 'single',
                 controlType,
                 group,
                 index
             };
+            
+            // Apply new selection highlight
+            updateSelectionHighlight();
         }
         
         // Clear selection
         function clearSelection() {
+            clearSelectionHighlight();
             selection = { mode: 'none', controlType: null, group: null, index: null };
+        }
+        
+        // Update visual highlight for current selection
+        function updateSelectionHighlight() {
+            if (selection.mode === 'none' || currentView !== 'overview') return;
+            
+            const cell = getOverviewCell(selection.controlType, selection.group, selection.index);
+            if (cell) {
+                cell.classList.add('selected');
+                cell.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            }
+        }
+        
+        // Clear visual highlight
+        function clearSelectionHighlight() {
+            const selected = document.querySelectorAll('.overview-table td.selected');
+            selected.forEach(cell => cell.classList.remove('selected'));
+        }
+        
+        // Get cell element by control type, group, index
+        function getOverviewCell(controlType, group, index) {
+            const table = document.querySelector('.overview-table');
+            if (!table) return null;
+            
+            // Find cell with matching data attributes
+            return table.querySelector(`td[data-type="${controlType}"][data-group="${group}"][data-index="${index}"]`);
+        }
+        
+        // Get max index for control type
+        function getMaxIndex(controlType) {
+            return controlType === 'fader9' ? 0 : 7;
+        }
+        
+        // Keyboard navigation
+        function moveSelection(direction) {
+            if (currentView !== 'overview') return;
+            
+            // If no selection, start at 0,0
+            if (selection.mode === 'none') {
+                setSelection(overviewTab === 'encoders' ? 'encoder' : 
+                            overviewTab === 'push' ? 'push' :
+                            overviewTab === 'green' ? 'green' : 'fader', 0, 0);
+                return;
+            }
+            
+            let { controlType, group, index } = selection;
+            const maxIndex = getMaxIndex(controlType);
+            
+            switch (direction) {
+                case 'left':
+                    group = Math.max(0, group - 1);
+                    break;
+                case 'right':
+                    group = Math.min(7, group + 1);
+                    break;
+                case 'up':
+                    if (index > 0) {
+                        index--;
+                    } else if (controlType === 'fader9') {
+                        // Move from fader9 row to fader row 8
+                        controlType = 'fader';
+                        index = 7;
+                    }
+                    break;
+                case 'down':
+                    if (index < maxIndex) {
+                        index++;
+                    } else if (controlType === 'fader' && overviewTab === 'faders') {
+                        // Move from fader row 8 to fader9 row
+                        controlType = 'fader9';
+                        index = 0;
+                    }
+                    break;
+            }
+            
+            setSelection(controlType, group, index);
+        }
+        
+        // Handle Enter key - jump to focused view
+        function handleEnterKey() {
+            if (currentView === 'overview' && selection.mode !== 'none') {
+                jumpToFocusedView(selection.controlType, selection.group, selection.index);
+            }
         }
         
         // Context menu
@@ -3816,6 +3981,25 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             } else if (e.key === 'Escape') {
                 hideContextMenu();
                 clearSelection();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                moveSelection('left');
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                moveSelection('right');
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                moveSelection('up');
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                moveSelection('down');
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                handleEnterKey();
+            } else if (e.key === 'Tab' && currentView === 'overview') {
+                e.preventDefault();
+                // Tab moves right, Shift+Tab moves left
+                moveSelection(e.shiftKey ? 'left' : 'right');
             }
         });
         
