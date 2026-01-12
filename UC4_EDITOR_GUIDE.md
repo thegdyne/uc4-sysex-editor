@@ -12,13 +12,14 @@ A web-based configuration editor for the **Faderfox UC4** MIDI controller. Edit 
 4. [Navigating Setups & Groups](#navigating-setups--groups)
 5. [Focused View — Detailed Editing](#focused-view--detailed-editing)
 6. [Overview Mode — See Everything](#overview-mode--see-everything)
-7. [Conflict Detection](#conflict-detection)
-8. [Copy & Paste Operations](#copy--paste-operations)
-9. [Undo & Redo](#undo--redo)
-10. [Session Persistence](#session-persistence)
-11. [Keyboard Shortcuts](#keyboard-shortcuts)
-12. [Workflow Examples](#workflow-examples)
-13. [Validation & Troubleshooting](#validation--troubleshooting)
+7. [Quick Copy/Paste — Rapid Configuration](#quick-copypaste--rapid-configuration)
+8. [Conflict Detection](#conflict-detection)
+9. [Context Menu Copy & Paste](#context-menu-copy--paste)
+10. [Undo, Redo & Reset](#undo-redo--reset)
+11. [Session Persistence](#session-persistence)
+12. [Keyboard Shortcuts](#keyboard-shortcuts)
+13. [Workflow Examples](#workflow-examples)
+14. [Validation & Troubleshooting](#validation--troubleshooting)
 
 ---
 
@@ -44,7 +45,7 @@ A web-based configuration editor for the **Faderfox UC4** MIDI controller. Edit 
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                                                                                 │
 │   UC4 SysEx Editor          [Import SysEx] [Export SysEx] [Import JSON]        │
-│                             [Export JSON]  [↶ Undo] [↷ Redo]                   │
+│                             [Export JSON]  [↶ Undo] [↷ Redo] [⟲ Reset]         │
 │                                                                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
@@ -83,6 +84,7 @@ A web-based configuration editor for the **Faderfox UC4** MIDI controller. Edit 
 | **Export JSON** | Save human-readable JSON (great for git!) |
 | **↶ Undo** | Reverse your last change |
 | **↷ Redo** | Replay an undone change |
+| **⟲ Reset** | Restore to originally imported SysEx |
 
 ### Navigation Elements
 
@@ -240,187 +242,110 @@ The UC4 has **two independent group selectors** on the hardware:
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
-│                    FADER/BUTTON DOMAIN                          │
+│                      FADER DOMAIN                               │
 │                                                                 │
 │   Hardware: Hold Shift + Press Green Button 1-8                 │
 │                                                                 │
 │   Controls affected:                                            │
-│   ┌────────┐ ┌────────┐ ┌────────┐     ┌────────┐ ┌────────┐   │
-│   │Fader 1 │ │Fader 2 │ │Fader 3 │ ... │Fader 8 │ │Fader 9 │   │
-│   └────────┘ └────────┘ └────────┘     └────────┘ └────────┘   │
-│   ┌────────┐ ┌────────┐ ┌────────┐     ┌────────┐              │
-│   │Green 1 │ │Green 2 │ │Green 3 │ ... │Green 8 │              │
-│   └────────┘ └────────┘ └────────┘     └────────┘              │
-│                                                                 │
+│   ┌─────────┐ ┌─────────┐ ┌─────────┐     ┌─────────┐          │
+│   │ Fader 1 │ │ Fader 2 │ │ Fader 3 │ ... │ Fader 8 │          │
+│   │(+Green) │ │(+Green) │ │(+Green) │     │(+Green) │          │
+│   └─────────┘ └─────────┘ └─────────┘     └─────────┘          │
+│                         + Fader 9                               │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**This is why the editor has TWO group selectors!**
+### Link Mode
 
-### 🔗 Link Groups
+Click **🔗 Link** to synchronize both domains. When linked, changing one group changes both.
 
-When you want both domains on the same group (common for channel-per-group setups):
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│   [🔗 Link ✓]     ← Check this box                              │
-│                                                                 │
-│   Encoder Grp  [1] [2] [③] [4] [5] [6] [7] [8]   GrP3          │
-│   Fader/Btn    [1] [2] [③] [4] [5] [6] [7] [8]   GrP3          │
-│                      ↑                                          │
-│                 Both sync!                                      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-Now clicking **any** group tab changes **both** selectors.
+**Use cases:**
+- **Linked:** All controls follow one group (simpler)
+- **Unlinked:** Encoders on Group 1, Faders on Group 5 (advanced)
 
 ---
 
 ## Focused View — Detailed Editing
 
-The Focused view shows full parameter cards for all controls in the selected groups.
+The default view. Edit every parameter for all controls in the selected group(s).
+
+### Section Order
+
+Controls are displayed in this order (same as Overview):
+
+1. **Faders 1-8** — Main faders
+2. **Fader 9** — Master/special fader
+3. **Green Buttons** — Below faders on hardware
+4. **Encoders** — Rotary encoders
+5. **Push Buttons** — Press-down on encoders
+
+### Control Cards
+
+Each control shows all its parameters:
 
 ```
-┌─ FADERS ───────────────────────────────────────────── GrP1 ─────┐
-│                                                                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
-│  │ Fader 1     │  │ Fader 2     │  │ Fader 3     │   ...       │
-│  │ F1.1        │  │ F1.2        │  │ F1.3        │             │
-│  │─────────────│  │─────────────│  │─────────────│             │
-│  │ Chan [1 ▾]  │  │ Chan [1 ▾]  │  │ Chan [1 ▾]  │             │
-│  │ CC   [ 1  ] │  │ CC   [ 2  ] │  │ CC   [ 3  ] │             │
-│  │ Type [CCAb] │  │ Type [CCAb] │  │ Type [CCAb] │             │
-│  │ Min  [ 0  ] │  │ Min  [ 0  ] │  │ Min  [ 0  ] │             │
-│  │ Max  [127 ] │  │ Max  [127 ] │  │ Max  [127 ] │             │
-│  └─────────────┘  └─────────────┘  └─────────────┘             │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-
-┌─ GREEN BUTTONS ────────────────────────────────────── GrP1 ─────┐
-│  ┌─────────────┐  ┌─────────────┐  ...                         │
-│  │ Green 1     │  │ Green 2     │                              │
-│  │ Chan [1 ▾]  │  │ Chan [1 ▾]  │                              │
-│  │ CC   [64  ] │  │ CC   [65  ] │                              │
-│  │ Type [Note] │  │ Type [Note] │                              │
-│  │ Lower[ 0  ] │  │ Lower[ 0  ] │                              │
-│  │ Upper[127 ] │  │ Upper[127 ] │                              │
-│  │ Mode [Gate] │  │ Mode [Gate] │                              │
-│  └─────────────┘  └─────────────┘                              │
-└─────────────────────────────────────────────────────────────────┘
-
-┌─ ENCODERS ─────────────────────────────────────────── GrP1 ─────┐
-│  (8 encoder cards - these use the ENCODER group selector)      │
-└─────────────────────────────────────────────────────────────────┘
-
-┌─ PUSH BUTTONS ─────────────────────────────────────── GrP1 ─────┐
-│  (8 push button cards - buttons under encoders)                │
-└─────────────────────────────────────────────────────────────────┘
-
-┌─ FADER 9 ──────────────────────────────────────────── GrP1 ─────┐
-│  ┌─────────────┐                                               │
-│  │ Fader 9     │  (Expression pedal / 9th fader)               │
-│  │ Chan [1 ▾]  │                                               │
-│  │ CC   [ 11 ] │                                               │
-│  └─────────────┘                                               │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Section Headers — Know What You're Editing!
-
-Each section shows the **group name in bright cyan**:
-
-```
-┌─ ENCODERS ──────────────────────────────── GrP3 ────┐
+┌─ ENCODERS ──────────────────────────────── GrP1 ────┐
                                               ↑
                                     Bright accent color
                                     Matches UC4 display
 ```
 
-This prevents accidentally editing the wrong group!
+### Encoder Types Explained
 
-### Parameter Reference
-
-**Encoder Parameters:**
-| Param | Values | Description |
-|-------|--------|-------------|
-| Chan | 1-16 | MIDI channel |
-| CC | 0-127 | CC number (or note for some types) |
-| Type | CCr1, CCr2, CCAb, PrGC, CCAh, Pbnd, AFtt | Message type |
-| Acc | Acc0-3 | Acceleration (higher = more sensitive) |
-| Disp | OFF, Std, bPoL | LED ring display mode |
-| Min | 0-127 | Minimum value |
-| Max | 0-127 | Maximum value |
-
-**Encoder Types Explained:**
 | Type | Description |
 |------|-------------|
 | CCr1 | Relative mode 1 (64 = no change) |
 | CCr2 | Relative mode 2 (0 = no change) |
 | CCAb | Absolute CC (standard 0-127) |
-| PrGC | Program Change (sends PC messages) |
+| PrGC | Program Change |
 | CCAh | 14-bit high-resolution CC |
 | Pbnd | Pitch Bend |
 | AFtt | Aftertouch |
-
-**Button Parameters:**
-| Param | Values | Description |
-|-------|--------|-------------|
-| Chan | 1-16 | MIDI channel |
-| CC | 0-127 | CC or note number |
-| Type | Note, CC, CC Toggle, Prog Chg, etc. | Message type |
-| Lower | 0-127 | Value when released / off |
-| Upper | 0-127 | Value when pressed / on |
-| Mode | Gate, Toggle | Momentary vs latching |
-
-**Fader Parameters:**
-| Param | Values | Description |
-|-------|--------|-------------|
-| Chan | 1-16 | MIDI channel |
-| CC | 0-127 | CC number |
-| Type | CCAb, PrGC, Pbnd, AFtt | Message type |
-| Min | 0-127 | Value at bottom position |
-| Max | 0-127 | Value at top position |
 
 ---
 
 ## Overview Mode — See Everything
 
-Click **[Overview]** to see all 64 controls in an 8×8 grid.
+Click **[Overview]** to see all controls in an 8-column grid (one column per group).
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                                                                 │
-│   [ Encoders ] [ Push Buttons ] [ Green Buttons ] [ Faders ]    │
-│        ↑                                                        │
-│   Tab selection                                                 │
+│   [ All ] [ Encoders ] [ Push ] [ Green ] [ Faders ]           │
 │                                                                 │
 │   [✓ Concurrent (3)] [Mutually-Exclusive (12)]   ← Filters     │
 │                                                                 │
 ├─────────────────────────────────────────────────────────────────┤
+│  Quick Paste:  [Off] [Copy] [Paste]   Scope: [Cell][Col][Row]  │
+│  Source: Fad Column G1 (8)    Ch: [+1]  CC: [0]                │
+├─────────────────────────────────────────────────────────────────┤
 │           │ Group 1 │ Group 2 │ Group 3 │ Group 4 │ ...        │
 │           │  GrP1   │  GrP2   │  GrP3   │  GrP4   │            │
 │  ─────────┼─────────┼─────────┼─────────┼─────────┼────        │
-│  Enc 1    │ 1:CC 1  │ 1:CC 1  │ 1:CC 1  │⚠1:CC 1 │            │
-│  Enc 2    │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │            │
-│  Enc 3    │ 1:CC 3  │ 1:CC 3  │ 1:CC 3  │ 1:CC 3  │            │
-│  Enc 4    │ 1:CC 4  │ 1:CC 4  │ 1:CC 4  │ 1:CC 4  │            │
-│  Enc 5    │ 1:CC 5  │ 1:CC 5  │ 1:CC 5  │ 1:CC 5  │            │
-│  Enc 6    │ 1:CC 6  │ 1:CC 6  │ 1:CC 6  │ 1:CC 6  │            │
-│  Enc 7    │ 1:CC 7  │ 1:CC 7  │ 1:CC 7  │ 1:CC 7  │            │
-│  Enc 8    │ 1:CC 8  │ 1:CC 8  │ 1:CC 8  │ 1:CC 8  │            │
-│  ─────────┴─────────┴─────────┴─────────┴─────────┴────        │
-│                                                                 │
-│   ⚠ Conflicts:                                                  │
-│   ⚠ Ch1 CC 1: Enc G1.1 (CC), Enc G4.1 (CC)                     │
-│                                                                 │
+│  Fader 1  │ 1:CC 32 │ 1:CC 32 │ 1:CC 32 │ 1:CC 32 │            │
+│  Fader 2  │ 1:CC 33 │ 1:CC 33 │ 1:CC 33 │ 1:CC 33 │            │
+│  ...      │         │         │         │         │            │
+├─────────────────────────────────────────────────────────────────┤
+│  Fader 9  │ 1:CC 40 │ 1:CC 40 │ 1:CC 40 │ 1:CC 40 │            │
+├─────────────────────────────────────────────────────────────────┤
+│  Green 1  │ 1:Nt 36 │ 1:Nt 36 │⚠1:Nt 36│ 1:Nt 36 │            │
+│  ...      │         │         │         │         │            │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+### Tab Filters
+
+| Tab | Shows |
+|-----|-------|
+| **All** | All control types stacked vertically |
+| **Encoders** | Encoders only |
+| **Push** | Push buttons only |
+| **Green** | Green buttons only |
+| **Faders** | Faders 1-8 and Fader 9 |
+
 ### Cell Format
 
-Each cell shows: `Channel:Type CC#`
+Each cell shows: `Channel:Type Value`
 
 ```
 ┌─────────┐
@@ -428,20 +353,8 @@ Each cell shows: `Channel:Type CC#`
 └─────────┘
 
 ┌─────────┐
-│ 2:Nt 60 │  ← Channel 2, Note type, Note 60 (Middle C)
-└─────────┘
-
-┌─────────┐
 │⚠1:CC 64│  ← Warning icon = conflict detected
 └─────────┘
-```
-
-### Tab Navigation
-
-```
-[ Encoders ] [ Push Buttons ] [ Green Buttons ] [ Faders ]
-     ↓
-Click to switch between control types
 ```
 
 ### Interaction
@@ -450,9 +363,108 @@ Click to switch between control types
 |--------|--------|
 | **Single-click** | Select cell (green outline) |
 | **Double-click** | Jump to Focused view for that control |
-| **Right-click** | Open copy/paste context menu |
+| **Right-click** | Open context menu |
 | **Arrow keys** | Move selection |
 | **Enter** | Jump to Focused view |
+
+---
+
+## Quick Copy/Paste — Rapid Configuration
+
+The Quick Paste toolbar enables rapid batch configuration. Press **Q** to activate.
+
+### The Toolbar
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Mode: [Off] [Copy] [Paste]   Scope: [Cell] [Column] [Row]      │
+│ Source: Fad Column G1 (8)    Ch: [0 ▾]   CC: [0 ▾]             │
+│ Click to paste • 3 pasted                                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### How It Works
+
+1. **Press Q** — Enter Copy mode
+2. **Set Scope** — Cell, Column (group), or Row
+3. **Set Multipliers** — Ch and CC offset multipliers
+4. **Click source** — Highlights amber, switches to Paste mode
+5. **Click targets** — Paste with automatic offset calculation
+6. **Press Escape** — Exit and clear
+
+### Relational Offset System
+
+The key feature: offsets are **calculated automatically** based on position difference.
+
+**Formula:**
+```
+offset = (target position - source position) × multiplier
+```
+
+**Example with Ch multiplier = +1:**
+
+| Copy From | Paste To | Calculation | Result |
+|-----------|----------|-------------|--------|
+| G1 (Ch 1) | G2 | 1 + (2-1)×1 | Ch 2 |
+| G1 (Ch 1) | G4 | 1 + (4-1)×1 | Ch 4 |
+| G1 (Ch 1) | G8 | 1 + (8-1)×1 | Ch 8 |
+
+**With multiplier = 0:** Exact copy, no offset applied.
+
+**With multiplier = +2:** Double the offset (useful for CC blocks).
+
+### Visual Feedback
+
+| Color | Meaning |
+|-------|---------|
+| **Amber outline** | Source — what you copied |
+| **Teal dashed outline** | Target — where you'll paste (on hover) |
+| **Flash animation** | Just pasted successfully |
+
+### Scopes Explained
+
+| Scope | Copies | Pastes To |
+|-------|--------|-----------|
+| **Cell** | Single control | Single control |
+| **Column** | All 8 controls in a group | Target group |
+| **Row** | One control across all 8 groups | Same row position |
+
+### Quick Paste Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| **Q** | Toggle mode: Off → Copy → Paste → Off |
+| **1** | Set scope to Cell |
+| **2** | Set scope to Column |
+| **3** | Set scope to Row |
+| **Escape** | Exit Quick Paste, clear source |
+
+### Common Quick Paste Workflows
+
+**8-Channel Mixer Setup:**
+```
+1. Configure G1 completely (Ch 1, your CCs)
+2. Press Q, set Scope = Column, Ch = +1, CC = 0
+3. Click G1 (copy)
+4. Click G2, G3, G4, G5, G6, G7, G8
+5. Result: Each group has incrementing channel
+6. Press Escape
+```
+
+**CC Blocks of 8:**
+```
+1. Configure G1 faders with CC 0-7
+2. Press Q, Scope = Column, Ch = 0, CC = +8
+3. Click G1, then G2, G3, etc.
+4. Result: G2 = CC 8-15, G3 = CC 16-23, etc.
+```
+
+**Duplicate Exactly:**
+```
+1. Leave Ch = 0, CC = 0
+2. Copy and paste anywhere
+3. Exact duplicate regardless of position
+```
 
 ---
 
@@ -462,33 +474,11 @@ The editor automatically detects when two controls send the **same MIDI message*
 
 ### Conflict Types
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  CONCURRENT CONFLICTS (Serious!)                                │
-│                                                                 │
-│  Two controls that are ACTIVE AT THE SAME TIME send the        │
-│  same MIDI message.                                             │
-│                                                                 │
-│  Example: Encoder 1 in Group 1 AND Fader 1 in Group 1          │
-│           both send Ch1 CC 64                                   │
-│                                                                 │
-│  ⚠ These will fight each other!                                │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+**CONCURRENT CONFLICTS (Serious!)**
+Two controls that are ACTIVE AT THE SAME TIME send the same MIDI message. These will fight each other!
 
-┌─────────────────────────────────────────────────────────────────┐
-│  MUTUALLY-EXCLUSIVE CONFLICTS (Usually OK)                      │
-│                                                                 │
-│  Two controls in DIFFERENT GROUPS send the same message.        │
-│  Only one group is active at a time, so they won't conflict.    │
-│                                                                 │
-│  Example: Encoder 1 in Group 1 AND Encoder 1 in Group 4        │
-│           both send Ch1 CC 64                                   │
-│                                                                 │
-│  ✓ This is often intentional (same layout, different group)    │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+**MUTUALLY-EXCLUSIVE CONFLICTS (Usually OK)**
+Two controls in DIFFERENT GROUPS send the same message. Only one group is active at a time, so they won't conflict in practice.
 
 ### Conflict Filters
 
@@ -496,43 +486,13 @@ The editor automatically detects when two controls send the **same MIDI message*
 [✓ Concurrent (3)]  [□ Mutually-Exclusive (12)]
        ↑                      ↑
    Checked = shown       Unchecked = hidden
-   (bright amber)         (dimmed)
-```
-
-- **Default:** Concurrent ON, Mutually-Exclusive OFF
-- Click chips to toggle visibility
-- Numbers show count of each type
-
-### Conflict Highlighting
-
-In the Overview grid:
-
-```
-┌─────────────┐     ┌─────────────┐
-│⚠ 1:CC 64   │     │⚠ 1:CC 64   │
-│ [amber bg] │     │ [dim amber] │
-└─────────────┘     └─────────────┘
-   Concurrent        Mutually-Excl
-```
-
-### Conflict Panel
-
-Below the grid, a panel lists all visible conflicts:
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ ⚠ Conflicts:                                                    │
-│ ⚠ Ch1 CC 64: Enc G1.1 (CC), Fad G1.1 (CC)                      │
-│ ⚠ Ch1 CC 65: Enc G1.2 (CC), Fad G1.2 (CC)                      │
-│ ⚠ Ch2 PC 0-127: Enc G2.1 (PrGC), Enc G5.1 (PrGC)              │
-└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Copy & Paste Operations
+## Context Menu Copy & Paste
 
-The editor supports powerful copy/paste in Overview mode.
+Right-click any cell in Overview for additional copy/paste options.
 
 ### Right-Click Context Menu
 
@@ -554,16 +514,10 @@ Right-click any cell in Overview:
 | Scope | What's Copied |
 |-------|---------------|
 | **Copy Control** | Single cell — all parameters for one control |
-| **Copy Row** | One control across all 8 groups (e.g., Encoder 3 in all groups) |
-| **Copy Column** | All controls in one group (e.g., all 8 encoders in Group 2) |
+| **Copy Row** | One control across all 8 groups |
+| **Copy Column** | All controls in one group |
 
-### Basic Paste
-
-Select a cell → Right-click → **Paste**
-
-The copied control's parameters replace the target cell.
-
-### Paste Special — Power Features!
+### Paste Special — Power Features
 
 ```
 ┌─ Paste Special ─────────────────────────────────────────────────┐
@@ -582,94 +536,33 @@ The copied control's parameters replace the target cell.
 │    Out-of-range:      [Clamp ▾]  (Clamp / Wrap)                │
 │                                                                 │
 │                              [Cancel]  [Paste]                  │
-│                                                                 │
 └─────────────────────────────────────────────────────────────────┘
-```
-
-### Transform Examples
-
-**Channel Offset:**
-```
-Source: Ch1 CC 64
-Offset: +2
-Result: Ch3 CC 64
-```
-
-**CC Offset:**
-```
-Source: Ch1 CC 64
-Offset: +10
-Result: Ch1 CC 74
-```
-
-**Auto-Increment (paste to row):**
-```
-Source: Ch1 CC 1
-Auto-increment by: 1
-Paste to row:
-  Group 1: CC 1
-  Group 2: CC 2
-  Group 3: CC 3
-  ...
-  Group 8: CC 8
-```
-
-**Wrap vs Clamp:**
-```
-Source: Ch15, Offset: +3
-
-Clamp: Ch16 (stops at max)
-Wrap:  Ch2  (wraps around: 15+3=18 → 18-16=2)
 ```
 
 ---
 
-## Undo & Redo
+## Undo, Redo & Reset
 
-Every edit can be reversed.
+### Undo & Redo
 
-### How It Works
-
-```
-┌────────────────────────────────────────────────────────────────┐
-│                                                                │
-│  Edit stack:                                                   │
-│                                                                │
-│    [Initial] → [Edit 1] → [Edit 2] → [Edit 3]                 │
-│                                          ↑                     │
-│                                       Current                  │
-│                                                                │
-│  Click Undo: ←←←                                               │
-│  Click Redo: →→→                                               │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘
-```
-
-### Coalescing
-
-Rapid edits to the same parameter are **combined** into one undo step:
-
-```
-Typing CC value: 1 → 12 → 127
-
-Without coalescing: 3 undo steps
-With coalescing:    1 undo step (if typed within 1 second)
-```
-
-### Batch Operations
-
-Copy/paste to multiple cells creates a **single undo step**:
-
-```
-Paste to entire row (8 cells) → 1 undo step to reverse all 8
-```
-
-### Keyboard Shortcuts
+Every edit can be reversed. Rapid edits to the same parameter are **combined** into one undo step.
 
 | Action | Windows/Linux | Mac |
 |--------|---------------|-----|
 | Undo | Ctrl+Z | Cmd+Z |
-| Redo | Ctrl+Shift+Z or Ctrl+Y | Cmd+Shift+Z |
+| Redo | Ctrl+Shift+Z | Cmd+Shift+Z |
+| Redo (alt) | Ctrl+Y | — |
+
+### Reset
+
+The **⟲ Reset** button restores everything to the originally imported SysEx:
+
+- Reverts all changes since import
+- Clears undo/redo history
+- Clears Quick Paste source
+- Shows confirmation dialog first
+
+**Use case:** Made a mess? Reset and start fresh without re-importing.
 
 ---
 
@@ -735,6 +628,16 @@ Your work is **automatically saved** to browser storage.
 | Paste to selected | Ctrl+V / Cmd+V |
 | Close context menu | Escape |
 
+### Quick Paste Shortcuts
+
+| Action | Key |
+|--------|-----|
+| Toggle Quick Paste mode | Q |
+| Set scope to Cell | 1 |
+| Set scope to Column | 2 |
+| Set scope to Row | 3 |
+| Exit Quick Paste | Escape |
+
 ---
 
 ## Workflow Examples
@@ -752,24 +655,22 @@ Your work is **automatically saved** to browser storage.
 
 Time: ~30 seconds
 
-### Example 2: Set Up 8 Channels
+### Example 2: Set Up 8 Channels with Quick Paste
 
 **Goal:** Each group on a different MIDI channel (Group 1 = Ch1, Group 2 = Ch2, etc.)
 
 ```
-1. Overview mode → Encoders tab
-2. Click Group 1, Encoder 1 cell
-3. Right-click → Copy Column
-4. Click Group 2, Encoder 1 cell
-5. Right-click → Paste Special
-   - Channel offset: +1
-   - Paste to: Entire column
-6. Repeat for Groups 3-8 (or use row paste with auto-increment)
-7. Do same for Faders, Green Buttons
+1. Configure Group 1 completely in Focused view
+2. Switch to Overview
+3. Press Q (Quick Paste)
+4. Set Scope = Column, Ch = +1, CC = 0
+5. Click any cell in Group 1 (copies entire column)
+6. Click Group 2, 3, 4, 5, 6, 7, 8
+7. Press Escape
 8. Export
 ```
 
-Time: ~3 minutes
+Time: ~1 minute
 
 ### Example 3: Clone a Setup
 
@@ -859,17 +760,19 @@ Before export checklist:
 
 2. **Use Link mode** when building channel-per-group layouts
 
-3. **Check conflicts before performing** — concurrent conflicts mean two controls fight each other
+3. **Use Quick Paste (Q)** for repetitive setups — much faster than context menu
 
-4. **Name your groups** on the UC4 hardware — the editor displays these names
+4. **Check conflicts before performing** — concurrent conflicts mean two controls fight each other
 
-5. **Use Paste Special transforms** for repetitive setups — much faster than manual editing
+5. **Name your groups** on the UC4 hardware — the editor displays these names
 
 6. **Keep your .syx and .json files** together in a folder with the date
 
 7. **Test on hardware** after making significant changes — the editor can't catch everything
 
 8. **Use Overview for big-picture checks**, Focused for detailed edits
+
+9. **Reset button** is your friend if you make a mess — restores to imported state
 
 ---
 
@@ -888,18 +791,26 @@ Before export checklist:
 │  FOCUSED:    Edit individual parameters                         │
 │  OVERVIEW:   See 8×8 grid, copy/paste, find conflicts          │
 ├─────────────────────────────────────────────────────────────────┤
+│  QUICK PASTE (press Q to activate):                             │
+│    Q         Toggle mode (Off → Copy → Paste → Off)            │
+│    1 / 2 / 3 Cell / Column / Row scope                         │
+│    Click     Copy (in Copy mode) or Paste (in Paste mode)      │
+│    Escape    Exit Quick Paste                                   │
+│    Ch/CC     Offset multiplier (0 = exact copy)                │
+├─────────────────────────────────────────────────────────────────┤
 │  Ctrl+Z      Undo                                               │
 │  Ctrl+Y      Redo                                               │
 │  Ctrl+C      Copy (in Overview)                                 │
 │  Ctrl+V      Paste (in Overview)                                │
 │  Arrows      Navigate grid                                      │
 │  Enter       Jump to Focused                                    │
-│  Escape      Clear selection                                    │
+│  Escape      Clear selection / Exit Quick Paste                 │
 │  Right-click Context menu                                       │
 ├─────────────────────────────────────────────────────────────────┤
 │  ⚠ Concurrent    = Active at same time (fix these!)            │
 │  ⚠ Mut-Excl      = Different groups (usually OK)               │
 │  ● Amber dot     = Unsaved changes                              │
+│  ⟲ Reset         = Restore to imported SysEx                    │
 │  Session restore = Auto-saved, offered on reload               │
 └─────────────────────────────────────────────────────────────────┘
 ```

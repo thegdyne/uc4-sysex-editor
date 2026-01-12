@@ -288,6 +288,7 @@
         .overview-section-title.push { color: var(--push); border-color: var(--push); }
         .overview-section-title.green { color: var(--green-btn); border-color: var(--green-btn); }
         .overview-section-title.faders { color: var(--fader); border-color: var(--fader); }
+        .overview-section-title.fader9 { color: var(--fader); border-color: var(--fader); }
         
         .overview-table {
             width: 100%;
@@ -343,6 +344,12 @@
             outline: 2px solid var(--accent);
             outline-offset: -2px;
             background: rgba(0, 255, 170, 0.15);
+        }
+        
+        .overview-table td.qp-source {
+            outline: 2px solid var(--warning);
+            outline-offset: -2px;
+            background: rgba(255, 170, 0, 0.15);
         }
         
         .overview-table td.selected.conflict {
@@ -520,6 +527,209 @@
             height: 1px;
             background: var(--border);
             margin: 0.25rem 0;
+        }
+        
+        /* Quick Paste Toolbar */
+        .quick-paste-toolbar {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.75rem;
+        }
+        
+        .quick-paste-toolbar.collapsed {
+            padding: 0.4rem 0.75rem;
+        }
+        
+        .quick-paste-toolbar.collapsed .qp-expanded-content {
+            display: none;
+        }
+        
+        .qp-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .qp-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.65rem;
+        }
+        
+        .qp-mode-buttons {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .qp-mode-btn {
+            font-family: inherit;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid var(--border);
+            background: var(--bg-control);
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.1s;
+            text-transform: uppercase;
+        }
+        
+        .qp-mode-btn:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+        
+        .qp-mode-btn.active {
+            font-weight: 600;
+        }
+        
+        .qp-mode-btn.active[data-mode="off"] {
+            background: var(--bg-input);
+            border-color: var(--border-light);
+            color: var(--text);
+        }
+        
+        .qp-mode-btn.active[data-mode="copy"] {
+            background: var(--encoder);
+            border-color: var(--encoder);
+            color: var(--bg-dark);
+        }
+        
+        .qp-mode-btn.active[data-mode="paste"] {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-dark);
+        }
+        
+        .qp-scope-btns {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .qp-scope-btn {
+            font-family: inherit;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--border);
+            background: var(--bg-control);
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        
+        .qp-scope-btn:hover {
+            border-color: var(--accent);
+        }
+        
+        .qp-scope-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-dark);
+            font-weight: 600;
+        }
+        
+        .qp-scope-btn.locked {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .qp-scope-btn.locked.active {
+            opacity: 1;
+        }
+        
+        .qp-source-display {
+            color: var(--text);
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            min-width: 120px;
+        }
+        
+        .qp-source-display.has-source {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .qp-source-display .lock-icon {
+            margin-left: 0.25rem;
+            font-size: 0.65rem;
+        }
+        
+        .qp-ch-section {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .qp-ch-section select {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            min-width: 60px;
+        }
+        
+        .qp-status {
+            color: var(--text-muted);
+            font-style: italic;
+            margin-left: auto;
+        }
+        
+        .qp-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .qp-action-btn {
+            font-family: inherit;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.4rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+        }
+        
+        .qp-action-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        /* Overview table mode styles */
+        .overview-table.qp-copy-mode td {
+            cursor: crosshair;
+        }
+        
+        .overview-table.qp-paste-mode td {
+            cursor: cell;
+        }
+        
+        .overview-table.qp-paste-mode td.qp-incompatible {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        /* Cell/Column/Row hover highlighting */
+        .overview-table td.qp-cell-hover,
+        .overview-table td.qp-column-hover,
+        .overview-table td.qp-row-hover {
+            outline: 2px dashed var(--accent);
+            outline-offset: -2px;
+            background: rgba(0, 212, 170, 0.1);
+        }
+        
+        /* Just pasted flash animation */
+        @keyframes qpFlash {
+            0% { background: var(--accent); }
+            100% { background: var(--bg-input); }
+        }
+        
+        .overview-table td.just-pasted {
+            animation: qpFlash 0.4s ease-out;
         }
         
         /* Paste Special Dialog */
@@ -964,23 +1174,27 @@
         
         /* View Toggle */
         .view-toggle {
-            display: flex;
+            display: inline-flex;
             gap: 0;
-            border: 1px solid var(--accent);
-            overflow: hidden;
+            border-radius: 0;
         }
         
         .view-btn {
             font-family: inherit;
             font-size: 0.75rem;
             padding: 0.5rem 1rem;
-            border: none;
+            border: 1px solid var(--accent);
+            margin-left: -1px;
             background: var(--bg-control);
             color: var(--text-dim);
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             transition: all 0.15s;
+        }
+        
+        .view-btn:first-child {
+            margin-left: 0;
         }
         
         .view-btn:hover {
@@ -1058,6 +1272,7 @@
             <span class="btn-divider"></span>
             <button class="btn" id="undoBtn" onclick="undo()" disabled title="Undo (Ctrl+Z)">↶ Undo</button>
             <button class="btn" id="redoBtn" onclick="redo()" disabled title="Redo (Ctrl+Y)">↷ Redo</button>
+            <button class="btn" id="resetBtn" onclick="confirmReset()" title="Reset to imported SysEx or defaults">⟲ Reset</button>
             <span class="btn-divider"></span>
             <a href="UC4_EDITOR_GUIDE.html" class="btn help-link" target="_blank" title="Usage Guide">? Guide</a>
         </div>
@@ -1123,6 +1338,7 @@
         
         // State
         let rawBuffer = null;
+        let originalBuffer = null;  // Stores the imported SysEx for reset
         let sectionIndex = null;
         let currentSetup = 0;
         let encoderGroup = 0;
@@ -1160,6 +1376,17 @@
             controlType: null,
             group: null,
             index: null
+        };
+        
+        // Quick Paste State (v1.0)
+        const quickPaste = {
+            mode: 'off',           // 'off' | 'copy' | 'paste'
+            scope: 'cell',         // 'cell' | 'column' | 'row'
+            source: null,          // { controlType, group, index, data, lockedScope, count }
+            chMultiplier: 0,       // Channel offset multiplier (-8 to +8)
+            ccMultiplier: 0,       // CC offset multiplier (-8 to +8)
+            pasteCount: 0,         // Total pastes this session
+            doubleClickToastShown: false
         };
         
         // Link Groups State
@@ -1560,6 +1787,11 @@
             faderSection.appendChild(faderGrid);
             main.appendChild(faderSection);
             
+            // Fader 9 section (uses fader group)
+            const fader9Section = createSection('Fader 9', 'fader9', faderGroupName);
+            fader9Section.appendChild(createFader9Card());
+            main.appendChild(fader9Section);
+            
             // Green Buttons section (uses fader group)
             const greenSection = createSection('Green Buttons', 'green', faderGroupName);
             const greenGrid = document.createElement('div');
@@ -1592,11 +1824,6 @@
             }
             pushSection.appendChild(pushGrid);
             main.appendChild(pushSection);
-            
-            // Fader 9 section (uses fader group)
-            const fader9Section = createSection('Fader 9', 'fader9', faderGroupName);
-            fader9Section.appendChild(createFader9Card());
-            main.appendChild(fader9Section);
         }
         
         function createSection(title, className, badge) {
@@ -1979,6 +2206,9 @@
             const container = document.createElement('div');
             container.className = 'overview-container';
             
+            // Quick Paste Toolbar
+            container.appendChild(createQuickPasteToolbar());
+            
             // Tab bar
             const tabs = document.createElement('div');
             tabs.className = 'overview-tabs';
@@ -1997,12 +2227,12 @@
             filters.innerHTML = `
                 <span class="conflict-filters-label">Conflicts:</span>
                 <div class="filter-chip ${showConcurrentConflicts ? 'active' : ''}" onclick="toggleConcurrentFilter()">
-                    <span class="checkmark">${showConcurrentConflicts ? '✔' : ''}</span>
+                    <span class="checkmark">${showConcurrentConflicts ? '✓' : ''}</span>
                     Concurrent
                     <span class="count" id="concurrentCount">${conflicts.concurrent.size}</span>
                 </div>
                 <div class="filter-chip ${showMutuallyExclusiveConflicts ? 'active dim' : ''}" onclick="toggleMEFilter()">
-                    <span class="checkmark">${showMutuallyExclusiveConflicts ? '✔' : ''}</span>
+                    <span class="checkmark">${showMutuallyExclusiveConflicts ? '✓' : ''}</span>
                     Mutually-Exclusive
                     <span class="count" id="meCount">${conflicts.mutuallyExclusive.size}</span>
                 </div>
@@ -2015,8 +2245,9 @@
             
             switch (overviewTab) {
                 case 'all':
-                    // Show all control types stacked: Faders, Green, Encoders, Push
-                    grid.appendChild(createOverviewSection('Faders', createFaderOverviewTable(), 'faders'));
+                    // Show all control types stacked: Faders 1-8, Fader 9, Green, Encoders, Push
+                    grid.appendChild(createOverviewSection('Faders 1-8', createFaderOverviewTable(), 'faders'));
+                    grid.appendChild(createOverviewSection('Fader 9', createFader9OverviewTable(), 'fader9'));
                     grid.appendChild(createOverviewSection('Green Buttons', createButtonOverviewTable('green', getGreenData, 'B'), 'green'));
                     grid.appendChild(createOverviewSection('Encoders', createEncoderOverviewTable(), 'encoders'));
                     grid.appendChild(createOverviewSection('Push Buttons', createButtonOverviewTable('push', getPushData, 'P'), 'push'));
@@ -2031,7 +2262,8 @@
                     grid.appendChild(createButtonOverviewTable('green', getGreenData, 'B'));
                     break;
                 case 'faders':
-                    grid.appendChild(createFaderOverviewTable());
+                    grid.appendChild(createOverviewSection('Faders 1-8', createFaderOverviewTable(), 'faders'));
+                    grid.appendChild(createOverviewSection('Fader 9', createFader9OverviewTable(), 'fader9'));
                     break;
             }
             
@@ -2082,6 +2314,9 @@
             }
             
             main.appendChild(container);
+            
+            // Update cursor classes on all tables
+            updateOverviewTableCursor();
         }
         
         // Overview state
@@ -2217,10 +2452,24 @@
                         cell.classList.add('selected');
                     }
                     
+                    // Check if this cell is QP source
+                    if (isQuickPasteSource('encoder', g, i)) {
+                        cell.classList.add('qp-source');
+                    }
+                    
                     const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                     cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatEncoderCell(data)}</div>`;
-                    cell.onclick = () => { setSelection('encoder', g, i); };
-                    cell.ondblclick = () => jumpToFocusedView('encoder', g, i);
+                    cell.onclick = () => { 
+                        if (!handleQuickPasteCellClick('encoder', g, i)) {
+                            setSelection('encoder', g, i); 
+                        }
+                    };
+                    cell.ondblclick = () => {
+                        if (!handleQuickPasteDoubleClick('encoder', g, i)) {
+                            jumpToFocusedView('encoder', g, i);
+                        }
+                    };
+                    cell.onmouseenter = () => handleOverviewMouseEnter('encoder', g, i);
                     cell.oncontextmenu = (e) => showContextMenu(e, 'encoder', g, i);
                     cell.title = createEncoderTooltip(data, g, i);
                     row.appendChild(cell);
@@ -2283,10 +2532,24 @@
                         cell.classList.add('selected');
                     }
                     
+                    // Check if this cell is QP source
+                    if (isQuickPasteSource(type, g, i)) {
+                        cell.classList.add('qp-source');
+                    }
+                    
                     const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                     cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatButtonCell(data)}</div>`;
-                    cell.onclick = () => { setSelection(type, g, i); };
-                    cell.ondblclick = () => jumpToFocusedView(type, g, i);
+                    cell.onclick = () => { 
+                        if (!handleQuickPasteCellClick(type, g, i)) {
+                            setSelection(type, g, i); 
+                        }
+                    };
+                    cell.ondblclick = () => {
+                        if (!handleQuickPasteDoubleClick(type, g, i)) {
+                            jumpToFocusedView(type, g, i);
+                        }
+                    };
+                    cell.onmouseenter = () => handleOverviewMouseEnter(type, g, i);
                     cell.oncontextmenu = (e) => showContextMenu(e, type, g, i);
                     row.appendChild(cell);
                 }
@@ -2348,16 +2611,47 @@
                         cell.classList.add('selected');
                     }
                     
+                    // Check if this cell is QP source
+                    if (isQuickPasteSource('fader', g, i)) {
+                        cell.classList.add('qp-source');
+                    }
+                    
                     const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                     cell.innerHTML = `<div class="overview-cell">${warningIcon}${formatFaderCell(data)}</div>`;
-                    cell.onclick = () => { setSelection('fader', g, i); };
-                    cell.ondblclick = () => jumpToFocusedView('fader', g, i);
+                    cell.onclick = () => { 
+                        if (!handleQuickPasteCellClick('fader', g, i)) {
+                            setSelection('fader', g, i); 
+                        }
+                    };
+                    cell.ondblclick = () => {
+                        if (!handleQuickPasteDoubleClick('fader', g, i)) {
+                            jumpToFocusedView('fader', g, i);
+                        }
+                    };
+                    cell.onmouseenter = () => handleOverviewMouseEnter('fader', g, i);
                     cell.oncontextmenu = (e) => showContextMenu(e, 'fader', g, i);
                     row.appendChild(cell);
                 }
                 
                 table.appendChild(row);
             }
+            
+            return table;
+        }
+        
+        // Fader 9 separate table
+        function createFader9OverviewTable() {
+            const table = document.createElement('table');
+            table.className = 'overview-table';
+            
+            // Header row
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = '<th></th>';
+            for (let g = 0; g < 8; g++) {
+                const name = getGroupName(currentSetup, g);
+                headerRow.innerHTML += `<th class="group-header">Group ${g + 1}<br><span class="group-name">${name}</span></th>`;
+            }
+            table.appendChild(headerRow);
             
             // Fader 9 row
             const f9row = document.createElement('tr');
@@ -2387,12 +2681,26 @@
                     cell.classList.add('selected');
                 }
                 
+                // Check if this cell is QP source
+                if (isQuickPasteSource('fader9', g, 0)) {
+                    cell.classList.add('qp-source');
+                }
+                
                 // Fader 9 only has CC type
                 const ch = chDisp(data.channel - 1);
                 const warningIcon = conflictType ? '<span class="conflict-icon">⚠</span>' : '';
                 cell.innerHTML = `<div class="overview-cell">${warningIcon}${ch}:CC ${data.cc}</div>`;
-                cell.onclick = () => { setSelection('fader9', g, 0); };
-                cell.ondblclick = () => jumpToFocusedView('fader9', g, 0);
+                cell.onclick = () => { 
+                    if (!handleQuickPasteCellClick('fader9', g, 0)) {
+                        setSelection('fader9', g, 0); 
+                    }
+                };
+                cell.ondblclick = () => {
+                    if (!handleQuickPasteDoubleClick('fader9', g, 0)) {
+                        jumpToFocusedView('fader9', g, 0);
+                    }
+                };
+                cell.onmouseenter = () => handleOverviewMouseEnter('fader9', g, 0);
                 cell.oncontextmenu = (e) => showContextMenu(e, 'fader9', g, 0);
                 f9row.appendChild(cell);
             }
@@ -2681,6 +2989,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 }
                 
                 sectionIndex = buildIndex(rawBuffer);
+                
+                // Store original for reset
+                originalBuffer = new Uint8Array(rawBuffer);
                 
                 // Clear previous session - new import is clean slate
                 clearSession();
@@ -2978,6 +3289,51 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             undoStack.push(action);
             updateUndoRedoUI();
             renderCurrentView();
+        }
+        
+        function confirmReset() {
+            const hasOriginal = originalBuffer !== null;
+            const message = hasOriginal 
+                ? 'Reset all changes back to the imported SysEx?\n\nThis will discard all modifications.'
+                : 'Load default UC4 configuration?\n\nNo SysEx was imported, so this will load factory defaults.';
+            
+            if (confirm(message)) {
+                performReset();
+            }
+        }
+        
+        function performReset() {
+            if (originalBuffer) {
+                // Reset to imported SysEx
+                rawBuffer = new Uint8Array(originalBuffer);
+                sectionIndex = buildIndex(rawBuffer);
+            } else {
+                // Load default - create a basic UC4 config
+                // For now, just show a message since we don't have a default template
+                showToast('No SysEx imported - import a SysEx file first', 'warning');
+                return;
+            }
+            
+            // Clear undo/redo stacks
+            undoStack.length = 0;
+            redoStack.length = 0;
+            updateUndoRedoUI();
+            
+            // Reset state
+            isModified = false;
+            dirtyBanks.clear();
+            
+            // Clear Quick Paste source
+            quickPaste.source = null;
+            quickPaste.pasteCount = 0;
+            
+            // Rebuild conflict map
+            rebuildConflictMap();
+            
+            // Re-render
+            renderCurrentView();
+            updateStatus('loaded', 'Reset to imported SysEx');
+            showToast('Reset to imported SysEx', 'success');
         }
         
         function applyAction(action, reverse) {
@@ -3679,7 +4035,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         }
         
         // Transform copied data with options
-        function transformControlData(data, options, incrementIndex = 0) {
+        function transformControlData(data, options) {
             let newData = { ...data };
             
             // Apply channel offset (channel is 1-based: 1-16)
@@ -3692,14 +4048,6 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             if (options.numberOffset && options.numberOffset !== 0) {
                 if (newData.cc !== undefined) {
                     newData.cc = applyOffset(newData.cc, options.numberOffset, 0, 127, options.wrapMode);
-                }
-            }
-            
-            // Apply auto-increment
-            if (options.autoIncrement && options.incrementBy) {
-                const delta = options.incrementBy * incrementIndex;
-                if (newData.cc !== undefined) {
-                    newData.cc = applyOffset(newData.cc, delta, 0, 127, options.wrapMode);
                 }
             }
             
@@ -3873,16 +4221,36 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         
         // Get cell element by control type, group, index
         function getOverviewCell(controlType, group, index) {
-            const table = document.querySelector('.overview-table');
-            if (!table) return null;
-            
-            // Find cell with matching data attributes
-            return table.querySelector(`td[data-type="${controlType}"][data-group="${group}"][data-index="${index}"]`);
+            // Search all overview tables (Fader 9 is now in its own table)
+            const tables = document.querySelectorAll('.overview-table');
+            for (const table of tables) {
+                const cell = table.querySelector(`td[data-type="${controlType}"][data-group="${group}"][data-index="${index}"]`);
+                if (cell) return cell;
+            }
+            return null;
         }
         
         // Get max index for control type
         function getMaxIndex(controlType) {
             return controlType === 'fader9' ? 0 : 7;
+        }
+        
+        // Check if cell is part of Quick Paste source
+        function isQuickPasteSource(controlType, group, index) {
+            if (!quickPaste.source || quickPaste.source.controlType !== controlType) return false;
+            
+            const scope = quickPaste.source.lockedScope;
+            const srcGroup = quickPaste.source.group;
+            const srcIndex = quickPaste.source.index;
+            
+            if (scope === 'cell') {
+                return group === srcGroup && index === srcIndex;
+            } else if (scope === 'column') {
+                return group === srcGroup;
+            } else if (scope === 'row') {
+                return index === srcIndex;
+            }
+            return false;
         }
         
         // Keyboard navigation
@@ -4132,6 +4500,445 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         }
         
         // ============================================================
+        // Quick Paste System (v1.0)
+        // ============================================================
+        
+        function createQuickPasteToolbar() {
+            const toolbar = document.createElement('div');
+            toolbar.id = 'quickPasteToolbar';
+            toolbar.className = `quick-paste-toolbar ${quickPaste.mode === 'off' ? 'collapsed' : ''}`;
+            
+            const isExpanded = quickPaste.mode !== 'off';
+            const hasSource = quickPaste.source !== null;
+            
+            // Build channel multiplier options (-8 to +8, default 1)
+            let chOptions = '';
+            for (let i = -8; i <= 8; i++) {
+                const label = i === 0 ? '0' : (i > 0 ? `+${i}` : `${i}`);
+                chOptions += `<option value="${i}" ${quickPaste.chMultiplier === i ? 'selected' : ''}>${label}</option>`;
+            }
+            
+            // Build CC multiplier options (-8 to +8, default 1)
+            let ccOptions = '';
+            for (let i = -8; i <= 8; i++) {
+                const label = i === 0 ? '0' : (i > 0 ? `+${i}` : `${i}`);
+                ccOptions += `<option value="${i}" ${quickPaste.ccMultiplier === i ? 'selected' : ''}>${label}</option>`;
+            }
+            
+            // Source display
+            let sourceText = 'No source';
+            if (hasSource) {
+                const s = quickPaste.source;
+                const scopeNames = { cell: 'Cell', column: 'Column', row: 'Row' };
+                const typeNames = { encoder: 'Enc', push: 'Push', green: 'Grn', fader: 'Fad', fader9: 'F9' };
+                const typeName = typeNames[s.controlType] || s.controlType;
+                
+                if (s.lockedScope === 'cell') {
+                    sourceText = `${typeName} G${s.group + 1}.${s.index + 1}`;
+                } else if (s.lockedScope === 'column') {
+                    sourceText = `${typeName} Column G${s.group + 1} (${s.count})`;
+                } else if (s.lockedScope === 'row') {
+                    sourceText = `${typeName} Row ${s.index + 1} (${s.count})`;
+                }
+            }
+            
+            // Status text
+            let statusText = '';
+            if (quickPaste.mode === 'off') {
+                statusText = 'Press Q to start Quick Paste';
+            } else if (quickPaste.mode === 'copy') {
+                statusText = hasSource ? 'Click cell to copy new source, or switch to Paste' : 'Click a cell to set source';
+            } else if (quickPaste.mode === 'paste') {
+                statusText = hasSource ? `Click to paste • ${quickPaste.pasteCount} pasted` : 'Switch to Copy mode first';
+            }
+            
+            toolbar.innerHTML = `
+                <div class="qp-section">
+                    <span class="qp-label">Mode</span>
+                    <div class="qp-mode-buttons">
+                        <button class="qp-mode-btn ${quickPaste.mode === 'off' ? 'active' : ''}" data-mode="off" onclick="setQuickPasteMode('off')">Off</button>
+                        <button class="qp-mode-btn ${quickPaste.mode === 'copy' ? 'active' : ''}" data-mode="copy" onclick="setQuickPasteMode('copy')">Copy</button>
+                        <button class="qp-mode-btn ${quickPaste.mode === 'paste' ? 'active' : ''}" data-mode="paste" onclick="setQuickPasteMode('paste')">Paste</button>
+                    </div>
+                </div>
+                
+                <div class="qp-expanded-content qp-section">
+                    <span class="qp-label">Scope</span>
+                    <div class="qp-scope-btns">
+                        <button class="qp-scope-btn ${quickPaste.scope === 'cell' ? 'active' : ''}" 
+                                onclick="setQuickPasteScope('cell')" title="Single cell [1]">Cell</button>
+                        <button class="qp-scope-btn ${quickPaste.scope === 'column' ? 'active' : ''}" 
+                                onclick="setQuickPasteScope('column')" title="Entire column/group [2]">Column</button>
+                        <button class="qp-scope-btn ${quickPaste.scope === 'row' ? 'active' : ''}" 
+                                onclick="setQuickPasteScope('row')" title="Entire row [3]">Row</button>
+                    </div>
+                </div>
+                
+                <div class="qp-expanded-content qp-section">
+                    <span class="qp-label">Source</span>
+                    <div class="qp-source-display ${hasSource ? 'has-source' : ''}">${sourceText}</div>
+                </div>
+                
+                <div class="qp-expanded-content qp-section qp-ch-section">
+                    <span class="qp-label">Ch</span>
+                    <select id="qpChMult" onchange="setQuickPasteChMult(this.value)" title="Channel offset = group diff × this value">${chOptions}</select>
+                </div>
+                
+                <div class="qp-expanded-content qp-section qp-ch-section">
+                    <span class="qp-label">CC</span>
+                    <select id="qpCCMult" onchange="setQuickPasteCCMult(this.value)" title="CC offset = group diff × this value">${ccOptions}</select>
+                </div>
+                
+                <div class="qp-expanded-content qp-actions">
+                    <button class="qp-action-btn" onclick="clearQuickPasteSource()" ${!hasSource ? 'disabled' : ''}>Clear Source</button>
+                </div>
+                
+                <div class="qp-expanded-content qp-status">${statusText}</div>
+            `;
+            
+            return toolbar;
+        }
+        
+        function setQuickPasteMode(mode) {
+            const prevMode = quickPaste.mode;
+            quickPaste.mode = mode;
+            
+            // Clear source when going to off mode
+            if (mode === 'off') {
+                quickPaste.source = null;
+                quickPaste.pasteCount = 0;
+            }
+            
+            // Clear hover highlight tracking when leaving paste mode
+            if (prevMode === 'paste' && mode !== 'paste') {
+                lastHoverKey = null;
+                clearHoverHighlight();
+            }
+            
+            // Collapse/expand toolbar
+            const toolbar = document.getElementById('quickPasteToolbar');
+            if (toolbar) {
+                toolbar.classList.toggle('collapsed', mode === 'off');
+            }
+            
+            // Update table cursor class
+            updateOverviewTableCursor();
+            
+            // Re-render toolbar
+            renderOverview();
+        }
+        
+        function setQuickPasteScope(scope) {
+            // If scope is changing and we have a source, clear it
+            if (quickPaste.source && quickPaste.scope !== scope) {
+                quickPaste.source = null;
+                showToast(`Scope → ${scope.charAt(0).toUpperCase() + scope.slice(1)} (source cleared)`, 'info');
+            }
+            
+            quickPaste.scope = scope;
+            renderOverview();
+        }
+        
+        function setQuickPasteChMult(value) {
+            quickPaste.chMultiplier = parseInt(value, 10);
+        }
+        
+        function setQuickPasteCCMult(value) {
+            quickPaste.ccMultiplier = parseInt(value, 10);
+        }
+        
+        function clearQuickPasteSource() {
+            quickPaste.source = null;
+            quickPaste.pasteCount = 0;
+            renderOverview();
+        }
+        
+        
+        function updateOverviewTableCursor() {
+            const tables = document.querySelectorAll('.overview-table');
+            tables.forEach(table => {
+                table.classList.remove('qp-copy-mode', 'qp-paste-mode');
+                if (quickPaste.mode === 'copy') {
+                    table.classList.add('qp-copy-mode');
+                } else if (quickPaste.mode === 'paste') {
+                    table.classList.add('qp-paste-mode');
+                }
+            });
+        }
+        
+        // Perform Quick Copy based on scope
+        function performQuickCopy(controlType, group, index) {
+            const scope = quickPaste.scope;
+            const colCount = controlType === 'fader9' ? 1 : 8;
+            
+            let data;
+            let count;
+            
+            if (scope === 'cell') {
+                data = { ...getControlData(controlType, currentSetup, group, index) };
+                count = 1;
+            } else if (scope === 'column') {
+                data = [];
+                for (let i = 0; i < colCount; i++) {
+                    data.push({ ...getControlData(controlType, currentSetup, group, i) });
+                }
+                count = colCount;
+            } else if (scope === 'row') {
+                data = [];
+                for (let g = 0; g < 8; g++) {
+                    data.push({ ...getControlData(controlType, currentSetup, g, index) });
+                }
+                count = 8;
+            }
+            
+            quickPaste.source = {
+                controlType,
+                group,
+                index,
+                data,
+                lockedScope: scope,
+                count
+            };
+            
+            quickPaste.pasteCount = 0;
+            
+            // Auto-switch to paste mode
+            quickPaste.mode = 'paste';
+            
+            const scopeNames = { cell: 'Cell', column: 'Column', row: 'Row' };
+            showToast(`Copied ${scopeNames[scope]} - ready to paste`, 'success');
+            
+            renderOverview();
+        }
+        
+        // Perform Quick Paste based on locked scope
+        function performQuickPaste(controlType, group, index) {
+            if (!quickPaste.source) {
+                showToast('No source to paste', 'warning');
+                return;
+            }
+            
+            // Same-type enforcement
+            if (controlType !== quickPaste.source.controlType) {
+                showToast(`Can't paste ${quickPaste.source.controlType} to ${controlType}`, 'error');
+                return;
+            }
+            
+            const scope = quickPaste.source.lockedScope;
+            const colCount = controlType === 'fader9' ? 1 : 8;
+            
+            // Calculate offset based on group difference × multiplier
+            const sourceGroup = quickPaste.source.group;
+            const groupDiff = group - sourceGroup;
+            
+            const options = {
+                channelOffset: groupDiff * quickPaste.chMultiplier,
+                numberOffset: groupDiff * quickPaste.ccMultiplier,
+                wrapMode: 'clamp'
+            };
+            
+            // Record undo based on scope
+            if (scope === 'cell') {
+                // Single cell paste
+                const before = getControlData(controlType, currentSetup, group, index);
+                const newData = transformControlData(quickPaste.source.data, options);
+                setControlData(controlType, currentSetup, group, index, newData);
+                
+                recordUndo({
+                    type: 'control',
+                    description: `Quick Paste to ${formatControlName(controlType, group, index)}`,
+                    controlType,
+                    setupIdx: currentSetup,
+                    group,
+                    index,
+                    before,
+                    after: newData
+                });
+                
+                flashCell(controlType, group, index);
+                
+            } else if (scope === 'column') {
+                // Column paste to target group
+                const batch = { 
+                    type: 'batch', 
+                    description: `Quick Paste Column to G${group + 1}`, 
+                    actions: [] 
+                };
+                
+                for (let i = 0; i < colCount; i++) {
+                    const before = getControlData(controlType, currentSetup, group, i);
+                    const sourceData = quickPaste.source.data[i] || quickPaste.source.data[0];
+                    const newData = transformControlData(sourceData, options);
+                    setControlData(controlType, currentSetup, group, i, newData);
+                    
+                    batch.actions.push({
+                        type: 'control',
+                        controlType,
+                        setupIdx: currentSetup,
+                        group,
+                        index: i,
+                        before,
+                        after: newData
+                    });
+                    
+                    flashCell(controlType, group, i);
+                }
+                
+                recordUndo(batch);
+                
+            } else if (scope === 'row') {
+                // Row paste to all groups at target index
+                // For row paste, offset is based on row difference (index), not group
+                const sourceIndex = quickPaste.source.index;
+                const rowDiff = index - sourceIndex;
+                
+                const rowOptions = {
+                    channelOffset: rowDiff * quickPaste.chMultiplier,
+                    numberOffset: rowDiff * quickPaste.ccMultiplier,
+                    wrapMode: 'clamp'
+                };
+                
+                const batch = { 
+                    type: 'batch', 
+                    description: `Quick Paste Row ${index + 1}`, 
+                    actions: [] 
+                };
+                
+                for (let g = 0; g < 8; g++) {
+                    const before = getControlData(controlType, currentSetup, g, index);
+                    const sourceData = quickPaste.source.data[g] || quickPaste.source.data[0];
+                    const newData = transformControlData(sourceData, rowOptions);
+                    setControlData(controlType, currentSetup, g, index, newData);
+                    
+                    batch.actions.push({
+                        type: 'control',
+                        controlType,
+                        setupIdx: currentSetup,
+                        group: g,
+                        index,
+                        before,
+                        after: newData
+                    });
+                    
+                    flashCell(controlType, g, index);
+                }
+                
+                recordUndo(batch);
+            }
+            
+            quickPaste.pasteCount++;
+            
+            markModified();
+            scheduleConflictRebuild();
+            renderOverview();
+        }
+        
+        // Flash cell to indicate paste
+        function flashCell(controlType, group, index) {
+            const cell = getOverviewCell(controlType, group, index);
+            if (cell) {
+                cell.classList.add('just-pasted');
+                setTimeout(() => cell.classList.remove('just-pasted'), 400);
+            }
+        }
+        
+        // Handle Quick Paste cell click
+        function handleQuickPasteCellClick(controlType, group, index) {
+            if (quickPaste.mode === 'copy') {
+                performQuickCopy(controlType, group, index);
+                return true;
+            }
+            
+            if (quickPaste.mode === 'paste') {
+                performQuickPaste(controlType, group, index);
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // Handle Quick Paste double-click (blocked in paste mode)
+        function handleQuickPasteDoubleClick(controlType, group, index) {
+            if (quickPaste.mode === 'paste') {
+                if (!quickPaste.doubleClickToastShown) {
+                    showToast('Double-click disabled in Paste mode', 'info');
+                    quickPaste.doubleClickToastShown = true;
+                }
+                return true; // Block the action
+            }
+            
+            if (quickPaste.mode === 'copy') {
+                // Treat as single click
+                performQuickCopy(controlType, group, index);
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // Hover highlighting for Quick Paste (column/row preview)
+        let lastHoverKey = null;
+        
+        function handleOverviewMouseEnter(controlType, group, index) {
+            // Only show hover highlight in paste mode with a source
+            if (quickPaste.mode !== 'paste' || !quickPaste.source) return;
+            
+            // Only highlight compatible types
+            if (controlType !== quickPaste.source.controlType) return;
+            
+            const scope = quickPaste.source.lockedScope;
+            const key = `${controlType}-${group}-${index}-${scope}`;
+            
+            // Skip if same cell (avoid redundant DOM updates)
+            if (key === lastHoverKey) return;
+            lastHoverKey = key;
+            
+            clearHoverHighlight();
+            
+            const colCount = (controlType === 'fader9') ? 1 : 8;
+            
+            if (scope === 'column') {
+                // Highlight all cells in this group's column
+                for (let i = 0; i < colCount; i++) {
+                    const cell = getOverviewCell(controlType, group, i);
+                    if (cell) cell.classList.add('qp-column-hover');
+                }
+            } else if (scope === 'row') {
+                // Highlight all cells across groups at this index
+                for (let g = 0; g < 8; g++) {
+                    const cell = getOverviewCell(controlType, g, index);
+                    if (cell) cell.classList.add('qp-row-hover');
+                }
+            } else if (scope === 'cell') {
+                // Highlight single target cell
+                const cell = getOverviewCell(controlType, group, index);
+                if (cell) cell.classList.add('qp-cell-hover');
+            }
+            // Cell scope uses default CSS hover, no extra highlighting needed
+        }
+        
+        function handleOverviewMouseLeave(controlType, group, index) {
+            // Clear highlight when leaving cells
+            if (quickPaste.mode !== 'paste') return;
+            
+            // Small delay to prevent flicker when moving between cells
+            setTimeout(() => {
+                // Only clear if we haven't entered a new cell
+                const currentKey = lastHoverKey;
+                if (currentKey && currentKey.startsWith(`${controlType}-${group}-${index}-`)) {
+                    // Still on same logical cell, might be between sub-elements
+                }
+            }, 10);
+        }
+        
+        function clearHoverHighlight() {
+            const highlighted = document.querySelectorAll('.qp-column-hover, .qp-row-hover, .qp-cell-hover');
+            highlighted.forEach(cell => {
+                cell.classList.remove('qp-column-hover', 'qp-row-hover', 'qp-cell-hover');
+            });
+        }
+        
+        // ============================================================
         // Keyboard Shortcuts
         // ============================================================
         
@@ -4160,8 +4967,32 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 e.preventDefault();
                 handlePaste();
             } else if (e.key === 'Escape') {
-                hideContextMenu();
-                clearSelection();
+                // Quick Paste priority escape handling
+                if (contextMenu) {
+                    hideContextMenu();
+                } else if (quickPaste.mode !== 'off') {
+                    // Exit Quick Paste mode
+                    setQuickPasteMode('off');
+                    showToast('Quick Paste off', 'info');
+                } else {
+                    clearSelection();
+                }
+            } else if (e.key === 'q' || e.key === 'Q') {
+                // Cycle Quick Paste modes: off -> copy -> paste -> off
+                if (currentView === 'overview') {
+                    e.preventDefault();
+                    const modes = ['off', 'copy', 'paste'];
+                    const currentIdx = modes.indexOf(quickPaste.mode);
+                    const nextIdx = (currentIdx + 1) % modes.length;
+                    setQuickPasteMode(modes[nextIdx]);
+                }
+            } else if ((e.key === '1' || e.key === '2' || e.key === '3') && !ctrlKey && !e.altKey) {
+                // Quick Paste scope shortcuts (when in QP mode)
+                if (currentView === 'overview' && quickPaste.mode !== 'off') {
+                    e.preventDefault();
+                    const scopes = { '1': 'cell', '2': 'column', '3': 'row' };
+                    setQuickPasteScope(scopes[e.key]);
+                }
             } else if (e.key === 'ArrowLeft') {
                 e.preventDefault();
                 moveSelection('left');
@@ -4289,6 +5120,15 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             // Load factory defaults
             await loadDefaultSysEx();
         }
+        
+        // Warn before leaving with unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            // Check if there are unsaved changes
+            if (isModified || dirtyBanks.size > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
         
         initUI();
         initializeEditor();
