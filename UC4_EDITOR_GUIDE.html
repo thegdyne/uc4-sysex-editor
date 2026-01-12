@@ -225,9 +225,10 @@
             <li><a href="#navigation">Navigating Setups &amp; Groups</a></li>
             <li><a href="#focused">Focused View — Detailed Editing</a></li>
             <li><a href="#overview">Overview Mode — See Everything</a></li>
+            <li><a href="#quickpaste">Quick Copy/Paste — Rapid Configuration</a></li>
             <li><a href="#conflicts">Conflict Detection</a></li>
-            <li><a href="#copypaste">Copy &amp; Paste Operations</a></li>
-            <li><a href="#undo">Undo &amp; Redo</a></li>
+            <li><a href="#contextmenu">Context Menu Copy &amp; Paste</a></li>
+            <li><a href="#undo">Undo, Redo &amp; Reset</a></li>
             <li><a href="#session">Session Persistence</a></li>
             <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
             <li><a href="#workflows">Workflow Examples</a></li>
@@ -237,55 +238,38 @@
 
     <h2 id="quick-start">Quick Start</h2>
     <pre>
-1. Open editor        →  Factory defaults load automatically
-2. Select Setup 1-18  →  Pick which setup to edit
-3. Edit in Focused    →  Change individual parameters
-4. Check in Overview  →  See all 64 controls at once
-5. Export .syx        →  Send to UC4 via MIDI</pre>
-    <p>That's it! The editor auto-loads factory defaults so you can start immediately.</p>
+┌────────────────────────────────────────────────────────────────┐
+│  1. Open editor        →  Factory defaults load automatically  │
+│  2. Select Setup 1-18  →  Pick which setup to edit            │
+│  3. Edit in Focused    →  Change individual parameters        │
+│  4. Check in Overview  →  See all 64 controls at once         │
+│  5. Export .syx        →  Send to UC4 via MIDI                │
+└────────────────────────────────────────────────────────────────┘</pre>
+    <p><strong>That's it!</strong> The editor auto-loads factory defaults so you can start immediately.</p>
 
     <h2 id="interface">Interface Overview</h2>
-    <pre>
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                                                                                 │
-│   UC4 SysEx Editor          [Import SysEx] [Export SysEx] [Import JSON]        │
-│                             [Export JSON]  [↶ Undo] [↷ Redo]                   │
-│                                                                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                 │
-│   Setup [01 ▾]    [🔗 Link]    Encoder Grp [1][2][3][4][5][6][7][8]  GrP1      │
-│                                Fader/Btn   [1][2][3][4][5][6][7][8]  GrP1      │
-│                                                       [Focused] [Overview]      │
-│                                                                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                 │
-│                              MAIN EDITING AREA                                  │
-│                          (Focused View or Overview Mode)                        │
-│                                                                                 │
-├─────────────────────────────────────────────────────────────────────────────────┤
-│   ● Modified                                             100,640 bytes loaded   │
-└─────────────────────────────────────────────────────────────────────────────────┘</pre>
-
+    
     <h3>Header Elements</h3>
     <table>
         <tr><th>Button</th><th>What It Does</th></tr>
-        <tr><td><strong>Import SysEx</strong></td><td>Load a .syx dump from your UC4</td></tr>
-        <tr><td><strong>Export SysEx</strong></td><td>Save changes as .syx to send back to UC4</td></tr>
-        <tr><td><strong>Import JSON</strong></td><td>Load a human-readable JSON backup</td></tr>
-        <tr><td><strong>Export JSON</strong></td><td>Save human-readable JSON (great for git!)</td></tr>
-        <tr><td><strong>↶ Undo</strong></td><td>Reverse your last change</td></tr>
-        <tr><td><strong>↷ Redo</strong></td><td>Replay an undone change</td></tr>
+        <tr><td>Import SysEx</td><td>Load a .syx dump from your UC4</td></tr>
+        <tr><td>Export SysEx</td><td>Save changes as .syx to send back to UC4</td></tr>
+        <tr><td>Import JSON</td><td>Load a human-readable JSON backup</td></tr>
+        <tr><td>Export JSON</td><td>Save human-readable JSON (great for git!)</td></tr>
+        <tr><td>↶ Undo</td><td>Reverse your last change</td></tr>
+        <tr><td>↷ Redo</td><td>Replay an undone change</td></tr>
+        <tr><td>⟲ Reset</td><td>Restore to originally imported SysEx</td></tr>
     </table>
 
     <h3>Navigation Elements</h3>
     <table>
         <tr><th>Element</th><th>What It Does</th></tr>
-        <tr><td><strong>Setup [▾]</strong></td><td>Choose which of the 18 setups to edit</td></tr>
-        <tr><td><strong>🔗 Link</strong></td><td>Sync encoder and fader groups together</td></tr>
-        <tr><td><strong>Encoder Grp [1-8]</strong></td><td>Select group for encoders + push buttons</td></tr>
-        <tr><td><strong>Fader/Btn [1-8]</strong></td><td>Select group for faders + green buttons</td></tr>
-        <tr><td><strong>GrP1</strong></td><td>Shows the 4-character group name from UC4</td></tr>
-        <tr><td><strong>Focused / Overview</strong></td><td>Toggle between edit modes</td></tr>
+        <tr><td>Setup [▾]</td><td>Choose which of the 18 setups to edit</td></tr>
+        <tr><td>🔗 Link</td><td>Sync encoder and fader groups together</td></tr>
+        <tr><td>Encoder Grp [1-8]</td><td>Select group for encoders + push buttons</td></tr>
+        <tr><td>Fader/Btn [1-8]</td><td>Select group for faders + green buttons</td></tr>
+        <tr><td>GrP1</td><td>Shows the 4-character group name from UC4</td></tr>
+        <tr><td>Focused / Overview</td><td>Toggle between edit modes</td></tr>
     </table>
 
     <h3>Status Bar</h3>
@@ -297,42 +281,36 @@
     </table>
 
     <h2 id="files">Working with Files</h2>
-    
-    <h3>Importing Your UC4 Configuration</h3>
-    <p><strong>Step 1:</strong> Dump your UC4 via MIDI</p>
-    <ul>
-        <li>Connect UC4 to computer via USB or MIDI</li>
-        <li>Use a SysEx librarian (e.g., SysEx Librarian, MIDI-OX, your DAW)</li>
-        <li>Request dump from UC4 (see UC4 manual)</li>
-        <li>Save as .syx file</li>
-    </ul>
-    
-    <p><strong>Step 2:</strong> Load into editor</p>
-    <pre>
-Click [Import SysEx]
-        ↓
-Select file: my_uc4_backup.syx (100,640 bytes ✓)
-        ↓
-Editor loads all 18 setups</pre>
 
-    <div class="tip">The status bar shows "100,640 bytes loaded" — this confirms a valid full dump.</div>
+    <h3>Importing Your UC4 Configuration</h3>
+    <p><strong>Step 1:</strong> Dump your UC4 via MIDI — connect UC4, use a SysEx librarian, request dump, save as .syx file.</p>
+    <p><strong>Step 2:</strong> Click <strong>Import SysEx</strong> and select your file.</p>
+    <p><strong>Validation:</strong> The status bar shows "100,640 bytes loaded" — this confirms a valid full dump.</p>
+
+    <h3>Exporting Back to UC4</h3>
+    <pre>
+1. Make your edits
+2. Click [Export SysEx]
+3. Save the .syx file
+4. Send to UC4 via MIDI SysEx</pre>
+    <p><strong>Important:</strong> Exporting clears the "modified" indicator and your session backup.</p>
 
     <h3>JSON Export/Import — Your Best Friend</h3>
     <p>JSON creates a <strong>human-readable</strong> backup of your entire configuration.</p>
-    
     <table>
         <tr><th>Benefit</th><th>Description</th></tr>
-        <tr><td><strong>Git-friendly</strong></td><td>Track changes with version control</td></tr>
-        <tr><td><strong>Readable</strong></td><td>Review exactly what changed</td></tr>
-        <tr><td><strong>Shareable</strong></td><td>Send configs to bandmates</td></tr>
-        <tr><td><strong>Backup</strong></td><td>Safety net before experiments</td></tr>
-        <tr><td><strong>Smaller</strong></td><td>~50KB vs 100KB for .syx</td></tr>
+        <tr><td>Git-friendly</td><td>Track changes with version control</td></tr>
+        <tr><td>Readable</td><td>Review exactly what changed</td></tr>
+        <tr><td>Shareable</td><td>Send configs to bandmates</td></tr>
+        <tr><td>Backup</td><td>Safety net before experiments</td></tr>
+        <tr><td>Smaller</td><td>~50KB vs 100KB for .syx</td></tr>
     </table>
-    
-    <div class="tip"><strong>Workflow tip:</strong> Export JSON before making big changes. If something goes wrong, import the JSON to restore.</div>
+    <div class="tip">
+        <strong>Workflow tip:</strong> Export JSON before making big changes. If something goes wrong, import the JSON to restore.
+    </div>
 
     <h2 id="navigation">Navigating Setups &amp; Groups</h2>
-    
+
     <h3>The UC4's Structure</h3>
     <pre>
 UC4 Memory Structure
@@ -343,69 +321,29 @@ UC4 Memory Structure
 │   └── Group 8: ...
 │
 ├── Setup 2 ... Setup 18
-
+│
 Total: 18 setups × 8 groups × 33 controls = 4,752 editable controls!</pre>
 
-    <h3>Domain Mapping (Critical to Understand!)</h3>
-    <p>The UC4 has <strong>two independent group selectors</strong> on the hardware:</p>
-    
-    <pre>
-┌─────────────────────────────────────────────────────────────────┐
-│                      ENCODER DOMAIN                             │
-│                                                                 │
-│   Hardware: Hold Shift + Press Encoder 1-8                      │
-│   Controls: 8 Encoders + 8 Push Buttons (under encoders)        │
-└─────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────┐
-│                    FADER/BUTTON DOMAIN                          │
-│                                                                 │
-│   Hardware: Hold Shift + Press Green Button 1-8                 │
-│   Controls: 8 Faders + 8 Green Buttons + Fader 9                │
-└─────────────────────────────────────────────────────────────────┘</pre>
-    
-    <p><strong>This is why the editor has TWO group selectors!</strong></p>
-
-    <h3>🔗 Link Groups</h3>
-    <p>When you want both domains on the same group (common for channel-per-group setups):</p>
-    <pre>
-[🔗 Link ✓]     ← Check this box
-
-Encoder Grp  [1] [2] [③] [4] [5] [6] [7] [8]   GrP3
-Fader/Btn    [1] [2] [③] [4] [5] [6] [7] [8]   GrP3
-                  ↑
-             Both sync!</pre>
+    <h3>Domain Mapping</h3>
+    <p>The UC4 has <strong>two independent group selectors</strong>:</p>
+    <ul>
+        <li><strong>Encoder Domain:</strong> Shift + Encoder 1-8 → Controls encoders and push buttons</li>
+        <li><strong>Fader Domain:</strong> Shift + Green Button 1-8 → Controls faders, green buttons, and fader 9</li>
+    </ul>
+    <p>Click <strong>🔗 Link</strong> to synchronize both domains.</p>
 
     <h2 id="focused">Focused View — Detailed Editing</h2>
-    <p>The Focused view shows full parameter cards for all controls in the selected groups.</p>
-    
-    <pre>
-┌─ FADERS ───────────────────────────────────────────── GrP1 ─────┐
-│                                                                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
-│  │ Fader 1     │  │ Fader 2     │  │ Fader 3     │   ...       │
-│  │ F1.1        │  │ F1.2        │  │ F1.3        │             │
-│  │─────────────│  │─────────────│  │─────────────│             │
-│  │ Chan [1 ▾]  │  │ Chan [1 ▾]  │  │ Chan [1 ▾]  │             │
-│  │ CC   [ 1  ] │  │ CC   [ 2  ] │  │ CC   [ 3  ] │             │
-│  │ Type [CCAb] │  │ Type [CCAb] │  │ Type [CCAb] │             │
-│  │ Min  [ 0  ] │  │ Min  [ 0  ] │  │ Min  [ 0  ] │             │
-│  │ Max  [127 ] │  │ Max  [127 ] │  │ Max  [127 ] │             │
-│  └─────────────┘  └─────────────┘  └─────────────┘             │
-└─────────────────────────────────────────────────────────────────┘
+    <p>The default view. Edit every parameter for all controls in the selected group(s).</p>
 
-┌─ GREEN BUTTONS ────────────────────────────────────── GrP1 ─────┐
-┌─ ENCODERS ─────────────────────────────────────────── GrP1 ─────┐
-┌─ PUSH BUTTONS ─────────────────────────────────────── GrP1 ─────┐
-┌─ FADER 9 ──────────────────────────────────────────── GrP1 ─────┐</pre>
-
-    <h3>Section Headers — Know What You're Editing!</h3>
-    <p>Each section shows the <strong>group name in bright cyan</strong>:</p>
-    <pre>
-┌─ ENCODERS ──────────────────────────────── GrP3 ────┐
-                                              ↑
-                                    Bright accent color
-                                    Matches UC4 display</pre>
+    <h3>Section Order</h3>
+    <p>Controls are displayed in this order (same as Overview):</p>
+    <ol>
+        <li><strong>Faders 1-8</strong> — Main faders</li>
+        <li><strong>Fader 9</strong> — Master/special fader</li>
+        <li><strong>Green Buttons</strong> — Below faders on hardware</li>
+        <li><strong>Encoders</strong> — Rotary encoders</li>
+        <li><strong>Push Buttons</strong> — Press-down on encoders</li>
+    </ol>
 
     <h3>Encoder Types Explained</h3>
     <table>
@@ -420,26 +358,34 @@ Fader/Btn    [1] [2] [③] [4] [5] [6] [7] [8]   GrP3
     </table>
 
     <h2 id="overview">Overview Mode — See Everything</h2>
-    <p>Click <strong>[Overview]</strong> to see all 64 controls in an 8×8 grid.</p>
+    <p>Click <strong>[Overview]</strong> to see all controls in an 8-column grid (one column per group).</p>
     
     <pre>
 ┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│   [ Encoders ] [ Push Buttons ] [ Green Buttons ] [ Faders ]    │
-│                                                                 │
-│   [✓ Concurrent (3)] [Mutually-Exclusive (12)]   ← Filters     │
-│                                                                 │
+│  [ All ] [ Encoders ] [ Push ] [ Green ] [ Faders ]            │
+│  [✓ Concurrent (3)] [Mutually-Exclusive (12)]   ← Filters      │
+├─────────────────────────────────────────────────────────────────┤
+│  Quick Paste:  [Off] [Copy] [Paste]   Scope: [Cell][Col][Row]  │
+│  Source: Fad Column G1 (8)    Ch: [+1]  CC: [0]                │
 ├─────────────────────────────────────────────────────────────────┤
 │           │ Group 1 │ Group 2 │ Group 3 │ Group 4 │ ...        │
-│           │  GrP1   │  GrP2   │  GrP3   │  GrP4   │            │
 │  ─────────┼─────────┼─────────┼─────────┼─────────┼────        │
-│  Enc 1    │ 1:CC 1  │ 1:CC 1  │ 1:CC 1  │⚠1:CC 1 │            │
-│  Enc 2    │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │            │
-│  ...      │         │         │         │         │            │
+│  Fader 1  │ 1:CC 32 │ 1:CC 32 │ 1:CC 32 │ 1:CC 32 │            │
+│  Fader 2  │ 1:CC 33 │ 1:CC 33 │ 1:CC 33 │ 1:CC 33 │            │
 └─────────────────────────────────────────────────────────────────┘</pre>
 
+    <h3>Tab Filters</h3>
+    <table>
+        <tr><th>Tab</th><th>Shows</th></tr>
+        <tr><td>All</td><td>All control types stacked vertically</td></tr>
+        <tr><td>Encoders</td><td>Encoders only</td></tr>
+        <tr><td>Push</td><td>Push buttons only</td></tr>
+        <tr><td>Green</td><td>Green buttons only</td></tr>
+        <tr><td>Faders</td><td>Faders 1-8 and Fader 9</td></tr>
+    </table>
+
     <h3>Cell Format</h3>
-    <p>Each cell shows: <code>Channel:Type CC#</code></p>
+    <p>Each cell shows: <code>Channel:Type Value</code></p>
     <pre>
 ┌─────────┐
 │ 1:CC 64 │  ← Channel 1, CC type, CC# 64
@@ -454,19 +400,81 @@ Fader/Btn    [1] [2] [③] [4] [5] [6] [7] [8]   GrP3
         <tr><th>Action</th><th>Result</th></tr>
         <tr><td><strong>Single-click</strong></td><td>Select cell (green outline)</td></tr>
         <tr><td><strong>Double-click</strong></td><td>Jump to Focused view for that control</td></tr>
-        <tr><td><strong>Right-click</strong></td><td>Open copy/paste context menu</td></tr>
+        <tr><td><strong>Right-click</strong></td><td>Open context menu</td></tr>
         <tr><td><strong>Arrow keys</strong></td><td>Move selection</td></tr>
         <tr><td><strong>Enter</strong></td><td>Jump to Focused view</td></tr>
     </table>
 
+    <h2 id="quickpaste">Quick Copy/Paste — Rapid Configuration</h2>
+    <p>The Quick Paste toolbar enables rapid batch configuration. Press <kbd>Q</kbd> to activate.</p>
+
+    <h3>The Toolbar</h3>
+    <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│ Mode: [Off] [Copy] [Paste]   Scope: [Cell] [Column] [Row]      │
+│ Source: Fad Column G1 (8)    Ch: [0 ▾]   CC: [0 ▾]             │
+│ Click to paste • 3 pasted                                       │
+└─────────────────────────────────────────────────────────────────┘</pre>
+
+    <h3>How It Works</h3>
+    <ol>
+        <li><strong>Press Q</strong> — Enter Copy mode</li>
+        <li><strong>Set Scope</strong> — Cell, Column (group), or Row</li>
+        <li><strong>Set Multipliers</strong> — Ch and CC offset multipliers</li>
+        <li><strong>Click source</strong> — Highlights amber, switches to Paste mode</li>
+        <li><strong>Click targets</strong> — Paste with automatic offset calculation</li>
+        <li><strong>Press Escape</strong> — Exit and clear</li>
+    </ol>
+
+    <h3>Relational Offset System</h3>
+    <p>The key feature: offsets are <strong>calculated automatically</strong> based on position difference.</p>
+    <pre>offset = (target position - source position) × multiplier</pre>
+    
+    <p><strong>Example with Ch multiplier = +1:</strong></p>
+    <table>
+        <tr><th>Copy From</th><th>Paste To</th><th>Calculation</th><th>Result</th></tr>
+        <tr><td>G1 (Ch 1)</td><td>G2</td><td>1 + (2-1)×1</td><td>Ch 2</td></tr>
+        <tr><td>G1 (Ch 1)</td><td>G4</td><td>1 + (4-1)×1</td><td>Ch 4</td></tr>
+        <tr><td>G1 (Ch 1)</td><td>G8</td><td>1 + (8-1)×1</td><td>Ch 8</td></tr>
+    </table>
+    <p><strong>Multiplier = 0:</strong> Exact copy, no offset. <strong>Multiplier = +2:</strong> Double the offset.</p>
+
+    <h3>Visual Feedback</h3>
+    <table>
+        <tr><th>Color</th><th>Meaning</th></tr>
+        <tr><td><strong>Amber outline</strong></td><td>Source — what you copied</td></tr>
+        <tr><td><strong>Teal dashed outline</strong></td><td>Target — where you'll paste (on hover)</td></tr>
+        <tr><td><strong>Flash animation</strong></td><td>Just pasted successfully</td></tr>
+    </table>
+
+    <h3>Scopes Explained</h3>
+    <table>
+        <tr><th>Scope</th><th>Copies</th><th>Pastes To</th></tr>
+        <tr><td><strong>Cell</strong></td><td>Single control</td><td>Single control</td></tr>
+        <tr><td><strong>Column</strong></td><td>All 8 controls in a group</td><td>Target group</td></tr>
+        <tr><td><strong>Row</strong></td><td>One control across all 8 groups</td><td>Same row position</td></tr>
+    </table>
+
+    <h3>Quick Paste Keyboard Shortcuts</h3>
+    <table>
+        <tr><th>Key</th><th>Action</th></tr>
+        <tr><td><kbd>Q</kbd></td><td>Toggle mode: Off → Copy → Paste → Off</td></tr>
+        <tr><td><kbd>1</kbd></td><td>Set scope to Cell</td></tr>
+        <tr><td><kbd>2</kbd></td><td>Set scope to Column</td></tr>
+        <tr><td><kbd>3</kbd></td><td>Set scope to Row</td></tr>
+        <tr><td><kbd>Escape</kbd></td><td>Exit Quick Paste, clear source</td></tr>
+    </table>
+
+    <div class="tip">
+        <strong>8-Channel Mixer Setup:</strong> Configure G1, press Q, set Scope=Column, Ch=+1, CC=0. Click G1 to copy, then click G2-G8. Each group gets an incrementing channel. Done in seconds!
+    </div>
+
     <h2 id="conflicts">Conflict Detection</h2>
     <p>The editor automatically detects when two controls send the <strong>same MIDI message</strong>.</p>
 
-    <h3>Conflict Types</h3>
     <div class="warning">
         <strong>CONCURRENT CONFLICTS (Serious!)</strong><br>
-        Two controls that are ACTIVE AT THE SAME TIME send the same MIDI message.
-        These will fight each other!
+        Two controls that are ACTIVE AT THE SAME TIME send the same MIDI message. These will fight each other!
     </div>
     
     <div class="tip">
@@ -480,12 +488,11 @@ Fader/Btn    [1] [2] [③] [4] [5] [6] [7] [8]   GrP3
        ↑                      ↑
    Checked = shown       Unchecked = hidden</pre>
 
-    <h2 id="copypaste">Copy &amp; Paste Operations</h2>
+    <h2 id="contextmenu">Context Menu Copy &amp; Paste</h2>
+    <p>Right-click any cell in Overview for additional copy/paste options.</p>
     
     <h3>Right-Click Context Menu</h3>
     <pre>
-Right-click any cell in Overview:
-
 ┌─────────────────────────────────┐
 │ Copy Control                    │
 │ Copy Row (3 × 8 groups)         │
@@ -495,24 +502,13 @@ Right-click any cell in Overview:
 │ Paste Special...                │
 └─────────────────────────────────┘</pre>
 
-    <h3>Copy Scopes</h3>
-    <table>
-        <tr><th>Scope</th><th>What's Copied</th></tr>
-        <tr><td><strong>Copy Control</strong></td><td>Single cell — all parameters for one control</td></tr>
-        <tr><td><strong>Copy Row</strong></td><td>One control across all 8 groups</td></tr>
-        <tr><td><strong>Copy Column</strong></td><td>All controls in one group</td></tr>
-    </table>
-
-    <h3>Paste Special — Power Features!</h3>
+    <h3>Paste Special — Power Features</h3>
     <pre>
 ┌─ Paste Special ─────────────────────────────────────────────────┐
-│                                                                 │
 │  Source: Enc G1.3 (Ch1 CC 45)                                  │
 │                                                                 │
 │  Paste to:                                                      │
-│    ○ Current cell                                               │
-│    ○ Entire row (all groups)                                    │
-│    ○ Entire column (Group 2)                                    │
+│    ○ Current cell    ○ Entire row    ○ Entire column           │
 │                                                                 │
 │  Transforms:                                                    │
 │    Channel offset:    [ 0 ▾]  (-15 to +15)                     │
@@ -523,23 +519,25 @@ Right-click any cell in Overview:
 │                              [Cancel]  [Paste]                  │
 └─────────────────────────────────────────────────────────────────┘</pre>
 
-    <h3>Transform Examples</h3>
-    <table>
-        <tr><th>Transform</th><th>Example</th></tr>
-        <tr><td>Channel Offset +2</td><td>Ch1 → Ch3</td></tr>
-        <tr><td>CC Offset +10</td><td>CC 64 → CC 74</td></tr>
-        <tr><td>Auto-increment (row)</td><td>CC 1, CC 2, CC 3... CC 8</td></tr>
-        <tr><td>Wrap (Ch15 +3)</td><td>Ch15 → Ch2 (wraps around)</td></tr>
-        <tr><td>Clamp (Ch15 +3)</td><td>Ch15 → Ch16 (stops at max)</td></tr>
-    </table>
-
-    <h2 id="undo">Undo &amp; Redo</h2>
+    <h2 id="undo">Undo, Redo &amp; Reset</h2>
     <p>Every edit can be reversed. Rapid edits to the same parameter are <strong>combined</strong> into one undo step.</p>
     <table>
         <tr><th>Action</th><th>Windows/Linux</th><th>Mac</th></tr>
         <tr><td>Undo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td><kbd>Cmd</kbd>+<kbd>Z</kbd></td></tr>
         <tr><td>Redo</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td></tr>
     </table>
+
+    <h3>Reset Button</h3>
+    <p>The <strong>⟲ Reset</strong> button restores everything to the originally imported SysEx:</p>
+    <ul>
+        <li>Reverts all changes since import</li>
+        <li>Clears undo/redo history</li>
+        <li>Clears Quick Paste source</li>
+        <li>Shows confirmation dialog first</li>
+    </ul>
+    <div class="tip">
+        <strong>Use case:</strong> Made a mess? Reset and start fresh without re-importing.
+    </div>
 
     <h2 id="session">Session Persistence</h2>
     <p>Your work is <strong>automatically saved</strong> to browser storage every 2 seconds.</p>
@@ -566,6 +564,16 @@ You close browser → Reopen → Restore dialog appears</pre>
         <tr><td>Paste to selected</td><td><kbd>Ctrl</kbd>+<kbd>V</kbd></td></tr>
     </table>
 
+    <h3>Quick Paste</h3>
+    <table>
+        <tr><th>Action</th><th>Key</th></tr>
+        <tr><td>Toggle Quick Paste mode</td><td><kbd>Q</kbd></td></tr>
+        <tr><td>Set scope to Cell</td><td><kbd>1</kbd></td></tr>
+        <tr><td>Set scope to Column</td><td><kbd>2</kbd></td></tr>
+        <tr><td>Set scope to Row</td><td><kbd>3</kbd></td></tr>
+        <tr><td>Exit Quick Paste</td><td><kbd>Escape</kbd></td></tr>
+    </table>
+
     <h2 id="workflows">Workflow Examples</h2>
     
     <h3>Quick CC Remap (30 seconds)</h3>
@@ -575,16 +583,24 @@ You close browser → Reopen → Restore dialog appears</pre>
 3. Change CC: 1 → 74
 4. Export SysEx → send to UC4</pre>
 
-    <h3>Set Up 8 Channels (3 minutes)</h3>
+    <h3>Set Up 8 Channels with Quick Paste (1 minute)</h3>
     <pre>
-1. Overview mode → Encoders tab
-2. Click Group 1, Encoder 1 cell
-3. Right-click → Copy Column
-4. Click Group 2 → Paste Special
-   - Channel offset: +1
-   - Paste to: Entire column
-5. Repeat for Groups 3-8
-6. Export</pre>
+1. Configure Group 1 completely in Focused view
+2. Switch to Overview
+3. Press Q (Quick Paste)
+4. Set Scope = Column, Ch = +1, CC = 0
+5. Click any cell in Group 1 (copies entire column)
+6. Click Group 2, 3, 4, 5, 6, 7, 8
+7. Press Escape
+8. Export</pre>
+
+    <h3>Validate Before Gig</h3>
+    <pre>
+1. Import your .syx
+2. Overview mode
+3. Check [✓ Concurrent] filter
+4. Review and fix any conflicts
+5. Export clean .syx</pre>
 
     <h2 id="validation">Validation &amp; Troubleshooting</h2>
     
@@ -615,14 +631,22 @@ LINK:       Sync encoder &amp; fader group selectors
 FOCUSED:    Edit individual parameters
 OVERVIEW:   See 8×8 grid, copy/paste, find conflicts
 ────────────────────────────────────────────────────
+QUICK PASTE (press Q to activate):
+  Q         Toggle mode (Off → Copy → Paste → Off)
+  1 / 2 / 3 Cell / Column / Row scope
+  Click     Copy (in Copy mode) or Paste (in Paste)
+  Escape    Exit Quick Paste
+  Ch/CC     Offset multiplier (0 = exact copy)
+────────────────────────────────────────────────────
 Ctrl+Z      Undo            Arrows     Navigate
 Ctrl+Y      Redo            Enter      Jump to Focused
-Ctrl+C      Copy            Escape     Clear selection
+Ctrl+C      Copy            Escape     Clear/Exit
 Ctrl+V      Paste           Right-click Context menu
 ────────────────────────────────────────────────────
 ⚠ Concurrent    = Active at same time (fix these!)
 ⚠ Mut-Excl      = Different groups (usually OK)
-● Amber dot     = Unsaved changes</pre>
+● Amber dot     = Unsaved changes
+⟲ Reset         = Restore to imported SysEx</pre>
     </div>
 
     <hr>
