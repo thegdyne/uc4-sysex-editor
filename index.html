@@ -1252,10 +1252,215 @@
         .loading {
             animation: pulse 1s infinite;
         }
+        
+        /* ============================================================
+           Tooltip System
+           ============================================================ */
+        
+        .tooltip {
+            position: fixed;
+            min-width: 240px;
+            max-width: 320px;
+            padding: 0.75rem;
+            background: var(--bg-panel);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            font-size: 0.75rem;
+            line-height: 1.5;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.1s ease-out;
+            pointer-events: none;
+        }
+        
+        .tooltip.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .tooltip-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tooltip-arrow {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--bg-panel);
+            border: 1px solid var(--accent);
+            transform: rotate(45deg);
+        }
+        
+        .tooltip.above .tooltip-arrow {
+            bottom: -7px;
+            border-top: none;
+            border-left: none;
+        }
+        
+        .tooltip.below .tooltip-arrow {
+            top: -7px;
+            border-bottom: none;
+            border-right: none;
+        }
+        
+        .has-tooltip {
+            border-bottom: 1px dotted var(--text-dim);
+            cursor: help;
+        }
+        
+        /* Clickable labels that open option panels */
+        .has-options {
+            color: var(--accent);
+            cursor: pointer;
+            border-bottom: 1px solid var(--accent-dim);
+            transition: color 0.15s;
+        }
+        
+        .has-options:hover {
+            color: var(--text);
+            border-bottom-color: var(--accent);
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .tooltip {
+                transition: none;
+            }
+        }
+        
+        /* Info Panel */
+        .info-panel {
+            position: fixed;
+            min-width: 280px;
+            max-width: 400px;
+            max-height: 80vh;
+            background: var(--bg-panel);
+            border: 1px solid var(--accent);
+            z-index: 10001;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .info-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-control);
+        }
+        
+        .info-panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .info-panel-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            padding: 0;
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            background: rgba(0, 212, 170, 0.1);
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: bold;
+            line-height: 1;
+            transition: all 0.15s;
+        }
+        
+        .info-panel-close:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+        
+        .info-panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+        
+        .info-panel-option {
+            display: flex;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        
+        .info-panel-option:hover {
+            background: var(--bg-control);
+        }
+        
+        .info-panel-option.focused {
+            background: var(--bg-input);
+            outline: 1px solid var(--accent-dim);
+            outline-offset: -1px;
+        }
+        
+        .info-panel-marker {
+            width: 20px;
+            flex-shrink: 0;
+            color: var(--accent);
+            font-size: 0.75rem;
+        }
+        
+        .info-panel-option-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .info-panel-option-name {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-panel-option-desc {
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            line-height: 1.4;
+        }
+        
+        /* Touch dismiss overlay */
+        .touch-dismiss-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            background: transparent;
+        }
     </style>
 </head>
 <body>
     <div id="toastContainer" class="toast-container"></div>
+    
+    <!-- Tooltip element (single global instance) -->
+    <div id="tooltip" class="tooltip" role="tooltip" aria-hidden="true">
+        <div class="tooltip-content"></div>
+        <div class="tooltip-arrow"></div>
+    </div>
+    
+    <!-- Info Panel element (single global instance) -->
+    <div id="infoPanel" class="info-panel" style="display: none;">
+        <div class="info-panel-header">
+            <span class="info-panel-title"></span>
+            <button class="info-panel-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="info-panel-content"></div>
+    </div>
+    
     <header class="header">
         <div class="logo">UC4 <span>SysEx Editor</span></div>
         <div class="view-toggle">
@@ -1462,6 +1667,113 @@
         const GREEN_DISPLAY_MODES = ['OFF', 'Std', 'EXt'];
         const BUTTON_MODES = ['Momentary', 'Toggle'];
         const FADER_MODES = ['Jump', 'Snap'];
+        
+        // ============================================================
+        // Tooltip Content (per UC4_FOCUSED_TOOLTIPS_SPEC_v6)
+        // ============================================================
+        
+        const TOOLTIPS = {
+            // Parameter labels - keyed by controlType.paramName
+            labels: {
+                'encoder.chan': "MIDI channel (1-16). Controls which channel receives encoder messages.",
+                'encoder.cc': "Controller number (0-127). The MIDI CC number sent when encoder is turned. For CCAh mode, also occupies CC+32 for the LSB.",
+                'encoder.type': "Message type sent when encoder is turned.",
+                'encoder.acc': "Acceleration sensitivity. Higher values = faster response to quick turns.",
+                'encoder.disp': "Display mode. How values appear on the UC4's 7-segment display.",
+                'encoder.min': "Minimum output value (0-127). Encoder won't send values below this.",
+                'encoder.max': "Maximum output value (0-127). Encoder won't send values above this.",
+                
+                'fader.chan': "MIDI channel (1-16). Controls which channel receives fader messages.",
+                'fader.cc': "Controller number (0-127). The MIDI CC number sent when fader is moved.",
+                'fader.type': "Message type sent when fader is moved.",
+                'fader.mode': "Pickup behaviour. How the fader responds when position doesn't match current value.",
+                'fader.disp': "Display mode. How values appear on the UC4's 7-segment display.",
+                'fader.min': "Value sent at bottom position (0-127). Fader travel maps to Min→Max range.",
+                'fader.max': "Value sent at top position (0-127). Set Min > Max to invert fader direction.",
+                
+                'fader9.chan': "MIDI channel (1-16). Controls which channel receives expression pedal messages.",
+                'fader9.cc': "Controller number (0-127). Typically CC 11 (Expression) or CC 7 (Volume).",
+                'fader9.mode': "Pickup behaviour. Jump sends immediately; Snap waits to catch current value.",
+                'fader9.min': "Value sent at heel position (0-127).",
+                'fader9.max': "Value sent at toe position (0-127). Set Min > Max to invert pedal direction.",
+                
+                'push.chan': "MIDI channel (1-16). Controls which channel receives button messages.",
+                'push.note': "Note or CC number (0-127). The MIDI note/CC sent when button is pressed.",
+                'push.type': "Message type sent when button is pressed/released.",
+                'push.mode': "Button behaviour. Momentary sends on press/release; Toggle latches on/off.",
+                'push.lo': "Lower/release value (0-127). Sent on release (Momentary) or when toggled off.",
+                'push.hi': "Upper/press value (0-127). Sent on press (Momentary) or when toggled on.",
+                
+                'green.chan': "MIDI channel (1-16). Controls which channel receives button messages.",
+                'green.note': "Note or CC number (0-127). Also used for LED feedback on same number.",
+                'green.type': "Message type sent when button is pressed/released.",
+                'green.mode': "Button behaviour. Momentary sends on press/release; Toggle latches on/off.",
+                'green.led': "LED illumination mode. Controls when the green button lights up.",
+                'green.lo': "Lower/release value (0-127). Sent on release (Momentary) or when toggled off.",
+                'green.hi': "Upper/press value (0-127). Sent on press (Momentary) or when toggled on."
+            },
+            
+            // Dropdown options - keyed by optionGroup.optionValue
+            options: {
+                // Encoder types
+                'encoderType.CCr1': "Relative mode 1. Sends 1 for clockwise, 127 for counter-clockwise. Best for Ableton Live, Bitwig. Endless rotation.",
+                'encoderType.CCr2': "Relative mode 2. Sends 65 for clockwise, 63 for counter-clockwise. Alternative relative format. Endless rotation.",
+                'encoderType.CCAb': "Absolute 7-bit CC. Standard MIDI CC (0-127). Value jumps to match encoder position. Factory default.",
+                'encoderType.PrGC': "Program Change. Sends MIDI program change (0-127 internally, some instruments display 1-128). Turn to increment/decrement.",
+                'encoderType.CCAh': "Absolute 14-bit high-resolution CC. Uses CC N (MSB) and CC N+32 (LSB) for 16384 steps. CC must be 0-31. Best for sensitive parameters.",
+                'encoderType.Pbnd': "Pitch Bend. Sends 14-bit Pitch Bend message on the selected MIDI channel (-8192 to +8191). No CC number needed.",
+                'encoderType.AFtt': "Aftertouch (Channel Pressure). Sends channel pressure (0-127). Use for expression control.",
+                
+                // Fader types
+                'faderType.CCAb': "Absolute 7-bit CC. Standard MIDI CC (0-127). Factory default. Most common choice.",
+                'faderType.PrGC': "Program Change. Sends MIDI program change (0-127). Fader position selects program.",
+                'faderType.Pbnd': "Pitch Bend. Sends 14-bit Pitch Bend message on the selected MIDI channel. Full range mapped to fader travel. No CC number needed.",
+                'faderType.AFtt': "Aftertouch (Channel Pressure). Sends channel pressure. Fader controls expression amount.",
+                
+                // Acceleration (shared global group)
+                'acc.0': "No acceleration. 1:1 response regardless of turn speed. Most precise, slowest to traverse full range.",
+                'acc.1': "Low acceleration. Slight speed boost for faster turns. Good balance of precision and speed.",
+                'acc.2': "Medium acceleration. Moderate speed boost. Faster traversal with some precision trade-off.",
+                'acc.3': "Maximum acceleration. Fastest response to quick turns. Best for quickly sweeping values. Factory default.",
+                
+                // Display modes (shared global group)
+                'display.OFF': "Display disabled. 7-segment shows nothing when this control is active.",
+                'display.Std': "Standard display. Shows current value 0-127 on the 7-segment. Factory default.",
+                'display.bPoL': "Bipolar display. Shows value as ±63, centered at 64. Good for pan or bipolar parameters.",
+                
+                // Fader modes (shared by faders 1-8 and fader 9)
+                'faderMode.Jump': "Immediate response. Sends current position when moved. May cause value jumps.",
+                'faderMode.Snap': "Pickup mode. Only sends after position catches current value. Prevents jumps.",
+                
+                // Button types (shared by push and green buttons)
+                'buttonType.OFF': "Button disabled. No MIDI message sent when pressed.",
+                'buttonType.Note': "Note On/Off. Sends Note On (Hi velocity) on press, Note Off (Lo) on release. Factory default. Best for triggering clips/samples in DAWs.",
+                'buttonType.CC': "Control Change. Sends CC with Hi value on press, Lo on release. Good for momentary effects.",
+                'buttonType.PrGC': "Program Change. Sends program change (0-127) on press. Lo value typically ignored.",
+                'buttonType.AFtt': "Aftertouch. Sends channel pressure Hi on press, Lo on release.",
+                
+                // Button modes (shared by push and green buttons)
+                'buttonMode.Momentary': "Gate mode. Hi on press, Lo on release. Active only while held.",
+                'buttonMode.Toggle': "Latch mode. First press sends Hi, next press sends Lo. Alternates each press.",
+                
+                // Green LED modes
+                'greenLed.OFF': "LED always off. Button never illuminates.",
+                'greenLed.Std': "Standard. LED reflects button state AND responds to incoming MIDI feedback. Factory default.",
+                'greenLed.EXt': "External only. LED controlled only by incoming MIDI. Button presses don't change LED. Best for DAW sync."
+            }
+        };
+        
+        // Option group to panel title mapping
+        const OPTION_GROUP_TITLES = {
+            'encoderType': 'Encoder Type Options',
+            'faderType': 'Fader Type Options',
+            'acc': 'Acceleration Options',
+            'display': 'Display Options',
+            'faderMode': 'Fader Mode Options',
+            'buttonType': 'Button Type Options',
+            'buttonMode': 'Button Mode Options',
+            'greenLed': 'LED Options'
+        };
         
         // ============================================================
         // SysEx Parsing
@@ -1858,7 +2170,7 @@
                     <span class="control-index">E${encoderGroup + 1}.${idx + 1}</span>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Chan</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="encoder.chan">Chan</span>
                     <div class="param-input">
                         <select data-param="channel" onchange="updateEncoder(${idx}, 'channel', this.value)">
                             ${Array.from({length: 16}, (_, i) => 
@@ -1868,16 +2180,16 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">CC</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="encoder.cc">CC</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.cc}" 
+                        <input type="number" min="0" max="127" value="${data.cc}"
                             onchange="updateEncoder(${idx}, 'cc', this.value)">
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Type</span>
+                    <span class="param-label has-options" data-info-group="encoderType">Type</span>
                     <div class="param-input">
-                        <select onchange="updateEncoder(${idx}, 'type', this.value)">
+                        <select data-option-group="encoderType" onchange="updateEncoder(${idx}, 'type', this.value)">
                             ${ENCODER_TYPES.map((t, i) => 
                                 `<option value="${i}" ${data.type === i ? 'selected' : ''}>${t}</option>`
                             ).join('')}
@@ -1885,9 +2197,9 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Acc</span>
+                    <span class="param-label has-options" data-info-group="acc">Acc</span>
                     <div class="param-input">
-                        <select onchange="updateEncoder(${idx}, 'acc', this.value)">
+                        <select data-option-group="acc" onchange="updateEncoder(${idx}, 'acc', this.value)">
                             ${ACC_MODES.map((t, i) => 
                                 `<option value="${i}" ${data.acc === i ? 'selected' : ''}>${t}</option>`
                             ).join('')}
@@ -1895,9 +2207,9 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Disp</span>
+                    <span class="param-label has-options" data-info-group="display">Disp</span>
                     <div class="param-input">
-                        <select onchange="updateEncoder(${idx}, 'display', this.value)">
+                        <select data-option-group="display" onchange="updateEncoder(${idx}, 'display', this.value)">
                             ${DISPLAY_MODES.map((t, i) => 
                                 `<option value="${i}" ${data.display === i ? 'selected' : ''}>${t}</option>`
                             ).join('')}
@@ -1905,16 +2217,16 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Min</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="encoder.min">Min</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.min}" 
+                        <input type="number" min="0" max="127" value="${data.min}"
                             onchange="updateEncoder(${idx}, 'min', this.value)">
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Max</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="encoder.max">Max</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.max}" 
+                        <input type="number" min="0" max="127" value="${data.max}"
                             onchange="updateEncoder(${idx}, 'max', this.value)">
                     </div>
                 </div>
@@ -1934,7 +2246,7 @@
                     <span class="control-index">P${encoderGroup + 1}.${idx + 1}</span>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Chan</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="push.chan">Chan</span>
                     <div class="param-input">
                         <select onchange="updatePush(${idx}, 'channel', this.value)">
                             ${Array.from({length: 16}, (_, i) => 
@@ -1944,16 +2256,16 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Note</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="push.note">Note</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.cc}" 
+                        <input type="number" min="0" max="127" value="${data.cc}"
                             onchange="updatePush(${idx}, 'cc', this.value)">
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Type</span>
+                    <span class="param-label has-options" data-info-group="buttonType">Type</span>
                     <div class="param-input">
-                        <select onchange="updatePush(${idx}, 'typeNibble', this.value)">
+                        <select data-option-group="buttonType" onchange="updatePush(${idx}, 'typeNibble', this.value)">
                             ${BUTTON_TYPE_VALUES.map(v => 
                                 `<option value="${v}" ${data.typeNibble === v ? 'selected' : ''}>${BUTTON_TYPES[v]}</option>`
                             ).join('')}
@@ -1961,9 +2273,9 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Mode</span>
+                    <span class="param-label has-options" data-info-group="buttonMode">Mode</span>
                     <div class="param-input">
-                        <select onchange="updatePush(${idx}, 'mode', this.value)">
+                        <select data-option-group="buttonMode" onchange="updatePush(${idx}, 'mode', this.value)">
                             ${BUTTON_MODES.map((t, i) => 
                                 `<option value="${i}" ${data.mode === i ? 'selected' : ''}>${t}</option>`
                             ).join('')}
@@ -1971,16 +2283,16 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Lo</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="push.lo">Lo</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.lower}" 
+                        <input type="number" min="0" max="127" value="${data.lower}"
                             onchange="updatePush(${idx}, 'lower', this.value)">
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Hi</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="push.hi">Hi</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.upper}" 
+                        <input type="number" min="0" max="127" value="${data.upper}"
                             onchange="updatePush(${idx}, 'upper', this.value)">
                     </div>
                 </div>
@@ -2000,7 +2312,7 @@
                     <span class="control-index">B${faderGroup + 1}.${idx + 1}</span>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Chan</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="green.chan">Chan</span>
                     <div class="param-input">
                         <select onchange="updateGreen(${idx}, 'channel', this.value)">
                             ${Array.from({length: 16}, (_, i) => 
@@ -2010,16 +2322,16 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Note</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="green.note">Note</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.cc}" 
+                        <input type="number" min="0" max="127" value="${data.cc}"
                             onchange="updateGreen(${idx}, 'cc', this.value)">
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Type</span>
+                    <span class="param-label has-options" data-info-group="buttonType">Type</span>
                     <div class="param-input">
-                        <select onchange="updateGreen(${idx}, 'typeNibble', this.value)">
+                        <select data-option-group="buttonType" onchange="updateGreen(${idx}, 'typeNibble', this.value)">
                             ${BUTTON_TYPE_VALUES.map(v => 
                                 `<option value="${v}" ${data.typeNibble === v ? 'selected' : ''}>${BUTTON_TYPES[v]}</option>`
                             ).join('')}
@@ -2027,9 +2339,9 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Mode</span>
+                    <span class="param-label has-options" data-info-group="buttonMode">Mode</span>
                     <div class="param-input">
-                        <select onchange="updateGreen(${idx}, 'mode', this.value)">
+                        <select data-option-group="buttonMode" onchange="updateGreen(${idx}, 'mode', this.value)">
                             ${BUTTON_MODES.map((t, i) => 
                                 `<option value="${i}" ${data.mode === i ? 'selected' : ''}>${t}</option>`
                             ).join('')}
@@ -2037,9 +2349,9 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">LED</span>
+                    <span class="param-label has-options" data-info-group="greenLed">LED</span>
                     <div class="param-input">
-                        <select onchange="updateGreen(${idx}, 'display', this.value)">
+                        <select data-option-group="greenLed" onchange="updateGreen(${idx}, 'display', this.value)">
                             ${GREEN_DISPLAY_MODES.map((t, i) => 
                                 `<option value="${i}" ${data.display === i ? 'selected' : ''}>${t}</option>`
                             ).join('')}
@@ -2047,16 +2359,16 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Lo</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="green.lo">Lo</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.lower}" 
+                        <input type="number" min="0" max="127" value="${data.lower}"
                             onchange="updateGreen(${idx}, 'lower', this.value)">
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Hi</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="green.hi">Hi</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.upper}" 
+                        <input type="number" min="0" max="127" value="${data.upper}"
                             onchange="updateGreen(${idx}, 'upper', this.value)">
                     </div>
                 </div>
@@ -2076,7 +2388,7 @@
                     <span class="control-index">F${faderGroup + 1}.${idx + 1}</span>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Chan</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="fader.chan">Chan</span>
                     <div class="param-input">
                         <select onchange="updateFader(${idx}, 'channel', this.value)">
                             ${Array.from({length: 16}, (_, i) => 
@@ -2086,16 +2398,16 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">CC</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="fader.cc">CC</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.cc}" 
+                        <input type="number" min="0" max="127" value="${data.cc}"
                             onchange="updateFader(${idx}, 'cc', this.value)">
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Type</span>
+                    <span class="param-label has-options" data-info-group="faderType">Type</span>
                     <div class="param-input">
-                        <select onchange="updateFader(${idx}, 'type', this.value)">
+                        <select data-option-group="faderType" onchange="updateFader(${idx}, 'type', this.value)">
                             ${FADER_TYPES.map((t, i) => 
                                 `<option value="${i}" ${data.type === i ? 'selected' : ''}>${t}</option>`
                             ).join('')}
@@ -2103,9 +2415,9 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Mode</span>
+                    <span class="param-label has-options" data-info-group="faderMode">Mode</span>
                     <div class="param-input">
-                        <select onchange="updateFader(${idx}, 'mode', this.value)">
+                        <select data-option-group="faderMode" onchange="updateFader(${idx}, 'mode', this.value)">
                             ${FADER_MODES.map((t, i) => 
                                 `<option value="${i}" ${data.mode === i ? 'selected' : ''}>${t}</option>`
                             ).join('')}
@@ -2113,9 +2425,9 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Disp</span>
+                    <span class="param-label has-options" data-info-group="display">Disp</span>
                     <div class="param-input">
-                        <select onchange="updateFader(${idx}, 'display', this.value)">
+                        <select data-option-group="display" onchange="updateFader(${idx}, 'display', this.value)">
                             ${DISPLAY_MODES.map((t, i) => 
                                 `<option value="${i}" ${data.display === i ? 'selected' : ''}>${t}</option>`
                             ).join('')}
@@ -2123,16 +2435,16 @@
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Min</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="fader.min">Min</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.min}" 
+                        <input type="number" min="0" max="127" value="${data.min}"
                             onchange="updateFader(${idx}, 'min', this.value)">
                     </div>
                 </div>
                 <div class="param-row">
-                    <span class="param-label">Max</span>
+                    <span class="param-label has-tooltip" data-tooltip-key="fader.max">Max</span>
                     <div class="param-input">
-                        <input type="number" min="0" max="127" value="${data.max}" 
+                        <input type="number" min="0" max="127" value="${data.max}"
                             onchange="updateFader(${idx}, 'max', this.value)">
                     </div>
                 </div>
@@ -2151,9 +2463,9 @@
                     <span class="control-name">Fader 9</span>
                     <span class="control-index">F${faderGroup + 1}.9</span>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.75rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem;">
                     <div class="param-row">
-                        <span class="param-label">Chan</span>
+                        <span class="param-label has-tooltip" data-tooltip-key="fader9.chan">Chan</span>
                         <div class="param-input">
                             <select onchange="updateFader9('channel', this.value)">
                                 ${Array.from({length: 16}, (_, i) => 
@@ -2163,16 +2475,16 @@
                         </div>
                     </div>
                     <div class="param-row">
-                        <span class="param-label">CC</span>
+                        <span class="param-label has-tooltip" data-tooltip-key="fader9.cc">CC</span>
                         <div class="param-input">
-                            <input type="number" min="0" max="127" value="${data.cc}" 
+                            <input type="number" min="0" max="127" value="${data.cc}"
                                 onchange="updateFader9('cc', this.value)">
                         </div>
                     </div>
                     <div class="param-row">
-                        <span class="param-label">Mode</span>
+                        <span class="param-label has-options" data-info-group="faderMode">Mode</span>
                         <div class="param-input">
-                            <select onchange="updateFader9('mode', this.value)">
+                            <select data-option-group="faderMode" onchange="updateFader9('mode', this.value)">
                                 ${FADER_MODES.map((t, i) => 
                                     `<option value="${i}" ${data.mode === i ? 'selected' : ''}>${t}</option>`
                                 ).join('')}
@@ -2180,16 +2492,16 @@
                         </div>
                     </div>
                     <div class="param-row">
-                        <span class="param-label">Min</span>
+                        <span class="param-label has-tooltip" data-tooltip-key="fader9.min">Min</span>
                         <div class="param-input">
-                            <input type="number" min="0" max="127" value="${data.min}" 
+                            <input type="number" min="0" max="127" value="${data.min}"
                                 onchange="updateFader9('min', this.value)">
                         </div>
                     </div>
                     <div class="param-row">
-                        <span class="param-label">Max</span>
+                        <span class="param-label has-tooltip" data-tooltip-key="fader9.max">Max</span>
                         <div class="param-input">
-                            <input type="number" min="0" max="127" value="${data.max}" 
+                            <input type="number" min="0" max="127" value="${data.max}"
                                 onchange="updateFader9('max', this.value)">
                         </div>
                     </div>
@@ -4939,6 +5251,565 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         }
         
         // ============================================================
+        // Tooltip System
+        // ============================================================
+        
+        const tooltipState = {
+            showTimer: null,
+            hideTimer: null,
+            fadeTimer: null,
+            autoDismissTimer: null,
+            currentLabel: null,
+            hoverLabel: null,
+            isTouch: false,
+            touchDismissOverlay: null
+        };
+        
+        const tooltip = document.getElementById('tooltip');
+        const tooltipContent = tooltip.querySelector('.tooltip-content');
+        const tooltipArrow = tooltip.querySelector('.tooltip-arrow');
+        
+        // Detect touch device
+        tooltipState.isTouch = ('ontouchstart' in window) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+        
+        function getTooltipText(key) {
+            return TOOLTIPS.labels[key] || null;
+        }
+        
+        function showTooltip(labelEl, key, immediate = false) {
+            const text = getTooltipText(key);
+            if (!text) return;
+            
+            // Close any open info panel
+            hideInfoPanel();
+            
+            // Clear any pending operations
+            clearTooltipTimers();
+            
+            tooltipState.currentLabel = labelEl;
+            
+            const doShow = () => {
+                // Set content first (for ARIA)
+                tooltipContent.textContent = text;
+                
+                // Position tooltip
+                positionTooltip(labelEl);
+                
+                // Set ARIA before showing
+                tooltip.setAttribute('aria-hidden', 'false');
+                
+                // Show tooltip
+                tooltip.classList.add('visible');
+                
+                // Touch auto-dismiss
+                if (tooltipState.isTouch) {
+                    tooltipState.autoDismissTimer = setTimeout(() => {
+                        hideTooltip();
+                    }, 5000);
+                }
+            };
+            
+            if (immediate) {
+                doShow();
+            } else {
+                tooltipState.showTimer = setTimeout(doShow, 400);
+            }
+        }
+        
+        function hideTooltip(immediate = false) {
+            clearTooltipTimers();
+            
+            const doHide = () => {
+                // Remove visible class immediately
+                tooltip.classList.remove('visible');
+                
+                // Wait for fade then set aria-hidden
+                const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                const fadeTime = prefersReducedMotion ? 0 : 120;
+                
+                tooltipState.fadeTimer = setTimeout(() => {
+                    tooltip.setAttribute('aria-hidden', 'true');
+                    tooltipState.currentLabel = null;
+                }, fadeTime);
+            };
+            
+            if (immediate) {
+                tooltip.classList.remove('visible');
+                tooltip.setAttribute('aria-hidden', 'true');
+                tooltipState.currentLabel = null;
+                removeTouchDismissOverlay();
+            } else {
+                tooltipState.hideTimer = setTimeout(doHide, 100);
+            }
+        }
+        
+        function clearTooltipTimers() {
+            if (tooltipState.showTimer) {
+                clearTimeout(tooltipState.showTimer);
+                tooltipState.showTimer = null;
+            }
+            if (tooltipState.hideTimer) {
+                clearTimeout(tooltipState.hideTimer);
+                tooltipState.hideTimer = null;
+            }
+            if (tooltipState.fadeTimer) {
+                clearTimeout(tooltipState.fadeTimer);
+                tooltipState.fadeTimer = null;
+            }
+            if (tooltipState.autoDismissTimer) {
+                clearTimeout(tooltipState.autoDismissTimer);
+                tooltipState.autoDismissTimer = null;
+            }
+        }
+        
+        function positionTooltip(labelEl) {
+            const rect = labelEl.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const gap = 8;
+            const padding = 16;
+            
+            // Measure tooltip
+            tooltip.style.left = '0px';
+            tooltip.style.top = '0px';
+            tooltip.classList.remove('above', 'below');
+            tooltip.classList.add('above'); // Default
+            
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const tooltipWidth = tooltipRect.width;
+            const tooltipHeight = tooltipRect.height;
+            
+            // Calculate initial position (above, left-aligned)
+            let left = rect.left;
+            let top = rect.top - tooltipHeight - gap;
+            let placement = 'above';
+            
+            // Check if fits above
+            if (top < padding) {
+                // Flip below
+                top = rect.bottom + gap;
+                placement = 'below';
+            }
+            
+            // Right overflow
+            if (left + tooltipWidth > viewportWidth - padding) {
+                left = viewportWidth - padding - tooltipWidth;
+            }
+            
+            // Left overflow
+            if (left < padding) {
+                left = padding;
+            }
+            
+            // Apply position
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+            tooltip.classList.remove('above', 'below');
+            tooltip.classList.add(placement);
+            
+            // Position arrow
+            const triggerCenterX = rect.left + (rect.width / 2);
+            let arrowX = triggerCenterX - left;
+            
+            // Clamp arrow to tooltip content (post-layout width)
+            const contentWidth = tooltipContent.offsetWidth;
+            const minArrowX = 16;
+            const maxArrowX = contentWidth - 16;
+            arrowX = Math.max(minArrowX, Math.min(arrowX, maxArrowX));
+            
+            tooltipArrow.style.left = (arrowX - 6) + 'px'; // Offset by half arrow width
+        }
+        
+        // Mouse event handlers for labels
+        function handleLabelMouseEnter(e) {
+            if (tooltipState.isTouch) return;
+            
+            const label = e.target.closest('.has-tooltip');
+            if (!label) return;
+            
+            const key = label.dataset.tooltipKey;
+            if (!key) return;
+            
+            tooltipState.hoverLabel = label;
+            
+            // Cancel any pending hide
+            if (tooltipState.hideTimer) {
+                clearTimeout(tooltipState.hideTimer);
+                tooltipState.hideTimer = null;
+            }
+            
+            // If already showing this label, no action needed
+            if (tooltipState.currentLabel === label && tooltip.classList.contains('visible')) {
+                return;
+            }
+            
+            showTooltip(label, key);
+        }
+        
+        function handleLabelMouseLeave(e) {
+            if (tooltipState.isTouch) return;
+            
+            const label = e.target.closest('.has-tooltip');
+            if (!label) return;
+            
+            tooltipState.hoverLabel = null;
+            hideTooltip();
+        }
+        
+        // Touch handlers
+        function handleLabelTouch(e) {
+            if (!tooltipState.isTouch) return;
+            
+            const label = e.target.closest('.has-tooltip');
+            if (!label) return;
+            
+            e.preventDefault();
+            
+            const key = label.dataset.tooltipKey;
+            if (!key) return;
+            
+            // Toggle behavior
+            if (tooltipState.currentLabel === label && tooltip.classList.contains('visible')) {
+                hideTooltip(true);
+                removeTouchDismissOverlay();
+            } else {
+                showTooltip(label, key, true);
+                createTouchDismissOverlay();
+            }
+        }
+        
+        function createTouchDismissOverlay() {
+            removeTouchDismissOverlay();
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'touch-dismiss-overlay';
+            overlay.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                hideTooltip(true);
+                removeTouchDismissOverlay();
+            }, { passive: false });
+            
+            document.body.appendChild(overlay);
+            tooltipState.touchDismissOverlay = overlay;
+        }
+        
+        function removeTouchDismissOverlay() {
+            if (tooltipState.touchDismissOverlay) {
+                tooltipState.touchDismissOverlay.remove();
+                tooltipState.touchDismissOverlay = null;
+            }
+        }
+        
+        // Scroll handler
+        function handleScroll() {
+            if (tooltip.classList.contains('visible')) {
+                hideTooltip(true);
+                removeTouchDismissOverlay();
+            }
+        }
+        
+        // ============================================================
+        // Info Panel System
+        // ============================================================
+        
+        const infoPanelState = {
+            currentGroup: null,
+            currentSelect: null,
+            focusedIndex: 0
+        };
+        
+        const infoPanel = document.getElementById('infoPanel');
+        const infoPanelTitle = infoPanel.querySelector('.info-panel-title');
+        const infoPanelContent = infoPanel.querySelector('.info-panel-content');
+        const infoPanelClose = infoPanel.querySelector('.info-panel-close');
+        
+        function showInfoPanel(element) {
+            const group = element.dataset.infoGroup;
+            if (!group) return;
+            
+            // Find associated select in the same param-row
+            const paramRow = element.closest('.param-row');
+            const select = paramRow?.querySelector('select[data-option-group]');
+            if (!select) return;
+            
+            // Close any tooltip
+            hideTooltip(true);
+            
+            // Close any existing panel (single-panel rule)
+            if (infoPanelState.currentGroup && infoPanelState.currentGroup !== group) {
+                hideInfoPanel();
+            }
+            
+            infoPanelState.currentGroup = group;
+            infoPanelState.currentSelect = select;
+            
+            // Set title
+            infoPanelTitle.textContent = OPTION_GROUP_TITLES[group] || 'Options';
+            
+            // Build options list from select
+            buildInfoPanelOptions(select, group);
+            
+            // Position panel
+            positionInfoPanel(element);
+            
+            // Show panel
+            infoPanel.style.display = 'flex';
+            
+            // Focus panel for keyboard navigation
+            infoPanel.focus();
+        }
+        
+        function buildInfoPanelOptions(select, group) {
+            infoPanelContent.innerHTML = '';
+            
+            const options = Array.from(select.options);
+            const currentValue = select.value;
+            
+            options.forEach((opt, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'info-panel-option';
+                optionEl.dataset.value = opt.value;
+                optionEl.dataset.index = index;
+                
+                // Determine tooltip key based on group type
+                let tooltipKey;
+                const optText = opt.textContent.trim();
+                
+                // Map option text to tooltip key
+                if (group === 'acc') {
+                    tooltipKey = `acc.${index}`;
+                } else if (group === 'display') {
+                    tooltipKey = `display.${optText}`;
+                } else if (group === 'faderMode') {
+                    tooltipKey = `faderMode.${optText}`;
+                } else if (group === 'buttonMode') {
+                    tooltipKey = `buttonMode.${optText}`;
+                } else {
+                    tooltipKey = `${group}.${optText}`;
+                }
+                
+                const description = TOOLTIPS.options[tooltipKey] || '';
+                
+                const isSelected = opt.value === currentValue;
+                if (isSelected) {
+                    infoPanelState.focusedIndex = index;
+                    optionEl.classList.add('focused');
+                }
+                
+                optionEl.innerHTML = `
+                    <span class="info-panel-marker">${isSelected ? '►' : ''}</span>
+                    <div class="info-panel-option-content">
+                        <div class="info-panel-option-name">${optText}</div>
+                        <div class="info-panel-option-desc">${description}</div>
+                    </div>
+                `;
+                
+                optionEl.addEventListener('click', () => handleInfoPanelOptionClick(opt.value));
+                
+                infoPanelContent.appendChild(optionEl);
+            });
+        }
+        
+        function handleInfoPanelOptionClick(value) {
+            if (!infoPanelState.currentSelect) return;
+            
+            const currentValue = infoPanelState.currentSelect.value;
+            if (value === currentValue) return; // No-op if already selected
+            
+            // Update select value programmatically
+            infoPanelState.currentSelect.value = value;
+            
+            // Trigger change event
+            const event = new Event('change', { bubbles: true });
+            infoPanelState.currentSelect.dispatchEvent(event);
+            
+            // Update markers in panel
+            updateInfoPanelMarkers();
+        }
+        
+        function updateInfoPanelMarkers() {
+            if (!infoPanelState.currentSelect) return;
+            
+            const currentValue = infoPanelState.currentSelect.value;
+            const options = infoPanelContent.querySelectorAll('.info-panel-option');
+            
+            options.forEach((opt, index) => {
+                const marker = opt.querySelector('.info-panel-marker');
+                const isSelected = opt.dataset.value === currentValue;
+                marker.textContent = isSelected ? '►' : '';
+                
+                if (isSelected) {
+                    infoPanelState.focusedIndex = index;
+                }
+            });
+        }
+        
+        function positionInfoPanel(button) {
+            const rect = button.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const gap = 8;
+            const padding = 16;
+            
+            // Reset position for measurement
+            infoPanel.style.left = '0px';
+            infoPanel.style.top = '0px';
+            infoPanel.style.display = 'flex';
+            
+            const panelRect = infoPanel.getBoundingClientRect();
+            const panelWidth = panelRect.width;
+            const panelHeight = Math.min(panelRect.height, viewportHeight - 2 * padding);
+            
+            // Position to the right of the button
+            let left = rect.right + gap;
+            let top = rect.top;
+            
+            // Right overflow - position to the left instead
+            if (left + panelWidth > viewportWidth - padding) {
+                left = rect.left - panelWidth - gap;
+            }
+            
+            // Left overflow
+            if (left < padding) {
+                left = padding;
+            }
+            
+            // Bottom overflow
+            if (top + panelHeight > viewportHeight - padding) {
+                top = viewportHeight - padding - panelHeight;
+            }
+            
+            // Top overflow
+            if (top < padding) {
+                top = padding;
+            }
+            
+            infoPanel.style.left = left + 'px';
+            infoPanel.style.top = top + 'px';
+            infoPanel.style.maxHeight = (viewportHeight - 2 * padding) + 'px';
+        }
+        
+        function hideInfoPanel() {
+            infoPanel.style.display = 'none';
+            infoPanelState.currentGroup = null;
+            infoPanelState.currentSelect = null;
+            infoPanelState.focusedIndex = 0;
+        }
+        
+        function handleInfoPanelKeyDown(e) {
+            if (infoPanel.style.display === 'none') return;
+            
+            const options = infoPanelContent.querySelectorAll('.info-panel-option');
+            const numOptions = options.length;
+            
+            switch (e.key) {
+                case 'Escape':
+                    e.preventDefault();
+                    hideInfoPanel();
+                    break;
+                    
+                case 'ArrowDown':
+                    e.preventDefault();
+                    e.stopPropagation();
+                    infoPanelState.focusedIndex = (infoPanelState.focusedIndex + 1) % numOptions;
+                    updateInfoPanelFocus();
+                    break;
+                    
+                case 'ArrowUp':
+                    e.preventDefault();
+                    e.stopPropagation();
+                    infoPanelState.focusedIndex = (infoPanelState.focusedIndex - 1 + numOptions) % numOptions;
+                    updateInfoPanelFocus();
+                    break;
+                    
+                case 'Enter':
+                    e.preventDefault();
+                    const focusedOption = options[infoPanelState.focusedIndex];
+                    if (focusedOption) {
+                        handleInfoPanelOptionClick(focusedOption.dataset.value);
+                    }
+                    break;
+            }
+        }
+        
+        function updateInfoPanelFocus() {
+            const options = infoPanelContent.querySelectorAll('.info-panel-option');
+            options.forEach((opt, index) => {
+                opt.classList.toggle('focused', index === infoPanelState.focusedIndex);
+            });
+            
+            // Scroll focused option into view
+            options[infoPanelState.focusedIndex]?.scrollIntoView({ block: 'nearest' });
+        }
+        
+        // Watch for external select changes (sync marker)
+        function watchSelectChanges() {
+            document.addEventListener('change', (e) => {
+                if (e.target === infoPanelState.currentSelect) {
+                    updateInfoPanelMarkers();
+                }
+            });
+        }
+        
+        // Initialize tooltip system
+        function initTooltipSystem() {
+            // Event delegation for mouse events on labels
+            document.addEventListener('mouseenter', (e) => {
+                if (e.target.classList?.contains('has-tooltip')) {
+                    handleLabelMouseEnter(e);
+                }
+            }, true);
+            
+            document.addEventListener('mouseleave', (e) => {
+                if (e.target.classList?.contains('has-tooltip')) {
+                    handleLabelMouseLeave(e);
+                }
+            }, true);
+            
+            // Touch events on labels
+            if (tooltipState.isTouch) {
+                document.addEventListener('touchstart', (e) => {
+                    if (e.target.classList?.contains('has-tooltip')) {
+                        handleLabelTouch(e);
+                    }
+                }, { passive: false });
+            }
+            
+            // Scroll dismiss
+            window.addEventListener('scroll', handleScroll, true);
+            
+            // Click outside to dismiss (desktop) - safety net
+            document.addEventListener('mousedown', (e) => {
+                // Close info panel on click outside
+                if (infoPanel.style.display !== 'none') {
+                    if (!infoPanel.contains(e.target) && !e.target.closest('.has-options')) {
+                        hideInfoPanel();
+                    }
+                }
+            });
+            
+            // Options label clicks (opens info panel)
+            document.addEventListener('click', (e) => {
+                const optionsLabel = e.target.closest('.has-options');
+                if (optionsLabel) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showInfoPanel(optionsLabel);
+                }
+            });
+            
+            // Info panel close button
+            infoPanelClose.addEventListener('click', hideInfoPanel);
+            
+            // Info panel keyboard navigation
+            document.addEventListener('keydown', handleInfoPanelKeyDown);
+            
+            // Watch for select changes
+            watchSelectChanges();
+        }
+        
+        // ============================================================
         // Keyboard Shortcuts
         // ============================================================
         
@@ -5131,6 +6002,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         });
         
         initUI();
+        initTooltipSystem();
         initializeEditor();
     </script>
 </body>
