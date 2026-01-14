@@ -1761,7 +1761,7 @@
         // ============================================================
         
         // Single source of truth - value to glyph (32-element array, indices 0-31)
-        // GLYPH_TABLE: Hardware-verified via SysEx dumps (2026-01-14)
+        // GLYPH_TABLE: Hardware-verified via SysEx dumps (2024-01-14)
         // Canonical range 0-31, verified positions marked with ✓
         // Factory Ableton: Snd1=[27,22,13,1], trAC=[28,26,10,12], GLOb=[16,20,23,11]
         // Hardware tests: H1=17, H2/h=30, n_big=21(U), n_small=22(n), Q_9like=25(q)
@@ -1769,7 +1769,7 @@
             0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9',  // ✓ all
             10: 'A', 11: 'b', 12: 'C', 13: 'd', 14: 'E', 15: 'F', 16: 'G', 17: 'H',  // ✓ A,b,C,d,G,H
             18: 'I', 19: 'J', 20: 'L', 21: 'U', 22: 'n', 23: 'O', 24: 'P', 25: 'q',  // ✓ L,U,n,O,P,q
-            26: 'r', 27: 'S', 28: 't', 29: 'Y', 30: 'h', 31: ' '  // ✓ r,S,t,h; Y assumed at 29
+            26: 'r', 27: 'S', 28: 't', 29: 'Y', 30: 'h', 31: '?'  // ✓ r,S,t,h,Y; 31 displays as Y on hardware (unknown/duplicate)
         };
         
         // Non-canonical glyphs (outside 0-31 range, used in some presets)
@@ -1794,7 +1794,9 @@
         for (const [val, glyph] of Object.entries(GLYPH_TABLE)) {
             VALUE_TABLE[glyph] = parseInt(val);
         }
-        // Add non-canonical (prefer canonical space at 31 over 38)
+        // Override space to use 38 (hardware verified: UC4 displays Y for value 31, space for 38)
+        // Factory Ableton presets use 38 for trailing spaces in names like "rAC ", "PAn "
+        VALUE_TABLE[' '] = 38;
         VALUE_TABLE['-'] = 33;
         VALUE_TABLE['_'] = 34;
         
@@ -3921,6 +3923,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 }
                 
                 updateStatus('modified', 'JSON imported - changes pending');
+                updateGroupNames();
                 renderCurrentView();
             } catch (err) {
                 alert('Error loading JSON: ' + err.message);
