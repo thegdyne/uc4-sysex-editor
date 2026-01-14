@@ -163,6 +163,16 @@
             color: var(--accent);
         }
         
+        .toast.warning {
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+        
+        .toast.info {
+            border-color: var(--border-light);
+            color: var(--text);
+        }
+        
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
@@ -795,17 +805,6 @@
             font-size: 0.85rem;
         }
         
-        .btn-primary {
-            background: var(--accent);
-            color: var(--bg-dark);
-            border-color: var(--accent);
-        }
-        
-        .btn-primary:hover {
-            background: var(--accent-dim);
-            border-color: var(--accent-dim);
-        }
-        
         /* Navigation */
         .nav-bar {
             background: var(--bg-panel);
@@ -1380,7 +1379,7 @@
         
         .info-panel-close:hover {
             background: var(--accent);
-            color: var(--bg);
+            color: var(--bg-dark);
         }
         
         .info-panel-content {
@@ -1550,6 +1549,7 @@
         let faderGroup = 0;
         let currentView = 'focused';
         let isModified = false;
+        let suppressModified = false;
         let dirtyBanks = new Set();
         
         // Undo/Redo State
@@ -1793,7 +1793,9 @@
         }
         
         function buildIndex(buf) {
-            const occ = {};
+            // FIXED: Build flat index - each (secId, bank) appears once
+            // Setup addressing is computed in getValue/setValue
+            const index = {};
             
             for (let i = 0; i < buf.length - 10; i++) {
                 if (buf[i] === 0x49 && (i === 0 || buf[i-1] !== 0x4D) && buf[i+3] === 0x4A) {
@@ -1806,26 +1808,40 @@
                     const valueCount = (pos - dataOffset) / 3;
                     const checksumOffset = pos;
                     
-                    if (!occ[secId]) occ[secId] = {};
-                    if (!occ[secId][bank]) occ[secId][bank] = [];
-                    occ[secId][bank].push({ dataOffset, valueCount, checksumOffset });
-                }
-            }
-            
-            const index = [];
-            for (let setupIdx = 0; setupIdx < NUM_SETUPS; setupIdx++) {
-                index[setupIdx] = {};
-                for (const secId in occ) {
-                    index[setupIdx][secId] = {};
-                    for (const bank in occ[secId]) {
-                        if (occ[secId][bank][setupIdx]) {
-                            index[setupIdx][secId][bank] = occ[secId][bank][setupIdx];
-                        }
-                    }
+                    if (!index[secId]) index[secId] = {};
+                    index[secId][bank] = { dataOffset, valueCount, checksumOffset };
                 }
             }
             
             return index;
+        }
+        
+        // Compute actual section and bank for a given setupIdx
+        // Different control types use different addressing schemes
+        function computeActualLocation(setupIdx, secId, bank, valueIdx) {
+            let actualSecId, actualBank, actualValueIdx;
+            
+            if (secId === 0x17) {
+                // Fader9: 4 setups per section, bank encodes setup within section
+                actualSecId = 0x17 + Math.floor(setupIdx / 4);
+                actualBank = (setupIdx % 4) * 0x40;
+                actualValueIdx = valueIdx;
+            } else if (secId === 0x14 && bank === 0x80) {
+                // Group Names: 2 setups per bank, 4 setups per section
+                // Banks 0x80 and 0xC0 used, with valueOffset for odd setups
+                actualSecId = 0x14 + Math.floor(setupIdx / 4);
+                const bankOffset = Math.floor((setupIdx % 4) / 2);
+                actualBank = 0x80 + bankOffset * 0x40;
+                const valueOffset = (setupIdx % 2) * 32;
+                actualValueIdx = valueIdx + valueOffset;
+            } else {
+                // All others (Encoder, Push, Green, Fader): use existing stride logic
+                actualSecId = secId + (setupIdx * 5);
+                actualBank = bank;
+                actualValueIdx = valueIdx;
+            }
+            
+            return { actualSecId, actualBank, actualValueIdx };
         }
         
         function recalcBankChecksum(buf, dataStart) {
@@ -1848,24 +1864,28 @@
         }
         
         function getValue(setupIdx, secId, bank, valueIdx) {
-            if (!sectionIndex || !sectionIndex[setupIdx]) return null;
-            const sec = sectionIndex[setupIdx][secId];
+            if (!sectionIndex) return null;
+            
+            const loc = computeActualLocation(setupIdx, secId, bank, valueIdx);
+            const sec = sectionIndex[loc.actualSecId];
             if (!sec) return null;
-            const bnk = sec[bank];
+            const bnk = sec[loc.actualBank];
             if (!bnk) return null;
-            return decodeValue(rawBuffer, bnk.dataOffset, valueIdx);
+            return decodeValue(rawBuffer, bnk.dataOffset, loc.actualValueIdx);
         }
         
         function setValue(setupIdx, secId, bank, valueIdx, value) {
-            if (!sectionIndex || !sectionIndex[setupIdx]) return;
-            const sec = sectionIndex[setupIdx][secId];
+            if (!sectionIndex) return;
+            
+            const loc = computeActualLocation(setupIdx, secId, bank, valueIdx);
+            const sec = sectionIndex[loc.actualSecId];
             if (!sec) return;
-            const bnk = sec[bank];
+            const bnk = sec[loc.actualBank];
             if (!bnk) return;
             
-            encodeValue(rawBuffer, bnk.dataOffset, valueIdx, value);
-            dirtyBanks.add(`${setupIdx}-${secId}-${bank}`);
-            markModified();
+            encodeValue(rawBuffer, bnk.dataOffset, loc.actualValueIdx, value);
+            dirtyBanks.add(`${setupIdx}-${loc.actualSecId}-${loc.actualBank}`);
+            if (!suppressModified) markModified();
         }
         
         // ============================================================
@@ -2518,8 +2538,10 @@
             const container = document.createElement('div');
             container.className = 'overview-container';
             
-            // Quick Paste Toolbar
-            container.appendChild(createQuickPasteToolbar());
+            // Quick Paste Toolbar (guarded for safety)
+            if (typeof createQuickPasteToolbar === 'function') {
+                container.appendChild(createQuickPasteToolbar());
+            }
             
             // Tab bar
             const tabs = document.createElement('div');
@@ -2627,8 +2649,10 @@
             
             main.appendChild(container);
             
-            // Update cursor classes on all tables
-            updateOverviewTableCursor();
+            // Update cursor classes on all tables (guarded for safety)
+            if (typeof updateOverviewTableCursor === 'function') {
+                updateOverviewTableCursor();
+            }
         }
         
         // Overview state
@@ -3347,9 +3371,10 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             if (!rawBuffer) return;
             
             // Recalculate all dirty checksums
+            // dirtyBanks contains "${setupIdx}-${actualSecId}-${actualBank}"
             for (const key of dirtyBanks) {
-                const [setupIdx, secId, bank] = key.split('-').map(Number);
-                const sec = sectionIndex[setupIdx][secId];
+                const [, secId, bank] = key.split('-').map(Number);
+                const sec = sectionIndex[secId];
                 if (sec && sec[bank]) {
                     recalcBankChecksum(rawBuffer, sec[bank].dataOffset);
                 }
@@ -3649,26 +3674,31 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         }
         
         function applyAction(action, reverse) {
-            switch (action.type) {
-                case 'value': {
-                    const value = reverse ? action.before : action.after;
-                    applyValueChange(action, value);
-                    break;
-                }
-                    
-                case 'control': {
-                    const data = reverse ? action.before : action.after;
-                    setControlDataSilent(action.controlType, action.setupIdx, action.group, action.index, data);
-                    break;
-                }
-                    
-                case 'batch': {
-                    for (const subAction of action.actions) {
-                        const subData = reverse ? subAction.before : subAction.after;
-                        setControlDataSilent(subAction.controlType, subAction.setupIdx, subAction.group, subAction.index, subData);
+            suppressModified = true;
+            try {
+                switch (action.type) {
+                    case 'value': {
+                        const value = reverse ? action.before : action.after;
+                        applyValueChange(action, value);
+                        break;
                     }
-                    break;
+                        
+                    case 'control': {
+                        const data = reverse ? action.before : action.after;
+                        setControlDataSilent(action.controlType, action.setupIdx, action.group, action.index, data);
+                        break;
+                    }
+                        
+                    case 'batch': {
+                        for (const subAction of action.actions) {
+                            const subData = reverse ? subAction.before : subAction.after;
+                            setControlDataSilent(subAction.controlType, subAction.setupIdx, subAction.group, subAction.index, subData);
+                        }
+                        break;
+                    }
                 }
+            } finally {
+                suppressModified = false;
             }
             
             // After any change
@@ -3716,11 +3746,13 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         // Silent setters that don't trigger markModified (for undo/redo)
         function setControlDataSilent(type, setupIdx, group, index, data) {
             const setData = setControlDataByType(type);
-            if (setData) {
-                // Temporarily disable markModified in setValue
-                const originalMarkModified = markModified;
-                // setValue calls markModified, so we need to track dirty banks without it
+            if (!setData) return;
+
+            suppressModified = true;
+            try {
                 setData(setupIdx, group, index, data);
+            } finally {
+                suppressModified = false;
             }
         }
         
@@ -3839,6 +3871,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         function restoreSession(session) {
             rawBuffer = new Uint8Array(session.buffer);
             sectionIndex = buildIndex(rawBuffer);
+            
+            // Allow Reset to function after restore
+            originalBuffer = new Uint8Array(rawBuffer);
             
             // Restore UI state
             currentSetup = session.uiState.currentSetup || 0;
@@ -4653,7 +4688,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                     Copy Control
                 </div>
                 <div class="context-menu-item" onclick="copyRow('${controlType}', ${currentSetup}, ${index}); hideContextMenu();">
-                    Copy Row (${controlType === 'fader9' ? 'Fad9' : (index + 1)} × 8 groups)
+                    Copy Row (${controlType === 'fader9' ? 'Fad9' : (index + 1)} Ã— 8 groups)
                 </div>
                 <div class="context-menu-item" onclick="copyColumn('${controlType}', ${currentSetup}, ${group}); hideContextMenu();">
                     Copy Column (Group ${group + 1})
@@ -4893,12 +4928,12 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 
                 <div class="qp-expanded-content qp-section qp-ch-section">
                     <span class="qp-label">Ch</span>
-                    <select id="qpChMult" onchange="setQuickPasteChMult(this.value)" title="Channel offset = group diff × this value">${chOptions}</select>
+                    <select id="qpChMult" onchange="setQuickPasteChMult(this.value)" title="Channel offset = group diff Ã— this value">${chOptions}</select>
                 </div>
                 
                 <div class="qp-expanded-content qp-section qp-ch-section">
                     <span class="qp-label">CC</span>
-                    <select id="qpCCMult" onchange="setQuickPasteCCMult(this.value)" title="CC offset = group diff × this value">${ccOptions}</select>
+                    <select id="qpCCMult" onchange="setQuickPasteCCMult(this.value)" title="CC offset = group diff Ã— this value">${ccOptions}</select>
                 </div>
                 
                 <div class="qp-expanded-content qp-actions">
@@ -5039,7 +5074,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             const scope = quickPaste.source.lockedScope;
             const colCount = controlType === 'fader9' ? 1 : 8;
             
-            // Calculate offset based on group difference × multiplier
+            // Calculate offset based on group difference Ã— multiplier
             const sourceGroup = quickPaste.source.group;
             const groupDiff = group - sourceGroup;
             
