@@ -27,7 +27,7 @@ Quick reference for generating valid UC4 configuration JSON files.
 ```json
 {
   "index": 0-7,
-  "name": "GrP1",           // 4 chars, displayed on UC4
+  "name": "GrP1",           // 4 chars, 7-segment charset (see below)
   "encoders": [],           // 8 encoders
   "pushButtons": [],        // 8 push buttons (under encoders)
   "greenButtons": [],       // 8 green buttons
@@ -35,6 +35,130 @@ Quick reference for generating valid UC4 configuration JSON files.
   "fader9": {}              // 1 expression fader
 }
 ```
+
+---
+
+## Group Names
+
+Group names are displayed on the UC4's 7-segment display and must follow specific rules.
+
+### Rules
+
+| Rule | Description |
+|------|-------------|
+| **Length** | Exactly 4 characters (space-padded if shorter) |
+| **Charset** | 7-segment canonical glyphs only (see table below) |
+| **Padding** | Short names padded with spaces on the right |
+| **Case** | Normalized to match 7-segment display capability |
+
+### Canonical Glyph Charset
+
+The UC4's 7-segment display can only render these 32 characters:
+
+```
+0123456789AbCdEFGHIJLnOtPSrUY-_ 
+```
+
+**Complete Character Table:**
+
+| Value | Glyph | Notes |
+|-------|-------|-------|
+| 0 | `0` | Digit |
+| 1 | `1` | Digit |
+| 2 | `2` | Digit |
+| 3 | `3` | Digit |
+| 4 | `4` | Digit |
+| 5 | `5` | Digit |
+| 6 | `6` | Digit |
+| 7 | `7` | Digit |
+| 8 | `8` | Digit |
+| 9 | `9` | Digit |
+| 10 | `A` | Uppercase |
+| 11 | `b` | **Lowercase** (7-seg limitation) |
+| 12 | `C` | Uppercase |
+| 13 | `d` | **Lowercase** (7-seg limitation) |
+| 14 | `E` | Uppercase |
+| 15 | `F` | Uppercase |
+| 16 | `G` | Uppercase |
+| 17 | `H` | Uppercase |
+| 18 | `I` | Uppercase |
+| 19 | `J` | Uppercase |
+| 20 | `L` | Uppercase |
+| 21 | `n` | **Lowercase** (7-seg limitation) |
+| 22 | `O` | Uppercase |
+| 23 | `t` | **Lowercase** (7-seg limitation) |
+| 24 | `P` | Uppercase |
+| 25 | `S` | Uppercase |
+| 26 | `r` | **Lowercase** (7-seg limitation) |
+| 27 | `U` | Uppercase |
+| 28 | `Y` | Uppercase |
+| 29 | `-` | Hyphen |
+| 30 | `_` | Underscore |
+| 31 | ` ` | Space (blank segment) |
+
+### Input Normalization
+
+When creating JSON, input is normalized to canonical glyphs:
+
+| You Type | Stored As | Reason |
+|----------|-----------|--------|
+| `B` or `b` | `b` | 7-seg shows lowercase |
+| `D` or `d` | `d` | 7-seg shows lowercase |
+| `N` or `n` | `n` | 7-seg shows lowercase |
+| `T` or `t` | `t` | 7-seg shows lowercase |
+| `R` or `r` | `r` | 7-seg shows lowercase |
+| `a` | `A` | 7-seg shows uppercase |
+| `c` | `C` | 7-seg shows uppercase |
+| `e` | `E` | 7-seg shows uppercase |
+| `f` | `F` | 7-seg shows uppercase |
+| `g` | `G` | 7-seg shows uppercase |
+| `h` | `H` | 7-seg shows uppercase |
+| `i` | `I` | 7-seg shows uppercase |
+| `j` | `J` | 7-seg shows uppercase |
+| `l` | `L` | 7-seg shows uppercase |
+| `o` | `O` | 7-seg shows uppercase |
+| `p` | `P` | 7-seg shows uppercase |
+| `s` | `S` | 7-seg shows uppercase |
+| `u` | `U` | 7-seg shows uppercase |
+| `y` | `Y` | 7-seg shows uppercase |
+
+**Invalid characters** (K, M, Q, V, W, X, Z, punctuation other than `-_`, Unicode) are **rejected** on import.
+
+### Name Examples
+
+| Input | Stored | Notes |
+|-------|--------|-------|
+| `"SYn1"` | `"SYn1"` | Valid, n stays lowercase |
+| `"Bass"` | `"bASS"` | B→b, a→A, s→S |
+| `"Hi"` | `"HI  "` | Padded with 2 spaces |
+| `"DRUM"` | `"drUn"` | D→d, R→r, M is invalid → **REJECTED** |
+| `""` | `"    "` | Empty = 4 spaces |
+
+### Factory Default Names
+
+| Group | Name | Byte Values |
+|-------|------|-------------|
+| 1 | `GrP1` | [16, 26, 24, 1] |
+| 2 | `GrP2` | [16, 26, 24, 2] |
+| 3 | `GrP3` | [16, 26, 24, 3] |
+| 4 | `GrP4` | [16, 26, 24, 4] |
+| 5 | `GrP5` | [16, 26, 24, 5] |
+| 6 | `GrP6` | [16, 26, 24, 6] |
+| 7 | `GrP7` | [16, 26, 24, 7] |
+| 8 | `GrP8` | [16, 26, 24, 8] |
+
+### Ableton Setup Names (Setups 17-18)
+
+| Group | Name | Purpose |
+|-------|------|---------|
+| 1 | `Snd1` | Send 1 |
+| 2 | `Snd2` | Send 2 |
+| 3 | `Snd3` | Send 3 |
+| 4 | `Snd4` | Send 4 |
+| 5 | `trAC` | Track |
+| 6 | `rAC ` | Rack |
+| 7 | `PAn ` | Pan |
+| 8 | `GLOb` | Global |
 
 ---
 
@@ -231,5 +355,5 @@ Group 2 → Channel 1, CCs 9-16
 
 - **Inverted ranges**: `min` > `max` is valid (reverses control direction)
 - **14-bit CC (CCAh)**: CC must be 0-31; LSB auto-assigned to CC+32
-- **Group names**: 4 characters, set on hardware, shown in editor
+- **Group names**: Must use 7-segment canonical charset; invalid chars rejected on import
 - **Setups 17-18** (index 16-17): Factory presets for Ableton Live

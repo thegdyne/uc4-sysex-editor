@@ -1,7 +1,7 @@
 # UC4 SysEx Editor — Technical Specification
 
-Version: 2.0.0  
-Date: 2026-01-11  
+Version: 2.1.0  
+Date: 2026-01-15  
 Status: Implemented
 
 ---
@@ -17,7 +17,7 @@ The UC4 SysEx Editor is a single-page web application for editing Faderfox UC4 M
 | **Setups** | All 18 setups fully editable |
 | **Groups** | All 8 groups per setup |
 | **Controls** | Encoders, Push Buttons, Green Buttons, Faders, Fader 9 |
-| **File formats** | SysEx (.syx), JSON |
+| **File formats** | SysEx (.syx), JSON (full and single-setup) |
 | **Persistence** | Browser localStorage |
 
 ### Architecture
@@ -29,7 +29,10 @@ The UC4 SysEx Editor is a single-page web application for editing Faderfox UC4 M
 │  UI Layer                                               │
 │  ├── Header (file ops, undo/redo, guide link)          │
 │  ├── Navigation (setup, groups, view toggle)           │
+│  ├── Setup Manager (modal dialog)                      │
 │  ├── Main Content (Focused or Overview)                │
+│  │   ├── Quick Paste Toolbar (Overview only)           │
+│  │   └── Tooltip System (Focused only)                 │
 │  └── Status Bar (modified indicator, file info)        │
 ├─────────────────────────────────────────────────────────┤
 │  State Management                                       │
@@ -37,12 +40,16 @@ The UC4 SysEx Editor is a single-page web application for editing Faderfox UC4 M
 │  ├── sectionIndex (byte offset lookup)                 │
 │  ├── undoStack / redoStack                             │
 │  ├── clipboard / selection                             │
+│  ├── quickPaste (mode, scope, source, multipliers)     │
+│  ├── setupLabels (Map: index → label)                  │
+│  ├── factoryTemplates (baseline for reset)             │
 │  ├── conflicts (concurrent / mutuallyExclusive)        │
 │  └── session (localStorage persistence)                │
 ├─────────────────────────────────────────────────────────┤
 │  Data Layer                                             │
 │  ├── getValue / setValue (SysEx byte access)           │
 │  ├── getEncoderData / getFaderData / etc.              │
+│  ├── captureSetupSnapshot / restoreSetupSnapshot       │
 │  ├── exportJSON / importJSON                           │
 │  └── detectConflicts                                   │
 └─────────────────────────────────────────────────────────┘
@@ -87,7 +94,7 @@ The UC4 SysEx Editor is a single-page web application for editing Faderfox UC4 M
 ### 1. Dual View System
 
 #### Focused View
-Full parameter editing for selected groups.
+Full parameter editing for selected groups with contextual tooltips.
 
 **Section Order:**
 1. Faders (fader group)
@@ -102,8 +109,13 @@ Full parameter editing for selected groups.
 ```
 Where `GrPN` is the 4-character group name in accent color.
 
+**Tooltips:**
+- Hover over parameter labels for explanations
+- Hover over dropdown options for detailed descriptions
+- 500ms delay before showing, 10s timeout
+
 #### Overview Mode
-8×8 grid display with tabs.
+8×8 grid display with tabs and Quick Paste toolbar.
 
 **Tabs:**
 - **All** (default) — All control types stacked vertically
@@ -126,10 +138,139 @@ Examples: `1:CC 64`, `2:Nt 60`, `1:PB --`
 | Right-click | Context menu + select |
 | Arrow keys | Move selection |
 | Enter | Jump to Focused view |
+| Q | Toggle Quick Paste |
 
 ---
 
-### 2. Conflict Detection
+### 2. Setup Manager
+
+Modal dialog for managing entire setups.
+
+#### Features
+
+| Operation | Description |
+|-----------|-------------|
+| **Label** | Assign human-readable name to setup |
+| **Clear** | Zero out all parameters in setup |
+| **Copy** | Duplicate setup to other slot(s) |
+| **Swap** | Exchange two setups |
+| **Reset** | Restore setup to factory defaults |
+| **Export** | Save single setup as JSON |
+| **Import** | Load single setup JSON to slot |
+
+#### Setup Grid
+```
+┌────────────────────────────────────────────┐
+│  1: Label    2: Label    3            4    │
+│  5           6           7            8    │
+│  9           10          11           12   │
+│  13          14          15           16   │
+│  17: Ableton 18: Ableton                   │
+└────────────────────────────────────────────┘
+```
+
+**Visual Indicators:**
+- Modified setups: Accent color border
+- Factory-matching setups: "(factory)" suffix
+- Selected setups: Highlighted background
+
+#### Selection
+- Click to select single setup
+- Ctrl+click for multi-select
+- Click empty area to deselect
+
+#### Label Storage
+Labels stored in localStorage, not in SysEx. Key: `uc4-editor-setup-labels`.
+
+#### Single Setup JSON Format
+```json
+{
+  "format": "uc4-editor-setup",
+  "version": "1.0",
+  "exported": "2026-01-15T12:00:00.000Z",
+  "sourceSetup": 0,
+  "label": "Synth",
+  "groups": [...]
+}
+```
+
+---
+
+### 3. Quick Copy/Paste System
+
+Rapid copy/paste workflow for Overview mode.
+
+#### State
+```javascript
+let quickPaste = {
+    mode: 'off' | 'copy' | 'paste',
+    scope: 'cell' | 'column' | 'row',
+    source: null | { controlType, group, index, data, lockedScope, count },
+    chMultiplier: 1,   // -8 to +8
+    ccMultiplier: 0,   // -8 to +8
+    pasteCount: 0
+};
+```
+
+#### Toolbar
+```
+┌──────────────────────────────────────────────────────────────┐
+│ Mode [Off][Copy][Paste]  Scope [Cell][Column][Row]           │
+│ Source: Enc G1.1         Ch [+1▾]  CC [0▾]  [Clear Source]   │
+│ Status: Click to paste • 3 pasted                            │
+└──────────────────────────────────────────────────────────────┘
+```
+
+#### Offset Calculation
+```javascript
+offset = (targetGroup - sourceGroup) * multiplier
+```
+
+Example: Source G1, Target G3, Ch multiplier +1
+- Group diff = 2
+- Channel offset = 2 × 1 = +2
+
+#### Visual Feedback
+- Source cells: Green highlight
+- Hover preview: Cyan outline
+- Toast notifications on paste
+
+#### Keyboard Shortcuts
+| Key | Action |
+|-----|--------|
+| Q | Toggle Quick Paste mode |
+| 1 | Cell scope |
+| 2 | Column scope |
+| 3 | Row scope |
+
+---
+
+### 4. Contextual Tooltips
+
+Help text for all parameters in Focused view.
+
+#### Implementation
+```javascript
+const TOOLTIPS = {
+    'encoder.chan': 'MIDI channel (1-16). Controls which channel receives encoder messages.',
+    'encoderType.CCr1': 'Relative mode 1. Sends 1 for clockwise, 127 for counter-clockwise.',
+    // ... (see UC4_FOCUSED_TOOLTIPS_SPEC_v6.md for complete list)
+};
+```
+
+#### Behavior
+- Show delay: 500ms after hover
+- Hide timeout: 10s
+- Position: Above element when possible
+- Keyboard accessible via `:focus`
+
+#### Coverage
+- All parameter labels (Chan, CC, Type, Acc, Disp, Min, Max, etc.)
+- All dropdown options (CCr1, CCr2, CCAb, PrGC, CCAh, Pbnd, AFtt, etc.)
+
+---
+
+### 5. Conflict Detection
 
 #### Classification
 
@@ -173,16 +314,9 @@ Examples:
 - Mutually-Exclusive: Dim amber background (when filter enabled)
 - Both: Warning icon (⚠️) prefix
 
-**Conflict Panel:**
-```
-⚠ Conflicts:
-⚠ Ch1 CC 64: Enc G1.1 (CC), Fad G1.1 (CC)
-⚠ Ch2 Note 60: Push G1.3 (Note), Green G1.5 (Note)
-```
-
 ---
 
-### 3. Copy/Paste Operations
+### 6. Copy/Paste Operations (Context Menu)
 
 #### Clipboard Structure
 ```javascript
@@ -216,55 +350,29 @@ Examples:
 | Auto-increment | Any integer | Sequential values per target |
 | Wrap mode | clamp / wrap | Out-of-range handling |
 
-**Transform Logic:**
-```javascript
-// Channel (1-based in UI, stored as 0-15)
-newChannel = applyOffset(channel, offset, 1, 16, wrapMode);
-
-// CC/Note (0-127)
-newCC = applyOffset(cc, offset + (autoInc * index), 0, 127, wrapMode);
-```
-
-#### Context Menu
-
-```
-┌─────────────────────────────────┐
-│ Copy Control                    │
-│ Copy Row (3 × 8 groups)         │
-│ Copy Column (Group 2)           │
-├─────────────────────────────────┤
-│ Paste                           │  ← Disabled if incompatible
-│ Paste Special...                │
-└─────────────────────────────────┘
-```
-
 ---
 
-### 4. Undo/Redo System
+### 7. Undo/Redo System
 
 #### Stack Structure
 ```javascript
 {
-    type: 'single' | 'batch',
+    type: 'single' | 'batch' | 'setup-copy' | 'setup-swap' | 'setup-clear' | 'setup-reset' | 'setup-import',
     timestamp: number,
-    // For single:
-    param: string,
-    controlType: string,
-    setup: number,
-    group: number,
-    index: number,
-    oldValue: any,
-    newValue: any,
-    // For batch:
-    operations: array
+    description: string,
+    // Type-specific fields...
 }
 ```
 
+#### Supported Operations
+- Individual parameter changes
+- Batch paste operations
+- Setup copy/swap/clear/reset
+- Setup import
+- Label changes
+
 #### Coalescing
 Rapid edits to the same parameter (within 1 second) are merged into one undo step.
-
-#### Batch Operations
-Paste-to-row and paste-to-column create single batch undo entries.
 
 #### Limits
 - Maximum stack size: 100 entries
@@ -279,7 +387,7 @@ Paste-to-row and paste-to-column create single batch undo entries.
 
 ---
 
-### 5. Session Persistence
+### 8. Session Persistence
 
 #### Storage Key
 ```
@@ -293,7 +401,8 @@ uc4_editor_session
     timestamp: ISO date string,
     currentSetup: number,
     encoderGroup: number,
-    faderGroup: number
+    faderGroup: number,
+    dirtyBanks: number[]  // Setups with unsaved changes
 }
 ```
 
@@ -304,7 +413,7 @@ uc4_editor_session
 #### Restore Flow
 1. Page loads
 2. Check localStorage for session
-3. If exists and rawBuffer valid:
+3. If exists and has dirty banks:
    - Show restore dialog
    - User chooses Restore or Discard
 4. If restored: Load session state
@@ -318,7 +427,7 @@ uc4_editor_session
 
 ---
 
-### 6. Link Groups
+### 9. Link Groups
 
 #### Purpose
 Synchronize encoder and fader group selectors for setups where groups map to channels.
@@ -336,7 +445,7 @@ When `linkGroups === true`:
 
 ---
 
-### 7. Keyboard Navigation
+### 10. Keyboard Navigation
 
 #### Overview Mode Shortcuts
 
@@ -349,6 +458,7 @@ When `linkGroups === true`:
 | Escape | Clear selection |
 | Ctrl+C | Copy selected control |
 | Ctrl+V | Paste to selected |
+| Q | Toggle Quick Paste |
 
 #### Selection State
 ```javascript
@@ -359,12 +469,6 @@ let selection = {
     index: number | null
 };
 ```
-
-#### Navigation in "All" Tab
-Arrow up/down at section boundaries moves to adjacent section:
-- Down from Encoder row 8 → Push row 1
-- Up from Push row 1 → Encoder row 8
-- etc.
 
 ---
 
@@ -380,12 +484,12 @@ Binary format matching UC4 hardware dump.
 
 Validation: File size must equal 100,640 bytes.
 
-### JSON
+### JSON (Full Export)
 
 ```json
 {
   "version": 1,
-  "exportDate": "2026-01-11T20:00:00.000Z",
+  "exportDate": "2026-01-15T20:00:00.000Z",
   "setups": [
     {
       "index": 0,
@@ -393,46 +497,28 @@ Validation: File size must equal 100,640 bytes.
         {
           "index": 0,
           "name": "GrP1",
-          "encoders": [
-            {
-              "channel": 1,
-              "type": 2,
-              "cc": 1,
-              "min": 0,
-              "max": 127,
-              "acc": 1,
-              "display": 1
-            }
-          ],
-          "pushButtons": [
-            {
-              "channel": 1,
-              "typeNibble": 144,
-              "note": 36,
-              "lower": 0,
-              "upper": 127,
-              "mode": 0,
-              "display": 1
-            }
-          ],
+          "encoders": [...],
+          "pushButtons": [...],
           "greenButtons": [...],
-          "faders": [
-            {
-              "channel": 1,
-              "type": 2,
-              "cc": 1,
-              "min": 0,
-              "max": 127
-            }
-          ],
-          "fader9": {
-            "channel": 1,
-            "cc": 9
-          }
+          "faders": [...],
+          "fader9": { "channel": 1, "cc": 9 }
         }
       ]
     }
   ]
+}
+```
+
+### JSON (Single Setup Export)
+
+```json
+{
+  "format": "uc4-editor-setup",
+  "version": "1.0",
+  "exported": "2026-01-15T12:00:00.000Z",
+  "sourceSetup": 0,
+  "label": "Synth",
+  "groups": [...]
 }
 ```
 
@@ -444,14 +530,24 @@ Validation: File size must equal 100,640 bytes.
 - Logo/title
 - File operations: Import SysEx, Export SysEx, Import JSON, Export JSON
 - Undo/Redo buttons
+- Setup Manager button
 - Guide link
 
 ### Navigation Bar
-- Setup selector (dropdown, 1-18)
+- Setup selector (dropdown, 1-18, with labels)
 - Link groups checkbox
 - Encoder group tabs (1-8) + group name display
 - Fader group tabs (1-8) + group name display
 - View toggle (Focused / Overview)
+
+### Quick Paste Toolbar (Overview only)
+- Mode buttons: Off / Copy / Paste
+- Scope buttons: Cell / Column / Row
+- Source display
+- Channel multiplier dropdown
+- CC multiplier dropdown
+- Clear Source button
+- Status text
 
 ### Status Bar
 - Modified indicator (green/amber dot)
@@ -467,10 +563,18 @@ Validation: File size must equal 100,640 bytes.
 - Dismiss: Click outside, Escape key
 - Items: Copy Control, Copy Row, Copy Column, separator, Paste, Paste Special
 
-### Paste Special Dialog
+### Setup Manager Dialog
 - Modal overlay
-- Sections: Source info, Paste target, Transforms
-- Buttons: Cancel, Paste
+- 18-setup grid with labels
+- Selection highlight
+- Action buttons: Label, Clear, Copy, Swap, Reset, Export, Import
+- Close button
+
+### Tooltips
+- Position: Above target element
+- Delay: 500ms
+- Timeout: 10s
+- Style: Dark background, light text, accent border
 
 ---
 
@@ -478,23 +582,23 @@ Validation: File size must equal 100,640 bytes.
 
 ```css
 :root {
-    --bg-dark: #0a0a0f;
-    --bg-panel: #12121a;
-    --bg-card: #1a1a24;
-    --bg-input: #0d0d12;
-    --bg-control: #15151f;
-    --border: #2a2a3a;
-    --text: #e8e8e8;
-    --text-dim: #888;
-    --text-muted: #666;
-    --accent: #00ffaa;
-    --encoder: #00d4ff;
-    --push: #ff6b9d;
-    --green-btn: #7fff00;
-    --fader: #ffaa00;
+    --bg-dark: #0a0a0c;
+    --bg-panel: #111114;
+    --bg-control: #18181c;
+    --bg-input: #1e1e24;
+    --border: #2a2a32;
+    --border-light: #3a3a44;
+    --text: #e0e0e8;
+    --text-dim: #888898;
+    --text-muted: #555560;
+    --accent: #00d4aa;
+    --accent-dim: #00a888;
     --warning: #ffaa00;
-    --conflict-concurrent: rgba(255, 170, 0, 0.3);
-    --conflict-me: rgba(255, 170, 0, 0.15);
+    --error: #ff4466;
+    --encoder: #00aaff;
+    --push: #aa66ff;
+    --green-btn: #44dd66;
+    --fader: #ff8844;
 }
 ```
 
@@ -528,6 +632,7 @@ Validation: File size must equal 100,640 bytes.
 | Undo/redo | O(1) | Stack operations |
 | JSON export | O(n) | Full traversal |
 | Session save | O(1) | Debounced, async |
+| Factory diff | O(n) | Cached per setup |
 
 ---
 
@@ -547,3 +652,4 @@ Validation: File size must equal 100,640 bytes.
 |---------|------|---------|
 | 1.0.0 | — | Initial release |
 | 2.0.0 | 2026-01-11 | Undo/redo, session persistence, overview mode, conflict detection, copy/paste, keyboard navigation, link groups, All tab |
+| 2.1.0 | 2026-01-15 | Setup Manager (copy, swap, clear, reset, labels), Quick Copy/Paste system, contextual tooltips, single-setup export/import, factory reset |

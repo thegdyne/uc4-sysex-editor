@@ -2,7 +2,7 @@
 
 A web-based configuration editor for the **Faderfox UC4** MIDI controller. Edit all 18 setups, 8 groups, and every parameter without navigating the hardware menus.
 
-**[→ Open Editor](uc4-editor.html)** · **[→ Usage Guide](UC4_EDITOR_GUIDE.html)**
+**[→ Open Editor](index.html)** · **[→ Usage Guide](UC4_EDITOR_GUIDE.html)**
 
 ---
 
@@ -10,20 +10,25 @@ A web-based configuration editor for the **Faderfox UC4** MIDI controller. Edit 
 
 ### Core Editing
 - **18 Setups × 8 Groups** — Full access to all 4,752 controls
-- **Focused View** — Detailed parameter cards for encoders, buttons, and faders
+- **Focused View** — Detailed parameter cards with contextual tooltips
 - **Overview Mode** — See all 64 controls per type in an 8×8 grid
 - **All View** — See all control types stacked in one scrollable view
 
 ### Workflow
 - **Import/Export SysEx** — Load from and save to your UC4
 - **Import/Export JSON** — Human-readable backups (great for git)
+- **Single Setup Export** — Export/import individual setups as JSON
 - **Undo/Redo** — Full edit history with coalescing
 - **Session Persistence** — Auto-saves to browser storage
 
 ### Power Features
+- **Setup Manager** — Copy, swap, clear, and label entire setups
+- **Quick Copy/Paste** — Rapid cell/row/column operations with Q key
 - **Conflict Detection** — Find duplicate MIDI assignments automatically
-- **Copy/Paste** — Single controls, rows, or columns
+- **Context Menu Copy/Paste** — Single controls, rows, or columns
 - **Paste Special** — Channel offset, CC offset, auto-increment
+- **Reset to Factory** — Restore individual setups to factory defaults
+- **Contextual Tooltips** — Hover over any parameter for explanations
 - **Keyboard Navigation** — Arrow keys, Enter, Tab in Overview mode
 - **Link Groups** — Sync encoder and fader group selectors
 
@@ -32,7 +37,7 @@ A web-based configuration editor for the **Faderfox UC4** MIDI controller. Edit 
 ## Quick Start
 
 ```
-1. Open uc4-editor.html in your browser
+1. Open index.html in your browser
 2. Factory defaults load automatically
 3. Edit in Focused view or navigate with Overview
 4. Export SysEx → send to UC4 via MIDI
@@ -48,7 +53,7 @@ No installation required. Works entirely in the browser.
 Edit individual control parameters with full detail:
 
 ```
-┌─ FADERS ─────────────────────────────────────── GrP1 ─┐
+┌─ FADERS ───────────────────────────────────── GrP1 ─┐
 │                                                       │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐   │
 │  │ Fader 1     │  │ Fader 2     │  │ Fader 3     │   │
@@ -71,9 +76,26 @@ See all controls at once, spot conflicts instantly:
 │ [✓ Concurrent (3)] [Mutually-Exclusive (12)]           │
 ├─────────────────────────────────────────────────────────┤
 │         │ GrP1    │ GrP2    │ GrP3    │ GrP4    │ ...  │
-│ Enc 1   │ 1:CC 1  │ 1:CC 1  │ 1:CC 1  │⚠1:CC 1 │      │
+│ Enc 1   │ 1:CC 1  │ 1:CC 1  │ 1:CC 1  │⚠ 1:CC 1 │      │
 │ Enc 2   │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │ 1:CC 2  │      │
 │ ...     │         │         │         │         │      │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Setup Manager
+Manage entire setups with labels, copy, swap, and reset:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ Setup Manager                                    [×]   │
+├─────────────────────────────────────────────────────────┤
+│  1: Synth      2: Drums     3: (factory)  4: FX       │
+│  5            6: Keys       7            8             │
+│  9            10           11           12             │
+│  13           14           15           16             │
+│  17: Ableton  18: Ableton                              │
+├─────────────────────────────────────────────────────────┤
+│ [Label] [Clear] [Copy] [Swap] [Reset] [Export] [Import]│
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -85,27 +107,22 @@ See all controls at once, spot conflicts instantly:
 - **Size:** 100,640 bytes (full dump of all 18 setups)
 - **Use:** Transfer to/from UC4 hardware via MIDI
 
-### JSON
-- **Use:** Human-readable backup, version control, sharing
+### JSON (Full)
+- **Use:** Human-readable backup of all 18 setups
 - **Structure:** All setups, groups, and control parameters
+
+### JSON (Single Setup)
+- **Format:** `uc4-editor-setup`
+- **Use:** Export/import individual setups between files
 
 ```json
 {
-  "version": 1,
-  "exportDate": "2026-01-11T20:00:00Z",
-  "setups": [
-    {
-      "index": 0,
-      "groups": [
-        {
-          "name": "GrP1",
-          "encoders": [...],
-          "faders": [...],
-          ...
-        }
-      ]
-    }
-  ]
+  "format": "uc4-editor-setup",
+  "version": "1.0",
+  "exported": "2026-01-15T12:00:00Z",
+  "sourceSetup": 0,
+  "label": "Synth",
+  "groups": [...]
 }
 ```
 
@@ -132,9 +149,18 @@ Filter chips in Overview mode let you show/hide each type.
 | Redo | Ctrl+Shift+Z / Ctrl+Y |
 | Copy (Overview) | Ctrl+C |
 | Paste (Overview) | Ctrl+V |
+| Quick Paste Mode | Q |
 | Navigate grid | Arrow keys |
 | Jump to Focused | Enter |
 | Clear selection | Escape |
+
+### Quick Paste Shortcuts (when active)
+
+| Key | Action |
+|-----|--------|
+| 1 | Cell scope |
+| 2 | Column scope |
+| 3 | Row scope |
 
 ---
 
@@ -154,7 +180,7 @@ Requires JavaScript enabled. No server needed — runs entirely client-side.
 
 | File | Description |
 |------|-------------|
-| `uc4-editor.html` | The editor application |
+| `index.html` | The editor application |
 | `UC4_EDITOR_GUIDE.html` | Comprehensive usage guide |
 | `UC4_EDITOR_GUIDE.md` | Guide in Markdown format |
 | `factory_default.syx` | UC4 factory defaults (auto-loaded) |
@@ -183,8 +209,9 @@ The editor mirrors this with separate group selectors. Use **🔗 Link** to sync
 ## Documentation
 
 - **[Usage Guide](UC4_EDITOR_GUIDE.html)** — Complete walkthrough with examples
+- **[HOWTO](HOWTO.md)** — Practical workflows for common tasks
 - **[UC4 SysEx Protocol](UC4_SYSEX_PROTOCOL_COMPLETE.md)** — Technical protocol details
-- **[Editor Specification](UC4_EDITOR_IMPROVEMENTS_SPEC.md)** — Feature specifications
+- **[Editor Specification](SPECIFICATION.md)** — Technical specification
 
 ---
 
@@ -192,16 +219,20 @@ The editor mirrors this with separate group selectors. Use **🔗 Link** to sync
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
 
-### Current Features
+### Current Features (v2.1)
 - ✅ Full SysEx editing (all 18 setups, 8 groups)
-- ✅ JSON import/export
+- ✅ JSON import/export (full and single-setup)
+- ✅ Setup Manager with labels, copy, swap, reset
+- ✅ Quick Copy/Paste system
+- ✅ Contextual tooltips for all parameters
 - ✅ Undo/Redo with coalescing
 - ✅ Session persistence
 - ✅ Overview mode with All view
 - ✅ Conflict detection (concurrent + mutually-exclusive)
-- ✅ Copy/paste with transforms
+- ✅ Context menu copy/paste with transforms
 - ✅ Keyboard navigation
 - ✅ Link groups toggle
+- ✅ Reset to factory defaults
 
 ---
 

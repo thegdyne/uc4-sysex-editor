@@ -177,28 +177,6 @@
             content: '💡 ';
         }
         
-        .quick-ref {
-            background: var(--bg-card);
-            border: 2px solid var(--accent);
-            border-radius: 6px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-        }
-        
-        .quick-ref h3 {
-            margin-top: 0;
-            color: var(--accent);
-        }
-        
-        kbd {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 3px;
-            padding: 0.1rem 0.4rem;
-            font-family: inherit;
-            font-size: 0.9em;
-        }
-        
         ul, ol {
             padding-left: 1.5rem;
         }
@@ -226,6 +204,7 @@
             <li><a href="#focused">Focused View — Detailed Editing</a></li>
             <li><a href="#overview">Overview Mode — See Everything</a></li>
             <li><a href="#quickpaste">Quick Copy/Paste — Rapid Configuration</a></li>
+            <li><a href="#setupmanager">Setup Manager — Organize Your Setups</a></li>
             <li><a href="#conflicts">Conflict Detection</a></li>
             <li><a href="#contextmenu">Context Menu Copy &amp; Paste</a></li>
             <li><a href="#undo">Undo, Redo &amp; Reset</a></li>
@@ -258,7 +237,7 @@
         <tr><td>Export JSON</td><td>Save human-readable JSON (great for git!)</td></tr>
         <tr><td>↶ Undo</td><td>Reverse your last change</td></tr>
         <tr><td>↷ Redo</td><td>Replay an undone change</td></tr>
-        <tr><td>⟲ Reset</td><td>Restore to originally imported SysEx</td></tr>
+        <tr><td>Manage Setups</td><td>Open Setup Manager for bulk operations</td></tr>
     </table>
 
     <h3>Navigation Elements</h3>
@@ -275,381 +254,540 @@
     <h3>Status Bar</h3>
     <table>
         <tr><th>Indicator</th><th>Meaning</th></tr>
-        <tr><td>● Green dot</td><td>All changes saved/exported</td></tr>
-        <tr><td>● Amber dot</td><td>You have unsaved changes!</td></tr>
-        <tr><td>File size</td><td>Confirms valid 100,640 byte file loaded</td></tr>
+        <tr><td>● Modified</td><td>You have unsaved changes</td></tr>
+        <tr><td>○ (outline)</td><td>Data matches last saved state</td></tr>
+        <tr><td>100,640 bytes</td><td>Valid UC4 dump is loaded</td></tr>
     </table>
 
     <h2 id="files">Working with Files</h2>
 
-    <h3>Importing Your UC4 Configuration</h3>
-    <p><strong>Step 1:</strong> Dump your UC4 via MIDI — connect UC4, use a SysEx librarian, request dump, save as .syx file.</p>
-    <p><strong>Step 2:</strong> Click <strong>Import SysEx</strong> and select your file.</p>
-    <p><strong>Validation:</strong> The status bar shows "100,640 bytes loaded" — this confirms a valid full dump.</p>
+    <h3>SysEx Files (.syx)</h3>
+    <p>The native format for UC4 data.</p>
+    <p><strong>Import:</strong></p>
+    <ol>
+        <li>Click <strong>Import SysEx</strong></li>
+        <li>Select a .syx file (must be exactly 100,640 bytes)</li>
+        <li>File loads immediately</li>
+    </ol>
+    <p><strong>Export:</strong></p>
+    <ol>
+        <li>Click <strong>Export SysEx</strong></li>
+        <li>File downloads to your Downloads folder</li>
+        <li>Send this file to your UC4 via MIDI</li>
+    </ol>
 
-    <h3>Exporting Back to UC4</h3>
-    <pre>
-1. Make your edits
-2. Click [Export SysEx]
-3. Save the .syx file
-4. Send to UC4 via MIDI SysEx</pre>
-    <p><strong>Important:</strong> Exporting clears the "modified" indicator and your session backup.</p>
+    <h3>JSON Files</h3>
+    <p>Human-readable format, great for backups and version control.</p>
+    <p><strong>Import:</strong></p>
+    <ol>
+        <li>Click <strong>Import JSON</strong></li>
+        <li>Select a .json file exported from this editor</li>
+        <li>All 18 setups are loaded</li>
+    </ol>
 
-    <h3>JSON Export/Import — Your Best Friend</h3>
-    <p>JSON creates a <strong>human-readable</strong> backup of your entire configuration.</p>
-    <table>
-        <tr><th>Benefit</th><th>Description</th></tr>
-        <tr><td>Git-friendly</td><td>Track changes with version control</td></tr>
-        <tr><td>Readable</td><td>Review exactly what changed</td></tr>
-        <tr><td>Shareable</td><td>Send configs to bandmates</td></tr>
-        <tr><td>Backup</td><td>Safety net before experiments</td></tr>
-        <tr><td>Smaller</td><td>~50KB vs 100KB for .syx</td></tr>
-    </table>
-    <div class="tip">
-        <strong>Workflow tip:</strong> Export JSON before making big changes. If something goes wrong, import the JSON to restore.
-    </div>
+    <h3>Single Setup JSON</h3>
+    <p>Export and import individual setups via the Setup Manager.</p>
+    <p><strong>Export Single Setup:</strong></p>
+    <ol>
+        <li>Click <strong>Manage Setups</strong></li>
+        <li>Select one setup</li>
+        <li>Click <strong>Export</strong></li>
+        <li>Choose filename and save</li>
+    </ol>
+    <p><strong>Import to Slot:</strong></p>
+    <ol>
+        <li>Click <strong>Manage Setups</strong></li>
+        <li>Click <strong>Import</strong></li>
+        <li>Select single-setup JSON file</li>
+        <li>Choose target slot</li>
+        <li>Click <strong>Import</strong></li>
+    </ol>
 
     <h2 id="navigation">Navigating Setups &amp; Groups</h2>
 
-    <h3>The UC4's Structure</h3>
-    <pre>
-UC4 Memory Structure
-│
-├── Setup 1
-│   ├── Group 1: 8 encoders, 8 push, 8 green, 8 faders, fader9
-│   ├── Group 2: ...
-│   └── Group 8: ...
-│
-├── Setup 2 ... Setup 18
-│
-Total: 18 setups × 8 groups × 33 controls = 4,752 editable controls!</pre>
-
-    <h3>Domain Mapping</h3>
+    <h3>The UC4's Two-Domain System</h3>
     <p>The UC4 has <strong>two independent group selectors</strong>:</p>
+    <pre>
+ENCODER DOMAIN (Shift + Encoder 1-8)
+├── 8 Encoders
+└── 8 Push Buttons
+
+FADER/BUTTON DOMAIN (Shift + Green 1-8)
+├── 8 Faders (1-8)
+├── 8 Green Buttons
+└── Fader 9</pre>
+    <p>You can be on Encoder Group 3 while Fader Group 7 is active. They're independent!</p>
+
+    <h3>Link Groups Toggle</h3>
+    <p><strong>Enabled (🔗 checked):</strong></p>
     <ul>
-        <li><strong>Encoder Domain:</strong> Shift + Encoder 1-8 → Controls encoders and push buttons</li>
-        <li><strong>Fader Domain:</strong> Shift + Green Button 1-8 → Controls faders, green buttons, and fader 9</li>
+        <li>Clicking any group tab sets BOTH domains to that group</li>
+        <li>Useful when your groups are organized by channel (Group 1 = Ch1, etc.)</li>
     </ul>
-    <p>Click <strong>🔗 Link</strong> to synchronize both domains.</p>
+    <p><strong>Disabled:</strong></p>
+    <ul>
+        <li>Encoder and Fader groups are independent</li>
+        <li>Matches actual UC4 hardware behavior</li>
+    </ul>
 
     <h2 id="focused">Focused View — Detailed Editing</h2>
-    <p>The default view. Edit every parameter for all controls in the selected group(s).</p>
+    <p>The default editing mode, showing one group at a time with full parameter access.</p>
 
     <h3>Section Order</h3>
-    <p>Controls are displayed in this order (same as Overview):</p>
     <ol>
-        <li><strong>Faders 1-8</strong> — Main faders</li>
-        <li><strong>Fader 9</strong> — Master/special fader</li>
-        <li><strong>Green Buttons</strong> — Below faders on hardware</li>
-        <li><strong>Encoders</strong> — Rotary encoders</li>
-        <li><strong>Push Buttons</strong> — Press-down on encoders</li>
+        <li><strong>Faders</strong> (from Fader group)</li>
+        <li><strong>Green Buttons</strong> (from Fader group)</li>
+        <li><strong>Encoders</strong> (from Encoder group)</li>
+        <li><strong>Push Buttons</strong> (from Encoder group)</li>
+        <li><strong>Fader 9</strong> (from Fader group)</li>
     </ol>
 
-    <h3>Encoder Types Explained</h3>
+    <h3>Contextual Tooltips</h3>
+    <div class="tip">
+        <strong>Hover over any parameter label or dropdown option to see explanations!</strong>
+    </div>
     <table>
-        <tr><th>Type</th><th>Description</th></tr>
-        <tr><td>CCr1</td><td>Relative mode 1 (64 = no change)</td></tr>
-        <tr><td>CCr2</td><td>Relative mode 2 (0 = no change)</td></tr>
-        <tr><td>CCAb</td><td>Absolute CC (standard 0-127)</td></tr>
-        <tr><td>PrGC</td><td>Program Change</td></tr>
-        <tr><td>CCAh</td><td>14-bit high-resolution CC</td></tr>
-        <tr><td>Pbnd</td><td>Pitch Bend</td></tr>
-        <tr><td>AFtt</td><td>Aftertouch</td></tr>
+        <tr><th>Example</th><th>Tooltip</th></tr>
+        <tr><td>Hover over <strong>Chan</strong></td><td>"MIDI channel (1-16). Controls which channel receives messages."</td></tr>
+        <tr><td>Hover over <strong>CCr1</strong> option</td><td>"Relative mode 1. Sends 1 for clockwise, 127 for counter-clockwise. Best for Ableton, Bitwig."</td></tr>
+        <tr><td>Hover over <strong>Acc</strong></td><td>"Acceleration sensitivity. Higher values = faster response to quick turns."</td></tr>
+    </table>
+
+    <h3>Control Parameters</h3>
+    <p><strong>Encoder:</strong></p>
+    <table>
+        <tr><th>Param</th><th>Range</th><th>Description</th></tr>
+        <tr><td>Chan</td><td>1-16</td><td>MIDI channel</td></tr>
+        <tr><td>CC</td><td>0-127</td><td>Controller number</td></tr>
+        <tr><td>Type</td><td>CCr1/CCr2/CCAb/PrGC/CCAh/Pbnd/AFtt</td><td>Message type</td></tr>
+        <tr><td>Acc</td><td>0-4</td><td>Acceleration sensitivity</td></tr>
+        <tr><td>Disp</td><td>0-4</td><td>Display mode on UC4</td></tr>
+        <tr><td>Min</td><td>0-127</td><td>Minimum output value</td></tr>
+        <tr><td>Max</td><td>0-127</td><td>Maximum output value</td></tr>
+    </table>
+
+    <p><strong>Push/Green Button:</strong></p>
+    <table>
+        <tr><th>Param</th><th>Range</th><th>Description</th></tr>
+        <tr><td>Chan</td><td>1-16</td><td>MIDI channel</td></tr>
+        <tr><td>Type</td><td>Note/CC/PrGC/AFtt/Off</td><td>Message type</td></tr>
+        <tr><td>Note/CC</td><td>0-127</td><td>Note or CC number</td></tr>
+        <tr><td>Lower</td><td>0-127</td><td>Value on release</td></tr>
+        <tr><td>Upper</td><td>0-127</td><td>Value on press</td></tr>
+        <tr><td>Mode</td><td>Momentary/Toggle/Step</td><td>Button behavior</td></tr>
+    </table>
+
+    <p><strong>Fader:</strong></p>
+    <table>
+        <tr><th>Param</th><th>Range</th><th>Description</th></tr>
+        <tr><td>Chan</td><td>1-16</td><td>MIDI channel</td></tr>
+        <tr><td>CC</td><td>0-127</td><td>Controller number</td></tr>
+        <tr><td>Type</td><td>CCAb/PrGC/Pbnd/AFtt</td><td>Message type</td></tr>
+        <tr><td>Min</td><td>0-127</td><td>Value at bottom</td></tr>
+        <tr><td>Max</td><td>0-127</td><td>Value at top</td></tr>
     </table>
 
     <h2 id="overview">Overview Mode — See Everything</h2>
-    <p>Click <strong>[Overview]</strong> to see all controls in an 8-column grid (one column per group).</p>
-    
-    <pre>
-┌─────────────────────────────────────────────────────────────────┐
-│  [ All ] [ Encoders ] [ Push ] [ Green ] [ Faders ]            │
-│  [✓ Concurrent (3)] [Mutually-Exclusive (12)]   ← Filters      │
-├─────────────────────────────────────────────────────────────────┤
-│  Quick Paste:  [Off] [Copy] [Paste]   Scope: [Cell][Col][Row]  │
-│  Source: Fad Column G1 (8)    Ch: [+1]  CC: [0]                │
-├─────────────────────────────────────────────────────────────────┤
-│           │ Group 1 │ Group 2 │ Group 3 │ Group 4 │ ...        │
-│  ─────────┼─────────┼─────────┼─────────┼─────────┼────        │
-│  Fader 1  │ 1:CC 32 │ 1:CC 32 │ 1:CC 32 │ 1:CC 32 │            │
-│  Fader 2  │ 1:CC 33 │ 1:CC 33 │ 1:CC 33 │ 1:CC 33 │            │
-└─────────────────────────────────────────────────────────────────┘</pre>
+    <p>Grid view showing all controls across all 8 groups simultaneously.</p>
 
-    <h3>Tab Filters</h3>
+    <h3>Tabs</h3>
     <table>
-        <tr><th>Tab</th><th>Shows</th></tr>
-        <tr><td>All</td><td>All control types stacked vertically</td></tr>
-        <tr><td>Encoders</td><td>Encoders only</td></tr>
-        <tr><td>Push</td><td>Push buttons only</td></tr>
-        <tr><td>Green</td><td>Green buttons only</td></tr>
-        <tr><td>Faders</td><td>Faders 1-8 and Fader 9</td></tr>
+        <tr><th>Tab</th><th>What It Shows</th></tr>
+        <tr><td><strong>All</strong></td><td>All control types stacked vertically</td></tr>
+        <tr><td><strong>Encoders</strong></td><td>8×8 grid of encoders only</td></tr>
+        <tr><td><strong>Push</strong></td><td>8×8 grid of push buttons</td></tr>
+        <tr><td><strong>Green</strong></td><td>8×8 grid of green buttons</td></tr>
+        <tr><td><strong>Faders</strong></td><td>8×8 fader grid + fader9 row</td></tr>
     </table>
 
     <h3>Cell Format</h3>
-    <p>Each cell shows: <code>Channel:Type Value</code></p>
-    <pre>
-┌─────────┐
-│ 1:CC 64 │  ← Channel 1, CC type, CC# 64
-└─────────┘
+    <p>Each cell shows: <code>Channel:Type CC#</code></p>
+    <table>
+        <tr><th>Display</th><th>Meaning</th></tr>
+        <tr><td><code>1:CC 64</code></td><td>Channel 1, CC, number 64</td></tr>
+        <tr><td><code>2:Nt 60</code></td><td>Channel 2, Note, number 60</td></tr>
+        <tr><td><code>3:PC 0</code></td><td>Channel 3, Program Change, number 0</td></tr>
+        <tr><td><code>1:PB --</code></td><td>Channel 1, Pitch Bend</td></tr>
+        <tr><td><code>1:AT --</code></td><td>Channel 1, Aftertouch</td></tr>
+    </table>
 
-┌─────────┐
-│⚠1:CC 64│  ← Warning icon = conflict detected
-└─────────┘</pre>
-
-    <h3>Interaction</h3>
+    <h3>Cell Interactions</h3>
     <table>
         <tr><th>Action</th><th>Result</th></tr>
         <tr><td><strong>Single-click</strong></td><td>Select cell (green outline)</td></tr>
-        <tr><td><strong>Double-click</strong></td><td>Jump to Focused view for that control</td></tr>
-        <tr><td><strong>Right-click</strong></td><td>Open context menu</td></tr>
-        <tr><td><strong>Arrow keys</strong></td><td>Move selection</td></tr>
-        <tr><td><strong>Enter</strong></td><td>Jump to Focused view</td></tr>
+        <tr><td><strong>Double-click</strong></td><td>Jump to Focused view</td></tr>
+        <tr><td><strong>Right-click</strong></td><td>Context menu + select</td></tr>
+        <tr><td><strong>Hover (in Quick Paste)</strong></td><td>Preview paste target</td></tr>
     </table>
 
     <h2 id="quickpaste">Quick Copy/Paste — Rapid Configuration</h2>
-    <p>The Quick Paste toolbar enables rapid batch configuration. Press <kbd>Q</kbd> to activate.</p>
+    <p>The fastest way to copy/paste in Overview mode. Press <strong>Q</strong> to activate.</p>
 
-    <h3>The Toolbar</h3>
+    <h3>Quick Paste Toolbar</h3>
     <pre>
-┌─────────────────────────────────────────────────────────────────┐
-│ Mode: [Off] [Copy] [Paste]   Scope: [Cell] [Column] [Row]      │
-│ Source: Fad Column G1 (8)    Ch: [0 ▾]   CC: [0 ▾]             │
-│ Click to paste • 3 pasted                                       │
-└─────────────────────────────────────────────────────────────────┘</pre>
+┌──────────────────────────────────────────────────────────────────┐
+│ Mode [Off][Copy][Paste]   Scope [Cell][Column][Row]              │
+│ Source: Enc G1.1          Ch [+1▾]  CC [0▾]   [Clear Source]     │
+│ Status: Click to paste • 3 pasted                                │
+└──────────────────────────────────────────────────────────────────┘</pre>
 
-    <h3>How It Works</h3>
+    <h3>Workflow</h3>
     <ol>
-        <li><strong>Press Q</strong> — Enter Copy mode</li>
-        <li><strong>Set Scope</strong> — Cell, Column (group), or Row</li>
-        <li><strong>Set Multipliers</strong> — Ch and CC offset multipliers</li>
-        <li><strong>Click source</strong> — Highlights amber, switches to Paste mode</li>
-        <li><strong>Click targets</strong> — Paste with automatic offset calculation</li>
-        <li><strong>Press Escape</strong> — Exit and clear</li>
+        <li><strong>Press Q</strong> or click <strong>Copy</strong> — Enter Quick Paste mode</li>
+        <li><strong>Select scope</strong>: Cell (1), Column (2), or Row (3)</li>
+        <li><strong>Click a cell</strong> — Copies source and switches to Paste mode</li>
+        <li><strong>Click target cells</strong> — Pastes with offsets applied</li>
+        <li><strong>Press Q</strong> again — Exit Quick Paste mode</li>
     </ol>
 
-    <h3>Relational Offset System</h3>
-    <p>The key feature: offsets are <strong>calculated automatically</strong> based on position difference.</p>
-    <pre>offset = (target position - source position) × multiplier</pre>
-    
-    <p><strong>Example with Ch multiplier = +1:</strong></p>
+    <h3>Channel/CC Multipliers</h3>
+    <p>The multipliers apply offsets based on the group difference between source and target.</p>
+    <p><strong>Formula:</strong> <code>offset = (targetGroup - sourceGroup) × multiplier</code></p>
+    <p><strong>Example with Ch=+1, CC=0:</strong></p>
     <table>
-        <tr><th>Copy From</th><th>Paste To</th><th>Calculation</th><th>Result</th></tr>
-        <tr><td>G1 (Ch 1)</td><td>G2</td><td>1 + (2-1)×1</td><td>Ch 2</td></tr>
-        <tr><td>G1 (Ch 1)</td><td>G4</td><td>1 + (4-1)×1</td><td>Ch 4</td></tr>
-        <tr><td>G1 (Ch 1)</td><td>G8</td><td>1 + (8-1)×1</td><td>Ch 8</td></tr>
+        <tr><th>Source</th><th>Target</th><th>Group Diff</th><th>Channel Offset</th></tr>
+        <tr><td>G1</td><td>G2</td><td>1</td><td>+1</td></tr>
+        <tr><td>G1</td><td>G3</td><td>2</td><td>+2</td></tr>
+        <tr><td>G1</td><td>G5</td><td>4</td><td>+4</td></tr>
     </table>
-    <p><strong>Multiplier = 0:</strong> Exact copy, no offset. <strong>Multiplier = +2:</strong> Double the offset.</p>
+    <p>So copying from G1 Ch1 to G3 with Ch=+1 results in Ch3.</p>
+
+    <h3>Scope Options</h3>
+    <table>
+        <tr><th>Scope</th><th>What's Copied</th><th>What's Pasted</th></tr>
+        <tr><td><strong>Cell</strong></td><td>One control</td><td>One control</td></tr>
+        <tr><td><strong>Column</strong></td><td>All 8 controls in group</td><td>All 8 controls in target group</td></tr>
+        <tr><td><strong>Row</strong></td><td>One control from all 8 groups</td><td>Same row across 8 groups</td></tr>
+    </table>
 
     <h3>Visual Feedback</h3>
-    <table>
-        <tr><th>Color</th><th>Meaning</th></tr>
-        <tr><td><strong>Amber outline</strong></td><td>Source — what you copied</td></tr>
-        <tr><td><strong>Teal dashed outline</strong></td><td>Target — where you'll paste (on hover)</td></tr>
-        <tr><td><strong>Flash animation</strong></td><td>Just pasted successfully</td></tr>
-    </table>
+    <ul>
+        <li><strong>Green highlight</strong>: Source cells</li>
+        <li><strong>Cyan outline</strong>: Paste preview (hover)</li>
+        <li><strong>Toast message</strong>: Confirms each paste</li>
+    </ul>
 
-    <h3>Scopes Explained</h3>
-    <table>
-        <tr><th>Scope</th><th>Copies</th><th>Pastes To</th></tr>
-        <tr><td><strong>Cell</strong></td><td>Single control</td><td>Single control</td></tr>
-        <tr><td><strong>Column</strong></td><td>All 8 controls in a group</td><td>Target group</td></tr>
-        <tr><td><strong>Row</strong></td><td>One control across all 8 groups</td><td>Same row position</td></tr>
-    </table>
-
-    <h3>Quick Paste Keyboard Shortcuts</h3>
+    <h3>Keyboard Shortcuts</h3>
     <table>
         <tr><th>Key</th><th>Action</th></tr>
-        <tr><td><kbd>Q</kbd></td><td>Toggle mode: Off → Copy → Paste → Off</td></tr>
-        <tr><td><kbd>1</kbd></td><td>Set scope to Cell</td></tr>
-        <tr><td><kbd>2</kbd></td><td>Set scope to Column</td></tr>
-        <tr><td><kbd>3</kbd></td><td>Set scope to Row</td></tr>
-        <tr><td><kbd>Escape</kbd></td><td>Exit Quick Paste, clear source</td></tr>
+        <tr><td><strong>Q</strong></td><td>Toggle Quick Paste on/off</td></tr>
+        <tr><td><strong>1</strong></td><td>Cell scope</td></tr>
+        <tr><td><strong>2</strong></td><td>Column scope</td></tr>
+        <tr><td><strong>3</strong></td><td>Row scope</td></tr>
     </table>
 
-    <div class="tip">
-        <strong>8-Channel Mixer Setup:</strong> Configure G1, press Q, set Scope=Column, Ch=+1, CC=0. Click G1 to copy, then click G2-G8. Each group gets an incrementing channel. Done in seconds!
-    </div>
+    <h2 id="setupmanager">Setup Manager — Organize Your Setups</h2>
+    <p>Manage entire setups: label, copy, swap, clear, reset, export, import.</p>
 
-    <h2 id="conflicts">Conflict Detection</h2>
-    <p>The editor automatically detects when two controls send the <strong>same MIDI message</strong>.</p>
+    <h3>Opening Setup Manager</h3>
+    <p>Click <strong>[Manage Setups]</strong> in the header.</p>
 
-    <div class="warning">
-        <strong>CONCURRENT CONFLICTS (Serious!)</strong><br>
-        Two controls that are ACTIVE AT THE SAME TIME send the same MIDI message. These will fight each other!
-    </div>
-    
-    <div class="tip">
-        <strong>MUTUALLY-EXCLUSIVE CONFLICTS (Usually OK)</strong><br>
-        Two controls in DIFFERENT GROUPS send the same message. Only one group is active at a time, so they won't conflict in practice.
-    </div>
-
-    <h3>Conflict Filters</h3>
+    <h3>Setup Grid</h3>
     <pre>
-[✓ Concurrent (3)]  [□ Mutually-Exclusive (12)]
-       ↑                      ↑
-   Checked = shown       Unchecked = hidden</pre>
-
-    <h2 id="contextmenu">Context Menu Copy &amp; Paste</h2>
-    <p>Right-click any cell in Overview for additional copy/paste options.</p>
-    
-    <h3>Right-Click Context Menu</h3>
-    <pre>
-┌─────────────────────────────────┐
-│ Copy Control                    │
-│ Copy Row (3 × 8 groups)         │
-│ Copy Column (Group 2)           │
-├─────────────────────────────────┤
-│ Paste                           │
-│ Paste Special...                │
-└─────────────────────────────────┘</pre>
-
-    <h3>Paste Special — Power Features</h3>
-    <pre>
-┌─ Paste Special ─────────────────────────────────────────────────┐
-│  Source: Enc G1.3 (Ch1 CC 45)                                  │
-│                                                                 │
-│  Paste to:                                                      │
-│    ○ Current cell    ○ Entire row    ○ Entire column           │
-│                                                                 │
-│  Transforms:                                                    │
-│    Channel offset:    [ 0 ▾]  (-15 to +15)                     │
-│    CC/Number offset:  [ 0 ▾]  (-127 to +127)                   │
-│    [✓] Auto-increment CC by: [ 1 ]                             │
-│    Out-of-range:      [Clamp ▾]  (Clamp / Wrap)                │
-│                                                                 │
-│                              [Cancel]  [Paste]                  │
+┌─────────────────────────────────────────────────────────────────┐
+│ Setup Manager                                            [×]   │
+├─────────────────────────────────────────────────────────────────┤
+│  1: Synth      2: Drums     3: (factory)  4: FX               │
+│  5            6: Keys       7            8                     │
+│  9            10           11           12                     │
+│  13           14           15           16                     │
+│  17: Ableton  18: Ableton                                      │
+├─────────────────────────────────────────────────────────────────┤
+│ [Label] [Clear] [Copy] [Swap] [Reset] [Export] [Import]        │
 └─────────────────────────────────────────────────────────────────┘</pre>
 
+    <h3>Visual Indicators</h3>
+    <ul>
+        <li><strong>Accent border</strong>: Setup has been modified</li>
+        <li><strong>(factory)</strong>: Setup matches factory defaults</li>
+        <li><strong>Label text</strong>: Custom label you've assigned</li>
+    </ul>
+
+    <h3>Selection</h3>
+    <ul>
+        <li><strong>Click</strong>: Select one setup</li>
+        <li><strong>Ctrl+Click</strong>: Multi-select (add/remove from selection)</li>
+        <li><strong>Click empty area</strong>: Deselect all</li>
+    </ul>
+
+    <h3>Operations</h3>
+    <table>
+        <tr><th>Button</th><th>Requires</th><th>Action</th></tr>
+        <tr><td><strong>Label</strong></td><td>1 setup</td><td>Assign a name (stored in browser, not SysEx)</td></tr>
+        <tr><td><strong>Clear</strong></td><td>1+ setups</td><td>Zero out all parameters</td></tr>
+        <tr><td><strong>Copy</strong></td><td>1 setup</td><td>Duplicate to other slot(s)</td></tr>
+        <tr><td><strong>Swap</strong></td><td>2 setups</td><td>Exchange two setups</td></tr>
+        <tr><td><strong>Reset</strong></td><td>1+ setups</td><td>Restore factory defaults</td></tr>
+        <tr><td><strong>Export</strong></td><td>1 setup</td><td>Save as single-setup JSON</td></tr>
+        <tr><td><strong>Import</strong></td><td>—</td><td>Load single-setup JSON to a slot</td></tr>
+    </table>
+
+    <h3>Labels</h3>
+    <p>Labels are stored in your browser (localStorage), not in the SysEx file. They appear in:</p>
+    <ul>
+        <li>Setup dropdown: "1: Synth"</li>
+        <li>Setup Manager grid</li>
+        <li>Export filenames (suggested)</li>
+    </ul>
+
+    <h2 id="conflicts">Conflict Detection</h2>
+    <p>Automatically finds MIDI assignment conflicts.</p>
+
+    <h3>Conflict Types</h3>
+    <table>
+        <tr><th>Type</th><th>Description</th><th>Severity</th></tr>
+        <tr><td><strong>Concurrent</strong></td><td>Same message from controls active at the same time</td><td>⚠️ Fix these!</td></tr>
+        <tr><td><strong>Mutually-Exclusive</strong></td><td>Same message in different groups</td><td>Usually OK</td></tr>
+    </table>
+
+    <h3>Understanding Conflicts</h3>
+    <p><strong>Concurrent conflicts</strong> happen when two controls in the same active domain send identical messages. Examples:</p>
+    <ul>
+        <li>Encoder 1 and Encoder 3 both send Ch1 CC64 (same group)</li>
+        <li>Fader 1 and Green Button 1 both send Ch1 CC64 (same fader group)</li>
+    </ul>
+    <p><strong>Mutually-exclusive conflicts</strong> happen across different groups—only one can be active at a time, so usually intentional.</p>
+
+    <h3>Filter Chips</h3>
+    <pre>[✓ Concurrent (3)] [□ Mutually-Exclusive (12)]</pre>
+    <p>Click to show/hide each conflict type in the grid.</p>
+
+    <h2 id="contextmenu">Context Menu Copy &amp; Paste</h2>
+    <p>Right-click in Overview mode for advanced copy/paste operations.</p>
+
+    <h3>Copy Scopes</h3>
+    <table>
+        <tr><th>Menu Item</th><th>What's Copied</th></tr>
+        <tr><td><strong>Copy Control</strong></td><td>Single cell (one control)</td></tr>
+        <tr><td><strong>Copy Row</strong></td><td>Same control index across all 8 groups</td></tr>
+        <tr><td><strong>Copy Column</strong></td><td>All controls in one group</td></tr>
+    </table>
+
+    <h3>Paste Special Dialog</h3>
+    <p>Opens a dialog with transform options:</p>
+    <table>
+        <tr><th>Option</th><th>Range</th><th>Description</th></tr>
+        <tr><td><strong>Channel offset</strong></td><td>-15 to +15</td><td>Shift MIDI channel</td></tr>
+        <tr><td><strong>CC/Number offset</strong></td><td>-127 to +127</td><td>Shift CC or note number</td></tr>
+        <tr><td><strong>Auto-increment</strong></td><td>Any integer</td><td>Add sequential offset per target</td></tr>
+        <tr><td><strong>Wrap mode</strong></td><td>Clamp / Wrap</td><td>Out-of-range behavior</td></tr>
+    </table>
+
     <h2 id="undo">Undo, Redo &amp; Reset</h2>
-    <p>Every edit can be reversed. Rapid edits to the same parameter are <strong>combined</strong> into one undo step.</p>
+    <p>Full edit history with intelligent coalescing.</p>
+
+    <h3>What's Tracked</h3>
+    <ul>
+        <li>Individual parameter changes</li>
+        <li>Batch operations (paste to row/column)</li>
+        <li>Setup Manager operations (copy, swap, clear, reset)</li>
+        <li>Label changes</li>
+    </ul>
+
+    <h3>Coalescing</h3>
+    <p>Rapid edits to the same parameter (within 1 second) are combined into one undo step. This means dragging a slider doesn't create 50 undo entries.</p>
+
+    <h3>Limits</h3>
+    <ul>
+        <li>100 undo steps maximum</li>
+        <li>Oldest actions are dropped when limit reached</li>
+    </ul>
+
+    <h3>Shortcuts</h3>
     <table>
         <tr><th>Action</th><th>Windows/Linux</th><th>Mac</th></tr>
-        <tr><td>Undo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td><kbd>Cmd</kbd>+<kbd>Z</kbd></td></tr>
-        <tr><td>Redo</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td><td><kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td></tr>
+        <tr><td>Undo</td><td>Ctrl+Z</td><td>Cmd+Z</td></tr>
+        <tr><td>Redo</td><td>Ctrl+Shift+Z</td><td>Cmd+Shift+Z</td></tr>
+        <tr><td>Redo (alt)</td><td>Ctrl+Y</td><td>—</td></tr>
     </table>
-
-    <h3>Reset Button</h3>
-    <p>The <strong>⟲ Reset</strong> button restores everything to the originally imported SysEx:</p>
-    <ul>
-        <li>Reverts all changes since import</li>
-        <li>Clears undo/redo history</li>
-        <li>Clears Quick Paste source</li>
-        <li>Shows confirmation dialog first</li>
-    </ul>
-    <div class="tip">
-        <strong>Use case:</strong> Made a mess? Reset and start fresh without re-importing.
-    </div>
 
     <h2 id="session">Session Persistence</h2>
-    <p>Your work is <strong>automatically saved</strong> to browser storage every 2 seconds.</p>
-    <pre>
-You edit → 2 seconds pass → Auto-saved to localStorage
-You close browser → Reopen → Restore dialog appears</pre>
+    <p>Auto-saves your work to browser storage.</p>
+
+    <h3>How It Works</h3>
+    <ul>
+        <li>Changes are saved every 2 seconds</li>
+        <li>Survives page refresh and browser restart</li>
+        <li>Only prompts to restore if you have unsaved changes</li>
+    </ul>
+
+    <h3>When Session Clears</h3>
+    <ul>
+        <li>After Export SysEx</li>
+        <li>After Export JSON</li>
+        <li>After Import (new file replaces session)</li>
+        <li>After clicking Discard</li>
+    </ul>
 
     <h2 id="shortcuts">Keyboard Shortcuts</h2>
-    
+
     <h3>Global</h3>
     <table>
-        <tr><th>Action</th><th>Shortcut</th></tr>
-        <tr><td>Undo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td></tr>
-        <tr><td>Redo</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> or <kbd>Ctrl</kbd>+<kbd>Y</kbd></td></tr>
+        <tr><th>Key</th><th>Action</th></tr>
+        <tr><td>Ctrl+Z</td><td>Undo</td></tr>
+        <tr><td>Ctrl+Shift+Z</td><td>Redo</td></tr>
+        <tr><td>Ctrl+Y</td><td>Redo (alternate)</td></tr>
     </table>
-    
+
     <h3>Overview Mode</h3>
     <table>
-        <tr><th>Action</th><th>Key</th></tr>
-        <tr><td>Move selection</td><td>Arrow keys</td></tr>
-        <tr><td>Jump to Focused view</td><td><kbd>Enter</kbd></td></tr>
-        <tr><td>Clear selection</td><td><kbd>Escape</kbd></td></tr>
-        <tr><td>Copy selected</td><td><kbd>Ctrl</kbd>+<kbd>C</kbd></td></tr>
-        <tr><td>Paste to selected</td><td><kbd>Ctrl</kbd>+<kbd>V</kbd></td></tr>
+        <tr><th>Key</th><th>Action</th></tr>
+        <tr><td>↑↓←→</td><td>Move selection</td></tr>
+        <tr><td>Enter</td><td>Jump to Focused view for selected cell</td></tr>
+        <tr><td>Tab</td><td>Move right</td></tr>
+        <tr><td>Shift+Tab</td><td>Move left</td></tr>
+        <tr><td>Escape</td><td>Clear selection</td></tr>
+        <tr><td>Ctrl+C</td><td>Copy selected control</td></tr>
+        <tr><td>Ctrl+V</td><td>Paste to selected</td></tr>
     </table>
 
     <h3>Quick Paste</h3>
     <table>
-        <tr><th>Action</th><th>Key</th></tr>
-        <tr><td>Toggle Quick Paste mode</td><td><kbd>Q</kbd></td></tr>
-        <tr><td>Set scope to Cell</td><td><kbd>1</kbd></td></tr>
-        <tr><td>Set scope to Column</td><td><kbd>2</kbd></td></tr>
-        <tr><td>Set scope to Row</td><td><kbd>3</kbd></td></tr>
-        <tr><td>Exit Quick Paste</td><td><kbd>Escape</kbd></td></tr>
+        <tr><th>Key</th><th>Action</th></tr>
+        <tr><td>Q</td><td>Toggle Quick Paste mode</td></tr>
+        <tr><td>1</td><td>Cell scope</td></tr>
+        <tr><td>2</td><td>Column scope</td></tr>
+        <tr><td>3</td><td>Row scope</td></tr>
     </table>
 
     <h2 id="workflows">Workflow Examples</h2>
-    
-    <h3>Quick CC Remap (30 seconds)</h3>
-    <pre>
-1. Open editor (factory defaults load)
-2. Focused view → find Encoder 1 card
-3. Change CC: 1 → 74
-4. Export SysEx → send to UC4</pre>
 
-    <h3>Set Up 8 Channels with Quick Paste (1 minute)</h3>
-    <pre>
-1. Configure Group 1 completely in Focused view
-2. Switch to Overview
-3. Press Q (Quick Paste)
-4. Set Scope = Column, Ch = +1, CC = 0
-5. Click any cell in Group 1 (copies entire column)
-6. Click Group 2, 3, 4, 5, 6, 7, 8
-7. Press Escape
-8. Export</pre>
+    <h3>Create a Channel-Per-Group Setup</h3>
+    <p><strong>Goal:</strong> Group 1 = Channel 1, Group 2 = Channel 2, etc.</p>
+    <p><strong>Method (Quick Paste):</strong></p>
+    <ol>
+        <li>Configure Group 1 exactly as you want (all controls on Ch1)</li>
+        <li>Switch to <strong>Overview</strong> → <strong>Encoders</strong> tab</li>
+        <li>Press <strong>Q</strong> → select <strong>Column</strong> scope</li>
+        <li>Set <strong>Ch</strong> to <strong>+1</strong>, <strong>CC</strong> to <strong>0</strong></li>
+        <li>Click any cell in Group 1 (copies whole column)</li>
+        <li>Click Group 2, 3, 4... headers (pastes with channel offset)</li>
+        <li>Repeat for Push, Green, Faders tabs</li>
+    </ol>
+    <p><strong>Time:</strong> ~2 minutes for complete setup</p>
 
-    <h3>Validate Before Gig</h3>
-    <pre>
-1. Import your .syx
-2. Overview mode
-3. Check [✓ Concurrent] filter
-4. Review and fix any conflicts
-5. Export clean .syx</pre>
+    <h3>Sequential CCs Across a Row</h3>
+    <p><strong>Goal:</strong> Encoder 1 in all groups = CC1, CC2, CC3...CC8</p>
+    <p><strong>Method (Context Menu):</strong></p>
+    <ol>
+        <li>Overview → Encoders tab</li>
+        <li>Right-click Enc 1, Group 1 → <strong>Copy Control</strong></li>
+        <li>Right-click same cell → <strong>Paste Special...</strong></li>
+        <li>Set <strong>Auto-increment CC by:</strong> 1</li>
+        <li><strong>Paste to:</strong> Entire row</li>
+        <li>Click <strong>Paste</strong></li>
+    </ol>
+    <p><strong>Result:</strong> G1=CC1, G2=CC2, G3=CC3...</p>
+
+    <h3>Prepare Setups for Live Show</h3>
+    <ol>
+        <li><strong>Label your setups:</strong> Setup Manager → select setup → Label → "Opener", "Main", "Encore"</li>
+        <li><strong>Check for conflicts:</strong> Overview mode → ensure Concurrent count is 0</li>
+        <li><strong>Export backup:</strong> Export JSON → save as "live-show-backup.json"</li>
+        <li><strong>Export SysEx:</strong> Export SysEx → send to UC4</li>
+        <li><strong>Test on hardware:</strong> Verify all setups work correctly</li>
+    </ol>
 
     <h2 id="validation">Validation &amp; Troubleshooting</h2>
-    
-    <h3>File Size Validation</h3>
-    <table>
-        <tr><td>Valid UC4 dump</td><td>100,640 bytes ✓</td></tr>
-        <tr><td>Wrong size</td><td>Error: "Invalid file size"</td></tr>
-    </table>
 
-    <h3>Common Issues</h3>
-    <table>
-        <tr><th>Problem</th><th>Solution</th></tr>
-        <tr><td>"Invalid file size"</td><td>Dump ALL setups from UC4, not just one</td></tr>
-        <tr><td>Changes not on UC4</td><td>Did you send the .syx via MIDI after exporting?</td></tr>
-        <tr><td>Lost my edits</td><td>Check restore dialog on page load; use JSON backups</td></tr>
-        <tr><td>Conflicts everywhere</td><td>Factory defaults duplicate settings — use ME filter to hide</td></tr>
-    </table>
+    <h3>"Invalid file size" Error</h3>
+    <p><strong>Cause:</strong> The file isn't a complete UC4 dump.</p>
+    <p><strong>Fix:</strong> Use "Send All Setups" from UC4, not single-setup dump.</p>
 
-    <div class="quick-ref">
-        <h3>Quick Reference Card</h3>
-        <pre>
-IMPORT:     Load .syx from UC4 dump or .json backup
-EXPORT:     Save .syx for UC4, .json for backup/git
-SETUP:      18 total, independent configurations
-GROUPS:     8 per setup, selected via Shift+Encoder/Green
-LINK:       Sync encoder &amp; fader group selectors
-────────────────────────────────────────────────────
-FOCUSED:    Edit individual parameters
-OVERVIEW:   See 8×8 grid, copy/paste, find conflicts
-────────────────────────────────────────────────────
-QUICK PASTE (press Q to activate):
-  Q         Toggle mode (Off → Copy → Paste → Off)
-  1 / 2 / 3 Cell / Column / Row scope
-  Click     Copy (in Copy mode) or Paste (in Paste)
-  Escape    Exit Quick Paste
-  Ch/CC     Offset multiplier (0 = exact copy)
-────────────────────────────────────────────────────
-Ctrl+Z      Undo            Arrows     Navigate
-Ctrl+Y      Redo            Enter      Jump to Focused
-Ctrl+C      Copy            Escape     Clear/Exit
-Ctrl+V      Paste           Right-click Context menu
-────────────────────────────────────────────────────
-⚠ Concurrent    = Active at same time (fix these!)
-⚠ Mut-Excl      = Different groups (usually OK)
-● Amber dot     = Unsaved changes
-⟲ Reset         = Restore to imported SysEx</pre>
+    <h3>Changes Don't Appear on UC4</h3>
+    <p><strong>Checklist:</strong></p>
+    <ol>
+        <li>Did you click <strong>Export SysEx</strong>? (JSON won't work)</li>
+        <li>Did you <strong>send</strong> the .syx file to UC4 via MIDI?</li>
+        <li>Is UC4 ready to receive? (Check manual for receive mode)</li>
+    </ol>
+
+    <h3>Lost My Edits</h3>
+    <ol>
+        <li><strong>Refresh the page</strong> — Look for restore dialog</li>
+        <li><strong>Check Downloads</strong> — Look for exported files</li>
+        <li><strong>Check for JSON backup</strong> — You did export JSON, right?</li>
+    </ol>
+    <div class="tip">
+        <strong>Prevention:</strong> Export JSON frequently as backup!
     </div>
 
+    <h3>Conflicts Everywhere</h3>
+    <p><strong>This is normal for factory defaults!</strong></p>
+    <p>Factory config uses identical settings across groups intentionally.</p>
+    <ul>
+        <li><strong>Mutually-Exclusive:</strong> Different groups, same message (OK)</li>
+        <li><strong>Concurrent:</strong> Same group, same message (fix these)</li>
+    </ul>
+    <p>Use filter chips to show only Concurrent conflicts.</p>
+
+    <h3>Quick Paste Not Working</h3>
+    <ol>
+        <li><strong>Are you in Overview mode?</strong> Quick Paste only works there.</li>
+        <li><strong>Is the toolbar visible?</strong> Press Q to toggle.</li>
+        <li><strong>Did you set a source?</strong> Click a cell in Copy mode first.</li>
+        <li><strong>Same control type?</strong> Can't paste encoders to faders.</li>
+    </ol>
+
+    <h3>Tooltips Not Showing</h3>
+    <ol>
+        <li><strong>Wait 500ms</strong> — There's a delay before tooltips appear</li>
+        <li><strong>Focused view only</strong> — Tooltips only show in Focused view</li>
+        <li><strong>Hover over labels</strong> — Not the input fields</li>
+    </ol>
+
     <hr>
-    <p style="color: var(--text-dim); text-align: center;">Built for the Faderfox UC4. Not affiliated with Faderfox.</p>
+
+    <h2>UC4 Parameter Reference</h2>
+
+    <h3>Encoder Types</h3>
+    <table>
+        <tr><th>Type</th><th>Description</th></tr>
+        <tr><td><strong>CCr1</strong></td><td>Relative mode 1 (1/127). Best for Ableton, Bitwig.</td></tr>
+        <tr><td><strong>CCr2</strong></td><td>Relative mode 2 (65/63). Alternative relative format.</td></tr>
+        <tr><td><strong>CCAb</strong></td><td>Absolute 7-bit CC. Standard 0-127 range.</td></tr>
+        <tr><td><strong>PrGC</strong></td><td>Program Change. Turn to increment/decrement.</td></tr>
+        <tr><td><strong>CCAh</strong></td><td>High-resolution 14-bit CC. Uses CC and CC+32.</td></tr>
+        <tr><td><strong>Pbnd</strong></td><td>Pitch Bend. Full -8192 to +8191 range.</td></tr>
+        <tr><td><strong>AFtt</strong></td><td>Channel Aftertouch.</td></tr>
+    </table>
+
+    <h3>Button Types</h3>
+    <table>
+        <tr><th>Type</th><th>Description</th></tr>
+        <tr><td><strong>Note</strong></td><td>Standard MIDI note on/off.</td></tr>
+        <tr><td><strong>CC</strong></td><td>Control Change message.</td></tr>
+        <tr><td><strong>PrGC</strong></td><td>Program Change on press.</td></tr>
+        <tr><td><strong>AFtt</strong></td><td>Channel Aftertouch.</td></tr>
+        <tr><td><strong>Off</strong></td><td>Button disabled.</td></tr>
+    </table>
+
+    <h3>Button Modes</h3>
+    <table>
+        <tr><th>Mode</th><th>Description</th></tr>
+        <tr><td><strong>Momentary</strong></td><td>Upper on press, Lower on release.</td></tr>
+        <tr><td><strong>Toggle</strong></td><td>Alternates between Upper and Lower.</td></tr>
+        <tr><td><strong>Step</strong></td><td>Increments through range.</td></tr>
+    </table>
+
+    <h3>Fader Types</h3>
+    <table>
+        <tr><th>Type</th><th>Description</th></tr>
+        <tr><td><strong>CCAb</strong></td><td>Absolute CC. Standard fader mode.</td></tr>
+        <tr><td><strong>PrGC</strong></td><td>Program Change across range.</td></tr>
+        <tr><td><strong>Pbnd</strong></td><td>Pitch Bend.</td></tr>
+        <tr><td><strong>AFtt</strong></td><td>Channel Aftertouch.</td></tr>
+    </table>
+
+    <hr>
+
+    <h2>Getting More Help</h2>
+    <ul>
+        <li><strong>[? Guide]</strong> button in editor → Opens this guide</li>
+        <li><strong><a href="HOWTO.md">HOWTO.md</a></strong> → Practical workflow examples</li>
+        <li><strong><a href="SPECIFICATION.md">SPECIFICATION.md</a></strong> → Technical details</li>
+        <li><strong>UC4 Manual</strong> → Official Faderfox documentation</li>
+    </ul>
+
 </body>
 </html>

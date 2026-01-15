@@ -8,7 +8,7 @@ Practical workflows for common UC4 configuration tasks.
 
 ### First Time Setup
 
-1. **Open the editor** — Load `uc4-editor.html` in your browser
+1. **Open the editor** — Load `index.html` in your browser
 2. **Factory defaults load** — Editor is immediately usable
 3. **Optional:** Import your existing UC4 dump to edit your actual config
 
@@ -46,7 +46,18 @@ Practical workflows for common UC4 configuration tasks.
 
 ### Change MIDI Channel for All Controls in a Group
 
-**Using Copy/Paste:**
+**Using Quick Paste (fastest):**
+1. Switch to **Overview** mode → **Encoders** tab
+2. Press **Q** to enable Quick Paste
+3. Click **Column** scope
+4. Set **Ch** multiplier to **+1**
+5. Click any cell in Group 1 (copies column)
+6. Click Group 2 column header → pastes with Ch+1
+7. Repeat for Groups 3-8
+
+**Time:** ~30 seconds
+
+**Using Context Menu:**
 1. Switch to **Overview** mode
 2. Click the **Encoders** tab
 3. Right-click any cell in the target group column
@@ -56,13 +67,12 @@ Practical workflows for common UC4 configuration tasks.
 7. Set Channel offset (e.g., +1)
 8. Paste to: **Entire column**
 9. Click **Paste**
-10. Repeat for Push, Green, Faders tabs
 
 **Time:** ~2 minutes
 
 ### Set Up Sequential CCs (1, 2, 3... 8)
 
-**Using Auto-Increment:**
+**Using Context Menu:**
 1. **Overview** → select control type tab
 2. Click first cell (e.g., Encoder 1, Group 1)
 3. Right-click → **Copy Control**
@@ -77,17 +87,67 @@ Result: CC 1, 2, 3, 4, 5, 6, 7, 8
 
 **Goal:** Group 1 = Ch1, Group 2 = Ch2, etc.
 
-1. Set up Group 1 exactly how you want it
+**Using Quick Paste:**
+1. Set up Group 1 exactly how you want
 2. **Overview** → **Encoders** tab
-3. Right-click Group 1, Encoder 1 → **Copy Column**
-4. For each Group 2-8:
-   - Right-click Group N, Row 1
-   - **Paste Special...**
-   - Channel offset: `+(N-1)` (e.g., +1 for Group 2)
-   - Paste to: Entire column
-5. Repeat for Push, Green, Faders
+3. Press **Q** → select **Column** scope
+4. Set **Ch** to **+1**, **CC** to **0**
+5. Click any cell in Group 1 (copies)
+6. Click Groups 2-8 in sequence (each gets Ch offset)
+7. Repeat for other control type tabs
 
-**Time:** ~5 minutes for complete setup
+**Time:** ~1 minute for complete setup
+
+### Label Your Setups
+
+1. Click **[Manage Setups]** button
+2. Select a setup (click the number)
+3. Click **[Label]** button
+4. Enter a name (e.g., "Synth", "Drums", "FX")
+5. Labels appear in the setup dropdown
+
+**Tip:** Labels are stored in the editor only (not in SysEx).
+
+### Copy an Entire Setup
+
+1. Click **[Manage Setups]**
+2. Select the source setup
+3. Click **[Copy]**
+4. Select destination setup(s)
+5. Click **Copy**
+6. Optionally copy the label too
+
+### Swap Two Setups
+
+1. Click **[Manage Setups]**
+2. Select both setups (Ctrl+click)
+3. Click **[Swap]**
+4. Confirm swap
+
+### Reset a Setup to Factory Defaults
+
+1. Click **[Manage Setups]**
+2. Select the setup(s) to reset
+3. Click **[Reset]**
+4. Confirm reset
+
+**Note:** This restores all 264 controls to factory_default.syx values.
+
+### Export a Single Setup
+
+1. Click **[Manage Setups]**
+2. Select exactly one setup
+3. Click **[Export]**
+4. Enter filename
+5. Save JSON file
+
+### Import to a Specific Setup Slot
+
+1. Click **[Manage Setups]**
+2. Click **[Import]**
+3. Select single-setup JSON file
+4. Choose target slot
+5. Click **Import**
 
 ### Find All Conflicts
 
@@ -110,6 +170,58 @@ Result: CC 1, 2, 3, 4, 5, 6, 7, 8
 
 ---
 
+## Quick Paste Guide
+
+Quick Paste is the fastest way to copy/paste in Overview mode.
+
+### Enable Quick Paste
+
+- Press **Q** key, or
+- Click **Mode** buttons in the Quick Paste toolbar
+
+### Workflow
+
+1. **Q** → Enable Quick Paste (starts in Copy mode)
+2. **Select scope**: Cell (1), Column (2), or Row (3)
+3. **Click source** → Copies and switches to Paste mode
+4. **Click targets** → Pastes with offsets
+5. **Q** again → Exit Quick Paste
+
+### Channel/CC Multipliers
+
+The **Ch** and **CC** dropdowns apply offsets based on group difference:
+
+| Source | Target | Ch=+1 | CC=0 |
+|--------|--------|-------|------|
+| G1 | G2 | Ch + 1 | CC + 0 |
+| G1 | G3 | Ch + 2 | CC + 0 |
+| G1 | G5 | Ch + 4 | CC + 0 |
+
+**Example:** Source is G1 Ch1 CC64. Paste to G3 with Ch=+1, CC=0:
+- Result: Ch3 CC64 (group diff = 2, so channel offset = 2×1 = 2)
+
+### Visual Feedback
+
+- **Green highlight**: Source cells
+- **Cyan outline on hover**: Paste preview
+- **Toast messages**: Confirm each paste
+
+---
+
+## Tooltips
+
+Hover over any parameter label or dropdown option to see explanations.
+
+### Examples
+
+| Hover Target | Tooltip |
+|--------------|---------|
+| **Chan** label | MIDI channel (1-16). Controls which channel receives encoder messages. |
+| **CCr1** option | Relative mode 1. Sends 1 for clockwise, 127 for counter-clockwise. Best for Ableton, Bitwig. |
+| **Acc** label | Acceleration sensitivity. Higher values = faster response to quick turns. |
+
+---
+
 ## Navigation Tips
 
 ### Focused View
@@ -117,12 +229,14 @@ Result: CC 1, 2, 3, 4, 5, 6, 7, 8
 - Shows one group at a time (per domain)
 - Best for detailed editing
 - Section order: Faders → Green → Encoders → Push → Fader 9
+- Hover over labels for contextual help
 
 ### Overview Mode
 
 - Shows all 8 groups simultaneously
 - Best for comparison and bulk operations
 - Tabs: **All** | Encoders | Push | Green | Faders
+- Quick Paste toolbar appears above grid
 
 ### Link Groups 🔗
 
@@ -145,6 +259,7 @@ When unchecked:
 | Escape | Clear selection |
 | Ctrl+C | Copy selected |
 | Ctrl+V | Paste to selected |
+| Q | Toggle Quick Paste |
 
 ---
 
@@ -183,6 +298,7 @@ When unchecked:
 - Every edit is tracked
 - Rapid edits to same field are coalesced (combined)
 - Batch operations (paste to row/column) = single undo step
+- Setup Manager operations are fully undoable
 
 ### Shortcuts
 
@@ -213,7 +329,7 @@ On page load, if unsaved session exists:
 ┌─────────────────────────────────────────┐
 │  Restore Previous Session?              │
 │                                         │
-│  Found session from: Jan 11, 8:45 PM    │
+│  Found session from: Jan 15, 8:45 PM    │
 │                                         │
 │  [Discard]              [Restore]       │
 └─────────────────────────────────────────┘
@@ -225,6 +341,41 @@ On page load, if unsaved session exists:
 - After Export JSON
 - After Import (new file)
 - After clicking Discard
+
+---
+
+## Setup Manager Workflows
+
+### Organize Setups by Project
+
+1. Import your UC4 dump
+2. Open Setup Manager
+3. Label setups: "Studio", "Live Show", "Recording"
+4. Use Copy to duplicate a template setup
+5. Export JSON as backup
+
+### Create Template Setup
+
+1. Configure Setup 1 as your ideal starting point
+2. Open Setup Manager
+3. Select Setup 1
+4. Copy to Setups 2-8
+5. Modify each copy as needed
+
+### Reset After Experimentation
+
+1. Open Setup Manager
+2. Select the setup(s) you messed up
+3. Click Reset
+4. Factory defaults restored
+
+### Share Setup with Bandmate
+
+1. Open Setup Manager
+2. Select the setup to share
+3. Click Export
+4. Send the JSON file
+5. They import using Setup Manager → Import
 
 ---
 
@@ -254,12 +405,12 @@ git diff my-setup.json  # See exactly what changed
 git commit -m "Changed encoders to Ch2"
 ```
 
-### JSON Structure
+### JSON Structure (Full Export)
 
 ```json
 {
   "version": 1,
-  "exportDate": "2026-01-11T20:00:00Z",
+  "exportDate": "2026-01-15T20:00:00Z",
   "setups": [
     {
       "index": 0,
@@ -267,17 +418,7 @@ git commit -m "Changed encoders to Ch2"
         {
           "index": 0,
           "name": "GrP1",
-          "encoders": [
-            {
-              "channel": 1,
-              "type": 2,
-              "cc": 1,
-              "min": 0,
-              "max": 127,
-              "acc": 1,
-              "display": 1
-            }
-          ],
+          "encoders": [...],
           "pushButtons": [...],
           "greenButtons": [...],
           "faders": [...],
@@ -286,6 +427,19 @@ git commit -m "Changed encoders to Ch2"
       ]
     }
   ]
+}
+```
+
+### JSON Structure (Single Setup)
+
+```json
+{
+  "format": "uc4-editor-setup",
+  "version": "1.0",
+  "exported": "2026-01-15T12:00:00Z",
+  "sourceSetup": 0,
+  "label": "Synth",
+  "groups": [...]
 }
 ```
 
@@ -333,6 +487,13 @@ Use filter chips to show only Concurrent.
 2. Reduce browser tabs
 3. Hard refresh (Ctrl+Shift+R)
 
+### Quick Paste Not Working
+
+**Check:**
+1. Are you in Overview mode? (Quick Paste only works there)
+2. Press Q to toggle — check the toolbar state
+3. Make sure you've clicked a source cell first
+
 ---
 
 ## Quick Reference
@@ -343,6 +504,16 @@ IMPORT/EXPORT
   [Export SysEx]     Save .syx for UC4
   [Import JSON]      Load human-readable backup
   [Export JSON]      Save human-readable backup
+
+SETUP MANAGER
+  [Manage Setups]    Open Setup Manager
+  [Label]            Name a setup
+  [Clear]            Zero out a setup
+  [Copy]             Duplicate setup data
+  [Swap]             Exchange two setups
+  [Reset]            Restore factory defaults
+  [Export]           Save single setup JSON
+  [Import]           Load single setup JSON
 
 NAVIGATION
   Setup [01-18]      Select setup to edit
@@ -359,6 +530,12 @@ OVERVIEW TABS
   [Green Buttons]    8×8 green grid
   [Faders]           8×8 fader grid + fader9
 
+QUICK PASTE
+  Q                  Toggle Quick Paste
+  1 / 2 / 3          Cell / Column / Row scope
+  Ch dropdown        Channel offset multiplier
+  CC dropdown        CC offset multiplier
+
 CONFLICT FILTERS
   [✓ Concurrent]     Show/hide serious conflicts
   [Mutually-Excl]    Show/hide cross-group conflicts
@@ -368,6 +545,7 @@ KEYBOARD
   Ctrl+Y             Redo
   Ctrl+C             Copy (Overview)
   Ctrl+V             Paste (Overview)
+  Q                  Quick Paste mode
   Arrows             Navigate grid
   Enter              Jump to Focused
   Escape             Clear selection
