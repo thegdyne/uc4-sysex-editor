@@ -379,6 +379,96 @@ On page load, if unsaved session exists:
 
 ---
 
+## Setup Library
+
+Browse and import pre-built configurations from the community library.
+
+### Open the Library
+
+1. Click **[Import]** dropdown
+2. Select **Browse Library...**
+
+### Browse Configs
+
+The library shows available configurations as cards with:
+- **Name** and setup count (1 setup or 18 setups)
+- **Description** of what it maps
+- **Device** it's designed for
+- **Tags** for filtering
+
+### Search and Filter
+
+- **Search box** — Type to filter by name or description
+- **Device dropdown** — Filter by target device (Elektron, Korg, etc.)
+- **Tag chips** — Click tags to filter (AND logic when multiple selected)
+
+### Preview a Config
+
+1. Click **[Preview]** on any card
+2. Editor enters **read-only preview mode**:
+   - Yellow banner shows "Preview: Config Name"
+   - All controls disabled (can't edit)
+   - Your current work is preserved
+3. Navigate around to inspect the config
+4. Click **[Close Preview]** to return to library
+
+**Tip:** Preview lets you check group names, CC mappings, and channel assignments before committing.
+
+### Import a Config
+
+**From Preview:**
+1. While previewing, click **[Import This Config]**
+2. Select target slot(s)
+3. Click **[Import]**
+
+**Direct Import:**
+1. Click **[Import]** on the card (skips preview)
+2. Select target slot(s)
+3. Click **[Import]**
+
+### Import Options
+
+**Single Setup (1 setup):**
+- Select any of the 18 slots
+- Optionally apply the config's label
+
+**Full Config (18 setups):**
+- Replaces ALL 18 setups
+- Choose: Import labels or keep existing
+
+**Partial Config (2-17 setups):**
+- Select starting slot
+- Fills consecutive slots
+
+### After Import
+
+- Imported data is immediately active
+- **Ctrl+Z** to undo the entire import
+- Group names from the config are preserved
+- Export SysEx to send to your UC4
+
+---
+
+### Library Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| Escape | Close library modal |
+| Tab | Move between controls |
+| Arrow Up/Down | Navigate between cards |
+| Enter | Import focused card |
+
+---
+
+### Available Configs
+
+| Config | Device | Setups | Description |
+|--------|--------|--------|-------------|
+| Elektron Digitakt II Complete | Elektron Digitakt | 18 | Full mapping for DT2 with per-track groups |
+| Generic CC Sequential | Generic | 1 | Simple template with CC 1-8, 9-17, 20-35 |
+
+*More configs added over time*
+
 ## JSON Workflow
 
 ### Why Use JSON?
