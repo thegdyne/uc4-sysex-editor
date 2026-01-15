@@ -1,0 +1,371 @@
+{
+  "format": "uc4-editor-setup",
+  "version": "1.0.0",
+  "exportedBy": {
+    "app": "uc4-sysex-editor",
+    "version": "1.0.0"
+  },
+  "label": "SeqCC",
+  "groups": [
+    {
+      "index": 0,
+      "name": "Grp1",
+      "encoders": [
+        { "channel": 1, "type": 0, "cc": 1, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 2, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 3, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 4, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 5, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 6, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 7, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 8, "min": 0, "max": 127, "acc": 3, "display": 1 }
+      ],
+      "pushButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 20, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 21, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 22, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 23, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 24, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 25, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 26, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 27, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "greenButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 28, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 29, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 30, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 31, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 32, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 33, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 34, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 35, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "faders": [
+        { "channel": 1, "type": 0, "cc": 9, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 10, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 11, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 12, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 13, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 14, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 15, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 16, "min": 0, "max": 127, "display": 1 }
+      ],
+      "fader9": { "channel": 1, "type": 0, "cc": 17, "min": 0, "max": 127, "display": 1 }
+    },
+    {
+      "index": 1,
+      "name": "Grp2",
+      "encoders": [
+        { "channel": 1, "type": 0, "cc": 1, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 2, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 3, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 4, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 5, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 6, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 7, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 8, "min": 0, "max": 127, "acc": 3, "display": 1 }
+      ],
+      "pushButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 20, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 21, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 22, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 23, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 24, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 25, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 26, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 27, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "greenButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 28, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 29, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 30, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 31, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 32, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 33, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 34, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 35, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "faders": [
+        { "channel": 1, "type": 0, "cc": 9, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 10, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 11, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 12, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 13, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 14, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 15, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 16, "min": 0, "max": 127, "display": 1 }
+      ],
+      "fader9": { "channel": 1, "type": 0, "cc": 17, "min": 0, "max": 127, "display": 1 }
+    },
+    {
+      "index": 2,
+      "name": "Grp3",
+      "encoders": [
+        { "channel": 1, "type": 0, "cc": 1, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 2, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 3, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 4, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 5, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 6, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 7, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 8, "min": 0, "max": 127, "acc": 3, "display": 1 }
+      ],
+      "pushButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 20, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 21, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 22, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 23, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 24, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 25, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 26, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 27, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "greenButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 28, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 29, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 30, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 31, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 32, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 33, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 34, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 35, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "faders": [
+        { "channel": 1, "type": 0, "cc": 9, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 10, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 11, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 12, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 13, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 14, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 15, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 16, "min": 0, "max": 127, "display": 1 }
+      ],
+      "fader9": { "channel": 1, "type": 0, "cc": 17, "min": 0, "max": 127, "display": 1 }
+    },
+    {
+      "index": 3,
+      "name": "Grp4",
+      "encoders": [
+        { "channel": 1, "type": 0, "cc": 1, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 2, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 3, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 4, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 5, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 6, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 7, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 8, "min": 0, "max": 127, "acc": 3, "display": 1 }
+      ],
+      "pushButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 20, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 21, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 22, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 23, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 24, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 25, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 26, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 27, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "greenButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 28, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 29, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 30, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 31, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 32, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 33, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 34, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 35, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "faders": [
+        { "channel": 1, "type": 0, "cc": 9, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 10, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 11, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 12, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 13, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 14, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 15, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 16, "min": 0, "max": 127, "display": 1 }
+      ],
+      "fader9": { "channel": 1, "type": 0, "cc": 17, "min": 0, "max": 127, "display": 1 }
+    },
+    {
+      "index": 4,
+      "name": "Grp5",
+      "encoders": [
+        { "channel": 1, "type": 0, "cc": 1, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 2, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 3, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 4, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 5, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 6, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 7, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 8, "min": 0, "max": 127, "acc": 3, "display": 1 }
+      ],
+      "pushButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 20, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 21, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 22, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 23, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 24, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 25, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 26, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 27, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "greenButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 28, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 29, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 30, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 31, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 32, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 33, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 34, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 35, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "faders": [
+        { "channel": 1, "type": 0, "cc": 9, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 10, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 11, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 12, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 13, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 14, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 15, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 16, "min": 0, "max": 127, "display": 1 }
+      ],
+      "fader9": { "channel": 1, "type": 0, "cc": 17, "min": 0, "max": 127, "display": 1 }
+    },
+    {
+      "index": 5,
+      "name": "Grp6",
+      "encoders": [
+        { "channel": 1, "type": 0, "cc": 1, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 2, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 3, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 4, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 5, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 6, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 7, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 8, "min": 0, "max": 127, "acc": 3, "display": 1 }
+      ],
+      "pushButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 20, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 21, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 22, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 23, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 24, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 25, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 26, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 27, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "greenButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 28, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 29, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 30, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 31, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 32, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 33, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 34, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 35, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "faders": [
+        { "channel": 1, "type": 0, "cc": 9, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 10, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 11, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 12, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 13, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 14, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 15, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 16, "min": 0, "max": 127, "display": 1 }
+      ],
+      "fader9": { "channel": 1, "type": 0, "cc": 17, "min": 0, "max": 127, "display": 1 }
+    },
+    {
+      "index": 6,
+      "name": "Grp7",
+      "encoders": [
+        { "channel": 1, "type": 0, "cc": 1, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 2, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 3, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 4, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 5, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 6, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 7, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 8, "min": 0, "max": 127, "acc": 3, "display": 1 }
+      ],
+      "pushButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 20, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 21, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 22, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 23, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 24, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 25, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 26, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 27, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "greenButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 28, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 29, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 30, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 31, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 32, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 33, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 34, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 35, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "faders": [
+        { "channel": 1, "type": 0, "cc": 9, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 10, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 11, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 12, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 13, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 14, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 15, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 16, "min": 0, "max": 127, "display": 1 }
+      ],
+      "fader9": { "channel": 1, "type": 0, "cc": 17, "min": 0, "max": 127, "display": 1 }
+    },
+    {
+      "index": 7,
+      "name": "Grp8",
+      "encoders": [
+        { "channel": 1, "type": 0, "cc": 1, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 2, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 3, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 4, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 5, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 6, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 7, "min": 0, "max": 127, "acc": 3, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 8, "min": 0, "max": 127, "acc": 3, "display": 1 }
+      ],
+      "pushButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 20, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 21, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 22, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 23, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 24, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 25, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 26, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 27, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "greenButtons": [
+        { "channel": 1, "typeNibble": 16, "cc": 28, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 29, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 30, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 31, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 32, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 33, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 34, "lower": 0, "upper": 127, "mode": 0, "display": 1 },
+        { "channel": 1, "typeNibble": 16, "cc": 35, "lower": 0, "upper": 127, "mode": 0, "display": 1 }
+      ],
+      "faders": [
+        { "channel": 1, "type": 0, "cc": 9, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 10, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 11, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 12, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 13, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 14, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 15, "min": 0, "max": 127, "display": 1 },
+        { "channel": 1, "type": 0, "cc": 16, "min": 0, "max": 127, "display": 1 }
+      ],
+      "fader9": { "channel": 1, "type": 0, "cc": 17, "min": 0, "max": 127, "display": 1 }
+    }
+  ]
+}

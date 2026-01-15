@@ -1,0 +1,85 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-01-15T21:30:00.000Z",
+  "devices": [
+    { "id": "generic", "name": "Generic", "count": 2 },
+    { "id": "ableton-live", "name": "Ableton Live", "count": 1 },
+    { "id": "elektron-digitakt", "name": "Elektron Digitakt", "count": 1 }
+  ],
+  "tags": [
+    { "tag": "ableton", "count": 1 },
+    { "tag": "complete", "count": 1 },
+    { "tag": "daw", "count": 1 },
+    { "tag": "drum-machine", "count": 1 },
+    { "tag": "elektron", "count": 1 },
+    { "tag": "minimal", "count": 1 },
+    { "tag": "performance", "count": 2 },
+    { "tag": "template", "count": 2 }
+  ],
+  "entries": [
+    {
+      "id": "elektron-digitakt2-full",
+      "name": "Elektron Digitakt II Complete",
+      "author": "thegdyne",
+      "description": "Full 18-setup configuration for Digitakt II. Each setup maps to a track (1-8) with encoders for filter, amp, LFO controls. Groups provide different parameter pages per track.",
+      "deviceId": "elektron-digitakt",
+      "device": "Elektron Digitakt",
+      "tags": ["elektron", "drum-machine", "complete", "performance"],
+      "file": "configs/elektron-digitakt2-full.json",
+      "format": "uc4-editor",
+      "setupCount": 18,
+      "contentHash": "sha256-6dc9c840622a61873c65ebfeb896290b8a64b42bf41dd0f663bc5f670944ef9f",
+      "minEditorVersion": "1.0.0",
+      "created": "2026-01-15T21:30:00.000Z",
+      "updated": "2026-01-15T21:30:00.000Z"
+    },
+    {
+      "id": "generic-cc-sequential",
+      "name": "Generic CC Sequential",
+      "author": "thegdyne",
+      "description": "Simple starting template with sequential CC numbers. Encoders CC 1-8, faders CC 9-17, buttons CC 20-35. Great for quick DAW mappings.",
+      "deviceId": "generic",
+      "device": "Generic",
+      "tags": ["template", "minimal"],
+      "file": "configs/generic-cc-sequential.json",
+      "format": "uc4-editor-setup",
+      "setupCount": 1,
+      "contentHash": "sha256-63ec93fabf911e67aa8ef24ad0bb3af9f1bd54f1bcbb2b2f1940ddc0f66b0a23",
+      "minEditorVersion": "1.0.0",
+      "created": "2026-01-15T00:00:00.000Z",
+      "updated": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "generic-channel-per-group",
+      "name": "Generic Channel Per Group",
+      "author": "thegdyne",
+      "description": "Each of the 8 groups uses a different MIDI channel (1-8). All controls use CC 1-17 within their group's channel. Useful for multi-timbral setups.",
+      "deviceId": "generic",
+      "device": "Generic",
+      "tags": ["template"],
+      "file": "configs/generic-channel-per-group.json",
+      "format": "uc4-editor-setup",
+      "setupCount": 1,
+      "contentHash": "sha256-0000000000000000000000000000000000000000000000000000000000000002",
+      "minEditorVersion": "1.0.0",
+      "created": "2026-01-15T00:00:00.000Z",
+      "updated": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "ableton-live-extended",
+      "name": "Ableton Live Extended",
+      "author": "thegdyne",
+      "description": "Extended mapping for Ableton Live. Faders control track volumes, encoders for sends and pan, buttons for clip launch and transport.",
+      "deviceId": "ableton-live",
+      "device": "Ableton Live",
+      "tags": ["ableton", "daw", "performance"],
+      "file": "configs/ableton-live-extended.json",
+      "format": "uc4-editor-setup",
+      "setupCount": 1,
+      "contentHash": "sha256-0000000000000000000000000000000000000000000000000000000000000003",
+      "minEditorVersion": "1.0.0",
+      "created": "2026-01-15T00:00:00.000Z",
+      "updated": "2026-01-15T00:00:00.000Z"
+    }
+  ]
+}

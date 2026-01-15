@@ -1128,7 +1128,7 @@
         }
         
         .section-title::after {
-            content: '—';
+            content: '│';
             margin-left: 0.75rem;
             color: var(--border);
             font-weight: 300;
@@ -1993,6 +1993,572 @@
             color: var(--error);
             margin-top: 0.25rem;
         }
+        
+        /* Import Dropdown Menu */
+        .import-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .import-dropdown-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .import-dropdown-btn::after {
+            content: '▾';
+            font-size: 0.6rem;
+            opacity: 0.7;
+        }
+        
+        .import-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 2px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            min-width: 160px;
+            z-index: 1001;
+            display: none;
+        }
+        
+        .import-dropdown.open .import-dropdown-menu {
+            display: block;
+        }
+        
+        .import-dropdown-item {
+            padding: 0.6rem 0.8rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: var(--text);
+            white-space: nowrap;
+        }
+        
+        .import-dropdown-item:hover {
+            background: var(--bg-control);
+            color: var(--accent);
+        }
+        
+        .import-dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0.25rem 0;
+        }
+        
+        /* Library Modal */
+        .library-modal {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .library-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .library-close {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .library-close:hover {
+            color: var(--text);
+        }
+        
+        .library-filters {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .library-search {
+            display: flex;
+            align-items: center;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .library-search input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        
+        .library-search-icon {
+            color: var(--text-muted);
+            margin-right: 0.5rem;
+        }
+        
+        .library-search-clear {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0 0.25rem;
+            display: none;
+        }
+        
+        .library-search-clear.visible {
+            display: block;
+        }
+        
+        .library-search-clear:hover {
+            color: var(--text);
+        }
+        
+        .library-filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .library-filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .library-filter-group label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+        
+        .library-filter-group select {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.75rem;
+            padding: 0.35rem 0.5rem;
+            cursor: pointer;
+        }
+        
+        .library-tag-chips {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .library-tag-chip {
+            background: var(--bg-control);
+            border: 1px solid var(--border);
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
+        
+        .library-tag-chip.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-dark);
+        }
+        
+        .library-tag-chip:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+        
+        .library-tag-chip .remove {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .library-tag-chip:hover .remove {
+            opacity: 1;
+        }
+        
+        .library-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.5rem;
+        }
+        
+        .library-loading,
+        .library-error,
+        .library-empty {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-dim);
+        }
+        
+        .library-error {
+            color: var(--error);
+        }
+        
+        .library-retry-btn {
+            margin-top: 1rem;
+        }
+        
+        .library-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .library-card {
+            background: var(--bg-control);
+            border: 1px solid var(--border);
+            padding: 1rem;
+        }
+        
+        .library-card:hover {
+            border-color: var(--border-light);
+        }
+        
+        .library-card:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+            border-color: var(--accent);
+        }
+        
+        .library-card:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        
+        .library-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        
+        .library-card-title {
+            font-size: 0.9rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        .library-card-badge {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background: var(--bg-input);
+            padding: 0.15rem 0.4rem;
+        }
+        
+        .library-card-desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+        
+        .library-card-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+        
+        .library-card-tags {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+        
+        .library-card-tag {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            background: var(--bg-input);
+            padding: 0.1rem 0.35rem;
+        }
+        
+        .library-card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+        
+        .library-card-actions .btn {
+            font-size: 0.7rem;
+            padding: 0.4rem 0.75rem;
+        }
+        
+        /* Library keyboard navigation and focus styles */
+        .library-card:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        
+        .library-card:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        
+        .library-tag-chip:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+        
+        .library-tag-chip:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+        
+        .library-search input:focus {
+            outline: none;
+        }
+        
+        .library-search:focus-within {
+            border-color: var(--accent);
+        }
+        
+        .library-footer {
+            padding: 0.75rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+        
+        .library-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .library-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Share Dialog */
+        .share-dialog {
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .share-dialog h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .share-field {
+            margin-bottom: 1rem;
+        }
+        
+        .share-field label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+        
+        .share-field input,
+        .share-field select,
+        .share-field textarea {
+            width: 100%;
+            padding: 0.5rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+        
+        .share-field input:focus,
+        .share-field select:focus,
+        .share-field textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .share-field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .share-field .char-count {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+        
+        .share-field .char-count.warning {
+            color: var(--warning);
+        }
+        
+        .share-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .share-tag {
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.15s;
+        }
+        
+        .share-tag:hover {
+            border-color: var(--accent);
+        }
+        
+        .share-tag.selected {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+        
+        .share-tag-count {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+        }
+        
+        .share-source {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+        
+        .share-source-label {
+            color: var(--text-dim);
+            margin-bottom: 0.25rem;
+        }
+        
+        /* Library loading spinner */
+        .library-spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Preview Mode Banner */
+        .preview-banner {
+            background: linear-gradient(90deg, #1a3a4a 0%, #0d2530 100%);
+            border: 1px solid #2a5a6a;
+            border-left: 4px solid var(--warning);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .preview-banner-icon {
+            color: var(--warning);
+            font-size: 1.1rem;
+        }
+        
+        .preview-banner-title {
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .preview-banner-subtitle {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+        
+        .preview-banner-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .preview-banner-actions .btn {
+            font-size: 0.75rem;
+        }
+        
+        /* Disabled state for preview mode */
+        body.preview-mode .file-actions .btn:not(.preview-allowed),
+        body.preview-mode .nav-bar select,
+        body.preview-mode .nav-bar .btn,
+        body.preview-mode .group-tabs button,
+        body.preview-mode .group-name-display,
+        body.preview-mode .focused-inline-group-selector .selector-tab,
+        body.preview-mode .focused-inline-group-selector .group-name-badge {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        
+        body.preview-mode .control-input,
+        body.preview-mode .control-select,
+        body.preview-mode .control-card input,
+        body.preview-mode .control-card select,
+        body.preview-mode .encoder-row input,
+        body.preview-mode .encoder-row select,
+        body.preview-mode .fader-row input,
+        body.preview-mode .fader-row select,
+        body.preview-mode .btn-row input,
+        body.preview-mode .btn-row select,
+        body.preview-mode .main-content input,
+        body.preview-mode .main-content select {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        /* aria-live regions */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
     </style>
 </head>
 <body>
@@ -2021,10 +2587,17 @@
         </div>
         <div class="file-actions">
             <input type="file" id="sysexInput" accept=".syx" class="hidden-input">
-            <button class="btn" onclick="document.getElementById('sysexInput').click()">Import SysEx</button>
-            <button class="btn" id="exportBtn" onclick="exportSysEx()" disabled>Export SysEx</button>
             <input type="file" id="jsonInput" accept=".json" class="hidden-input">
-            <button class="btn" onclick="document.getElementById('jsonInput').click()">Import JSON</button>
+            <div class="import-dropdown" id="importDropdown">
+                <button class="btn import-dropdown-btn" onclick="toggleImportDropdown(event)">Import</button>
+                <div class="import-dropdown-menu">
+                    <div class="import-dropdown-item" onclick="document.getElementById('sysexInput').click(); closeImportDropdown();">Import SysEx</div>
+                    <div class="import-dropdown-item" onclick="document.getElementById('jsonInput').click(); closeImportDropdown();">Import JSON</div>
+                    <div class="import-dropdown-divider"></div>
+                    <div class="import-dropdown-item" onclick="openLibraryModal(); closeImportDropdown();">Browse Library...</div>
+                </div>
+            </div>
+            <button class="btn" id="exportBtn" onclick="exportSysEx()" disabled>Export SysEx</button>
             <button class="btn" id="exportJsonBtn" onclick="exportJSON()" disabled>Export JSON</button>
             <span class="btn-divider"></span>
             <button class="btn" id="undoBtn" onclick="undo()" disabled title="Undo (Ctrl+Z)">↶ Undo</button>
@@ -2113,6 +2686,14 @@
         const differsFromFactoryCache = new Map();  // Map<setupIdx, boolean>
         let dirtySinceLoad = false;
         
+        // Preview Mode State
+        let previewBuffer = null;
+        let previewMode = false;
+        let previewEntry = null;  // Library entry being previewed
+        let previewConfigData = null;  // Parsed config data for import
+        const previewLabels = new Map();  // Same convention as setupLabels
+        let prePreviewState = null;  // Saved UI state before preview
+        
         // Factory Ableton Setup Detection
         // These hashes identify factory SE17/SE18 (Ableton configs) by their snapshot content
         // Generated from factory_default.syx - if a loaded setup matches, auto-label "Ableton"
@@ -2186,6 +2767,26 @@
         const SESSION_VERSION = 1;
         const AUTO_SAVE_DELAY = 2000; // 2 seconds
         let autoSaveTimer = null;
+        
+        // Version Constants (for Library compatibility)
+        const CURRENT_EDITOR_VERSION = '1.2.0';
+        const SUPPORTED_SCHEMA_VERSION = '1.0.0';
+        
+        // Setup Library State
+        const LIBRARY_BASE_URL = 'library';  // Relative path for GitHub Pages
+        const LIBRARY_FETCH_TIMEOUT = 10000; // 10 seconds
+        let libraryModalOpen = false;
+        let libraryState = {
+            index: null,
+            searchText: '',
+            deviceFilter: '',
+            tagFilters: [],
+            scrollPosition: 0
+        };
+        const libraryCache = {
+            index: null,
+            configs: new Map()  // key: `${id}:${contentHash}` -> { json, text, hashVerified, fetchedAt }
+        };
         
         // Conflict Detection State
         const CONFLICT_REBUILD_DELAY = 200; // 200ms
@@ -2317,9 +2918,9 @@
         const NON_CANONICAL_GLYPHS = {
             33: '-',  // dash (verified: glyph_dash.syx)
             34: '_',  // underscore/lowbar (verified: glyph_lowbar.syx)
-            35: 'Ã¢Å’Ë†Ã‚Â',  // segment: top-left
-            36: 'Ã¢Ë†Ë†Ã‚Â',  // segment: two top verticals
-            37: 'Ã¢Å’Ë†Ã…Â ',  // segment: two bottom horizontals
+            35: 'ÃƒÂ¢Ã…â€™Ã‹â€ Ãƒâ€šÃ‚Â',  // segment: top-left
+            36: 'ÃƒÂ¢Ã‹â€ Ã‹â€ Ãƒâ€šÃ‚Â',  // segment: two top verticals
+            37: 'ÃƒÂ¢Ã…â€™Ã‹â€ Ãƒâ€¦Ã‚Â ',  // segment: two bottom horizontals
             38: ' '   // space variant (verified: glyph_blank.syx, Ableton RAC_/PAn_)
         };
         
@@ -2484,7 +3085,7 @@
                 // Display modes (shared global group)
                 'display.OFF': "Display disabled. 7-segment shows nothing when this control is active.",
                 'display.Std': "Standard display. Shows current value 0-127 on the 7-segment. Factory default.",
-                'display.bPoL': "Bipolar display. Shows value as Â±63, centered at 64. Good for pan or bipolar parameters.",
+                'display.bPoL': "Bipolar display. Shows value as Ã‚Â±63, centered at 64. Good for pan or bipolar parameters.",
                 
                 // Fader modes (shared by faders 1-8 and fader 9)
                 'faderMode.Jump': "Immediate response. Sends current position when moved. May cause value jumps.",
@@ -2622,6 +3223,15 @@
             }
         }
         
+        // Buffer and label accessors for preview mode
+        function getActiveBuffer() {
+            return previewMode ? previewBuffer : rawBuffer;
+        }
+        
+        function getActiveLabels() {
+            return previewMode ? previewLabels : setupLabels;
+        }
+        
         function getValue(setupIdx, secId, bank, valueIdx) {
             if (!sectionIndex) return null;
             
@@ -2631,7 +3241,7 @@
             if (!sec) return null;
             const bnk = sec[loc.actualBank];
             if (!bnk) return null;
-            return decodeValue(rawBuffer, bnk.dataOffset, loc.actualValueIdx);
+            return decodeValue(getActiveBuffer(), bnk.dataOffset, loc.actualValueIdx);
         }
         
         function setValue(setupIdx, secId, bank, valueIdx, value) {
@@ -4751,7 +5361,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                            autocomplete="off"
                            spellcheck="false">
                     
-                    <p class="preview">UC4 will show: <span id="groupNamePreview">${escapeHtml(currentDisplay).replace(/ /g, 'Â·')}</span></p>
+                    <p class="preview">UC4 will show: <span id="groupNamePreview">${escapeHtml(currentDisplay).replace(/ /g, 'Ã‚Â·')}</span></p>
                     
                     <p class="hint">Valid: 0-9 A b C d E F G H I J L n O t P S r U Y - _ space</p>
                     <p class="error" id="groupNameError"></p>
@@ -4806,8 +5416,8 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             } else {
                 error.textContent = '';
                 saveBtn.disabled = false;
-                // Show what UC4 will actually display (Â· for spaces)
-                preview.textContent = result.display.replace(/ /g, 'Â·');
+                // Show what UC4 will actually display (Ã‚Â· for spaces)
+                preview.textContent = result.display.replace(/ /g, 'Ã‚Â·');
             }
         }
         
@@ -4962,6 +5572,10 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         }
         
         function undo() {
+            if (previewMode) {
+                showToast('Undo not available in preview', 'info');
+                return;
+            }
             if (undoStack.length === 0) return;
             
             const action = undoStack.pop();
@@ -4975,6 +5589,10 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         }
         
         function redo() {
+            if (previewMode) {
+                showToast('Redo not available in preview', 'info');
+                return;
+            }
             if (redoStack.length === 0) return;
             
             const action = redoStack.pop();
@@ -5143,6 +5761,21 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                         break;
                     }
                     
+                    case 'library-import': {
+                        const snapshots = reverse ? action.beforeSnapshots : action.afterSnapshots;
+                        for (const item of snapshots) {
+                            restoreSetupSnapshot(item.index, item.snapshot);
+                            if (item.label) {
+                                setupLabels.set(item.index, item.label);
+                            } else {
+                                setupLabels.delete(item.index);
+                            }
+                        }
+                        invalidateDiffCache(action.affectedSlots);
+                        afterSetupStateMutation(action.affectedSlots);
+                        break;
+                    }
+                    
                     case 'setup-label': {
                         const label = reverse ? action.labelBefore : action.labelAfter;
                         if (label) {
@@ -5224,6 +5857,15 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         function updateUndoRedoUI() {
             const undoBtn = document.getElementById('undoBtn');
             const redoBtn = document.getElementById('redoBtn');
+            
+            // Disable in preview mode
+            if (previewMode) {
+                undoBtn.disabled = true;
+                redoBtn.disabled = true;
+                undoBtn.title = 'Undo not available in preview';
+                redoBtn.title = 'Redo not available in preview';
+                return;
+            }
             
             undoBtn.disabled = undoStack.length === 0;
             redoBtn.disabled = redoStack.length === 0;
@@ -6149,7 +6791,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                     Copy Control
                 </div>
                 <div class="context-menu-item" onclick="copyRow('${controlType}', ${currentSetup}, ${index}); hideContextMenu();">
-                    Copy Row (${controlType === 'fader9' ? 'Fad9' : (index + 1)} Ã— 8 groups)
+                    Copy Row (${controlType === 'fader9' ? 'Fad9' : (index + 1)} Ãƒ│ 8 groups)
                 </div>
                 <div class="context-menu-item" onclick="copyColumn('${controlType}', ${currentSetup}, ${group}); hideContextMenu();">
                     Copy Column (Group ${group + 1})
@@ -8992,10 +9634,11 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             const select = document.getElementById('setupSelect');
             if (!select) return;
             
+            const labels = getActiveLabels();
             for (let i = 0; i < 18; i++) {
                 const option = select.options[i + 1]; // +1 for the "--" placeholder
                 if (option) {
-                    const label = setupLabels.get(i);
+                    const label = labels.get(i);
                     option.textContent = label ? `${i + 1}: ${label}` : `${i + 1}`;
                 }
             }
@@ -9150,6 +9793,1981 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 e.returnValue = '';
             }
         });
+        
+        // ============================================================
+        // Setup Library - Infrastructure (Phase 1)
+        // ============================================================
+        
+        // SHA-256 hash functions (per spec Appendix B)
+        
+        // For config file contentHash verification (text -> UTF-8 bytes -> hash)
+        async function hashTextUtf8(text) {
+            const data = new TextEncoder().encode(text);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+        
+        // For factory slot detection (raw bytes -> hash)
+        async function hashBytes(uint8Array) {
+            const hash = await crypto.subtle.digest('SHA-256', uint8Array);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+        
+        // Content hash verification
+        async function verifyContentHash(fetchedText, expectedHash) {
+            const computed = await hashTextUtf8(fetchedText);
+            return `sha256-${computed}` === expectedHash;
+        }
+        
+        // Version comparison utilities
+        function parseVersion(versionStr) {
+            const parts = versionStr.split('.').map(n => parseInt(n, 10));
+            return {
+                major: parts[0] || 0,
+                minor: parts[1] || 0,
+                patch: parts[2] || 0
+            };
+        }
+        
+        function compareVersions(a, b) {
+            const va = parseVersion(a);
+            const vb = parseVersion(b);
+            if (va.major !== vb.major) return va.major - vb.major;
+            if (va.minor !== vb.minor) return va.minor - vb.minor;
+            return va.patch - vb.patch;
+        }
+        
+        // Import dropdown toggle
+        function toggleImportDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('importDropdown');
+            dropdown.classList.toggle('open');
+        }
+        
+        function closeImportDropdown() {
+            const dropdown = document.getElementById('importDropdown');
+            dropdown.classList.remove('open');
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('importDropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                closeImportDropdown();
+            }
+        });
+        
+        // Path validation for library entries (per spec)
+        function validateLibraryFilePath(file) {
+            if (!file.startsWith('configs/')) return false;
+            if (!file.endsWith('.json')) return false;
+            if (file.includes('..')) return false;
+            if (file.includes('://')) return false;
+            if (file.includes('\\')) return false;
+            if (file.startsWith('/')) return false;
+            const lower = file.toLowerCase();
+            if (lower.includes('%2e') || lower.includes('%2f')) return false;
+            return true;
+        }
+        
+        // Index entry validation
+        function validateIndexEntry(entry, index) {
+            const errors = [];
+            
+            // Required fields
+            if (!entry.id || typeof entry.id !== 'string') {
+                errors.push(`Entry ${index}: missing or invalid id`);
+            }
+            if (!entry.name || typeof entry.name !== 'string' || entry.name.length < 1 || entry.name.length > 100) {
+                errors.push(`Entry ${index}: name must be 1-100 characters`);
+            }
+            if (!entry.author || typeof entry.author !== 'string' || entry.author.length < 1 || entry.author.length > 50) {
+                errors.push(`Entry ${index}: author must be 1-50 characters`);
+            }
+            if (!entry.description || typeof entry.description !== 'string' || entry.description.length < 1 || entry.description.length > 300) {
+                errors.push(`Entry ${index}: description must be 1-300 characters`);
+            }
+            
+            // Device validation
+            if (!entry.deviceId || !CANONICAL_DEVICES.some(d => d.id === entry.deviceId)) {
+                errors.push(`Entry ${index}: invalid deviceId "${entry.deviceId}"`);
+            }
+            
+            // Tags validation
+            if (!Array.isArray(entry.tags) || entry.tags.length < 1 || entry.tags.length > 5) {
+                errors.push(`Entry ${index}: tags must be array of 1-5 items`);
+            } else {
+                for (const tag of entry.tags) {
+                    if (!CANONICAL_TAGS.includes(tag)) {
+                        errors.push(`Entry ${index}: invalid tag "${tag}"`);
+                    }
+                }
+            }
+            
+            // Format validation
+            if (entry.format !== 'uc4-editor' && entry.format !== 'uc4-editor-setup') {
+                errors.push(`Entry ${index}: invalid format "${entry.format}"`);
+            }
+            
+            // setupCount validation
+            if (typeof entry.setupCount !== 'number' || entry.setupCount < 1 || entry.setupCount > 18) {
+                errors.push(`Entry ${index}: setupCount must be 1-18`);
+            }
+            
+            // File path validation
+            if (!entry.file || !validateLibraryFilePath(entry.file)) {
+                errors.push(`Entry ${index}: invalid file path "${entry.file}"`);
+            }
+            
+            // Content hash format
+            if (!entry.contentHash || !/^sha256-[0-9a-f]{64}$/.test(entry.contentHash)) {
+                errors.push(`Entry ${index}: invalid contentHash format`);
+            }
+            
+            // Dates
+            if (!entry.created || isNaN(Date.parse(entry.created))) {
+                errors.push(`Entry ${index}: invalid created date`);
+            }
+            if (!entry.updated || isNaN(Date.parse(entry.updated))) {
+                errors.push(`Entry ${index}: invalid updated date`);
+            }
+            
+            return errors;
+        }
+        
+        // Fetch with timeout
+        async function fetchWithTimeout(url, timeoutMs = LIBRARY_FETCH_TIMEOUT) {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), timeoutMs);
+            
+            try {
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeout);
+                return response;
+            } catch (e) {
+                clearTimeout(timeout);
+                if (e.name === 'AbortError') {
+                    throw new Error('Request timed out. Please try again.');
+                }
+                throw e;
+            }
+        }
+        
+        // Fetch and validate library index
+        async function fetchLibraryIndex() {
+            if (libraryCache.index) {
+                return libraryCache.index;
+            }
+            
+            const url = `${LIBRARY_BASE_URL}/index.json`;
+            const response = await fetchWithTimeout(url);
+            
+            if (!response.ok) {
+                throw new Error('Unable to load library. Check your internet connection.');
+            }
+            
+            const data = await response.json();
+            
+            // Validate index structure
+            if (!data.version || !data.entries || !Array.isArray(data.entries)) {
+                throw new Error('Invalid library index structure.');
+            }
+            
+            // Check index schema version
+            const indexVersion = parseVersion(data.version);
+            const supportedVersion = parseVersion(SUPPORTED_SCHEMA_VERSION);
+            if (indexVersion.major !== supportedVersion.major) {
+                throw new Error(`Unsupported library index version ${data.version}. This editor supports ${SUPPORTED_SCHEMA_VERSION.split('.')[0]}.x.`);
+            }
+            
+            // Validate all entries
+            const allErrors = [];
+            const validEntries = [];
+            
+            for (let i = 0; i < data.entries.length; i++) {
+                const entry = data.entries[i];
+                const errors = validateIndexEntry(entry, i);
+                if (errors.length > 0) {
+                    console.warn('Library entry validation errors:', errors);
+                    // Skip invalid entries but continue
+                } else {
+                    validEntries.push(entry);
+                }
+            }
+            
+            // Compute device and tag counts from validated entries
+            const deviceCounts = new Map();
+            const tagCounts = new Map();
+            
+            for (const entry of validEntries) {
+                deviceCounts.set(entry.deviceId, (deviceCounts.get(entry.deviceId) || 0) + 1);
+                for (const tag of entry.tags) {
+                    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+                }
+            }
+            
+            // Build computed device list with counts
+            const computedDevices = [];
+            for (const device of CANONICAL_DEVICES) {
+                const count = deviceCounts.get(device.id);
+                if (count) {
+                    computedDevices.push({ ...device, count });
+                }
+            }
+            computedDevices.sort((a, b) => a.name.localeCompare(b.name));
+            
+            // Build computed tag list with counts
+            const computedTags = [];
+            for (const tag of CANONICAL_TAGS) {
+                const count = tagCounts.get(tag);
+                if (count) {
+                    computedTags.push({ tag, count });
+                }
+            }
+            computedTags.sort((a, b) => a.tag.localeCompare(b.tag));
+            
+            // Check for declared vs computed discrepancies (log warning only)
+            if (data.devices && data.tags) {
+                const declaredDeviceIds = new Set(data.devices.map(d => d.id));
+                const computedDeviceIds = new Set(computedDevices.map(d => d.id));
+                const declaredTagSet = new Set(data.tags.map(t => t.tag));
+                const computedTagSet = new Set(computedTags.map(t => t.tag));
+                
+                if (declaredDeviceIds.size !== computedDeviceIds.size || 
+                    declaredTagSet.size !== computedTagSet.size) {
+                    console.warn('Library index: declared device/tag lists differ from entry-derived lists');
+                }
+            }
+            
+            const processedIndex = {
+                version: data.version,
+                generated: data.generated,
+                entries: validEntries,
+                devices: computedDevices,
+                tags: computedTags
+            };
+            
+            libraryCache.index = processedIndex;
+            return processedIndex;
+        }
+        
+        // Get cache key for config
+        function getConfigCacheKey(entry) {
+            return `${entry.id}:${entry.contentHash}`;
+        }
+        
+        // Fetch config file with hash verification
+        async function fetchLibraryConfig(entry) {
+            const cacheKey = getConfigCacheKey(entry);
+            const cached = libraryCache.configs.get(cacheKey);
+            
+            if (cached) {
+                return cached;
+            }
+            
+            const url = `${LIBRARY_BASE_URL}/${entry.file}`;
+            const response = await fetchWithTimeout(url);
+            
+            if (!response.ok) {
+                throw new Error(`Unable to load '${entry.name}'.`);
+            }
+            
+            // Get raw text for hash verification (do NOT re-serialize)
+            const text = await response.text();
+            
+            // Parse JSON
+            let json;
+            try {
+                json = JSON.parse(text);
+            } catch (e) {
+                throw new Error('Configuration file is corrupted.');
+            }
+            
+            // Verify content hash
+            const hashValid = await verifyContentHash(text, entry.contentHash);
+            
+            const configData = {
+                json,
+                text,
+                hashVerified: hashValid,
+                fetchedAt: Date.now()
+            };
+            
+            libraryCache.configs.set(cacheKey, configData);
+            return configData;
+        }
+        
+        // Version compatibility checks (per spec)
+        function checkSchemaCompatibility(configVersion) {
+            const config = parseVersion(configVersion);
+            const supported = parseVersion(SUPPORTED_SCHEMA_VERSION);
+            
+            if (config.major !== supported.major) {
+                return {
+                    allowed: false,
+                    message: `Unsupported configuration schema version ${config.major}.x. This editor supports ${supported.major}.x.`
+                };
+            }
+            
+            if (config.minor > supported.minor) {
+                return {
+                    allowed: true,
+                    info: 'Config uses newer schema features'
+                };
+            }
+            
+            return { allowed: true };
+        }
+        
+        function checkEditorMinVersion(minVersion) {
+            const min = minVersion || '1.0.0';
+            if (compareVersions(CURRENT_EDITOR_VERSION, min) < 0) {
+                return {
+                    allowed: false,
+                    message: `This configuration requires editor version ${min} or later.`
+                };
+            }
+            return { allowed: true };
+        }
+        
+        // Library modal open/close
+        function openLibraryModal() {
+            libraryModalOpen = true;
+            renderLibraryModal();
+        }
+        
+        function closeLibraryModal() {
+            // Save scroll position before closing
+            const content = document.getElementById('libraryContent');
+            if (content) {
+                libraryState.scrollPosition = content.scrollTop;
+            }
+            
+            libraryModalOpen = false;
+            const modal = document.getElementById('libraryModal');
+            if (modal) {
+                // Clean up event listeners
+                if (modal._cleanup) modal._cleanup();
+                modal.remove();
+            }
+        }
+        
+        // Render library modal (basic structure for Phase 1)
+        function renderLibraryModal() {
+            // Remove existing modal if any
+            const existing = document.getElementById('libraryModal');
+            if (existing) existing.remove();
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.id = 'libraryModal';
+            overlay.setAttribute('role', 'dialog');
+            overlay.setAttribute('aria-modal', 'true');
+            overlay.setAttribute('aria-labelledby', 'libraryTitle');
+            
+            overlay.innerHTML = `
+                <div class="library-modal">
+                    <div class="library-header">
+                        <h2 id="libraryTitle">Setup Library</h2>
+                        <button class="library-close" onclick="closeLibraryModal()" aria-label="Close">&times;</button>
+                    </div>
+                    <div class="library-filters">
+                        <div class="library-search">
+                            <span class="library-search-icon">&#128269;</span>
+                            <input type="text" id="librarySearchInput" placeholder="Search configs..." 
+                                   value="${escapeHtml(libraryState.searchText)}"
+                                   oninput="handleLibrarySearch(this.value)">
+                            <button class="library-search-clear ${libraryState.searchText ? 'visible' : ''}" 
+                                    onclick="clearLibrarySearch()">&times;</button>
+                        </div>
+                        <div class="library-filter-row">
+                            <div class="library-filter-group">
+                                <label>Device:</label>
+                                <select id="libraryDeviceFilter" onchange="handleLibraryDeviceFilter(this.value)">
+                                    <option value="">All Devices</option>
+                                </select>
+                            </div>
+                            <div class="library-filter-group">
+                                <label>Tags:</label>
+                                <div class="library-tag-chips" id="libraryTagChips">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="library-content" id="libraryContent">
+                        <div class="library-loading">
+                            <div class="library-spinner"></div>
+                            <div>Loading library...</div>
+                        </div>
+                    </div>
+                    <div class="library-footer">
+                        <span id="libraryResultCount">Loading...</span>
+                    </div>
+                </div>
+                <div class="sr-only" aria-live="polite" id="libraryLiveRegion"></div>
+                <div class="sr-only" aria-live="assertive" id="libraryErrorRegion"></div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            // Close on overlay click
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeLibraryModal();
+            });
+            
+            // Focus trap and keyboard navigation
+            const handleKeydown = (e) => {
+                if (!libraryModalOpen) return;
+                
+                if (e.key === 'Escape') {
+                    closeLibraryModal();
+                    document.removeEventListener('keydown', handleKeydown);
+                    return;
+                }
+                
+                // Focus trap
+                if (e.key === 'Tab') {
+                    const modal = document.querySelector('.library-modal');
+                    if (!modal) return;
+                    
+                    const focusables = modal.querySelectorAll(
+                        'button, [href], input, select, [tabindex]:not([tabindex="-1"])'
+                    );
+                    if (focusables.length === 0) return;
+                    
+                    const first = focusables[0];
+                    const last = focusables[focusables.length - 1];
+                    
+                    if (e.shiftKey && document.activeElement === first) {
+                        e.preventDefault();
+                        last.focus();
+                    } else if (!e.shiftKey && document.activeElement === last) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                }
+            };
+            document.addEventListener('keydown', handleKeydown);
+            
+            // Store cleanup function
+            overlay._cleanup = () => {
+                document.removeEventListener('keydown', handleKeydown);
+            };
+            
+            // Focus search input
+            setTimeout(() => {
+                const searchInput = document.getElementById('librarySearchInput');
+                if (searchInput) searchInput.focus();
+            }, 50);
+            
+            // Load index
+            loadLibraryIndex();
+        }
+        
+        // Load and display library index
+        async function loadLibraryIndex() {
+            const content = document.getElementById('libraryContent');
+            const liveRegion = document.getElementById('libraryLiveRegion');
+            
+            try {
+                const index = await fetchLibraryIndex();
+                libraryState.index = index;
+                
+                // Populate device filter dropdown
+                populateLibraryFilters(index);
+                
+                // Render entries
+                renderLibraryEntries(index.entries);
+                
+                if (liveRegion) {
+                    liveRegion.textContent = `Loaded ${index.entries.length} configurations`;
+                }
+                
+            } catch (error) {
+                console.error('Library load error:', error);
+                if (content) {
+                    content.innerHTML = `
+                        <div class="library-error">
+                            <div>${escapeHtml(error.message)}</div>
+                            <button class="btn library-retry-btn" onclick="loadLibraryIndex()">Retry</button>
+                        </div>
+                    `;
+                }
+                if (liveRegion) {
+                    liveRegion.textContent = 'Failed to load library';
+                }
+                const errorRegion = document.getElementById('libraryErrorRegion');
+                if (errorRegion) {
+                    errorRegion.textContent = error.message;
+                }
+            }
+        }
+        
+        // Populate filter dropdowns
+        function populateLibraryFilters(index) {
+            const deviceSelect = document.getElementById('libraryDeviceFilter');
+            const tagChips = document.getElementById('libraryTagChips');
+            
+            if (deviceSelect) {
+                deviceSelect.innerHTML = '<option value="">All Devices</option>';
+                for (const device of index.devices) {
+                    const option = document.createElement('option');
+                    option.value = device.id;
+                    option.textContent = `${device.name} (${device.count})`;
+                    if (device.id === libraryState.deviceFilter) {
+                        option.selected = true;
+                    }
+                    deviceSelect.appendChild(option);
+                }
+            }
+            
+            if (tagChips) {
+                tagChips.innerHTML = '';
+                for (const tagInfo of index.tags) {
+                    const chip = document.createElement('span');
+                    chip.className = 'library-tag-chip';
+                    chip.setAttribute('tabindex', '0');
+                    chip.setAttribute('role', 'checkbox');
+                    chip.setAttribute('aria-checked', libraryState.tagFilters.includes(tagInfo.tag) ? 'true' : 'false');
+                    if (libraryState.tagFilters.includes(tagInfo.tag)) {
+                        chip.classList.add('active');
+                    }
+                    chip.textContent = `${tagInfo.tag} (${tagInfo.count})`;
+                    chip.onclick = () => toggleLibraryTag(tagInfo.tag);
+                    chip.onkeydown = (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            toggleLibraryTag(tagInfo.tag);
+                        }
+                    };
+                    tagChips.appendChild(chip);
+                }
+            }
+        }
+        
+        // Render library entries
+        function renderLibraryEntries(entries) {
+            const content = document.getElementById('libraryContent');
+            const countEl = document.getElementById('libraryResultCount');
+            
+            if (!content) return;
+            
+            // Apply filters
+            let filtered = entries;
+            
+            // Search filter
+            if (libraryState.searchText) {
+                const search = libraryState.searchText.toLowerCase();
+                filtered = filtered.filter(e => 
+                    e.name.toLowerCase().includes(search) ||
+                    e.description.toLowerCase().includes(search) ||
+                    e.author.toLowerCase().includes(search) ||
+                    e.device.toLowerCase().includes(search)
+                );
+            }
+            
+            // Device filter
+            if (libraryState.deviceFilter) {
+                filtered = filtered.filter(e => e.deviceId === libraryState.deviceFilter);
+            }
+            
+            // Tag filters (AND logic)
+            if (libraryState.tagFilters.length > 0) {
+                filtered = filtered.filter(e => 
+                    libraryState.tagFilters.every(tag => e.tags.includes(tag))
+                );
+            }
+            
+            // Update count
+            if (countEl) {
+                countEl.textContent = `Showing ${filtered.length} of ${entries.length} configs`;
+            }
+            
+            // Restore scroll position
+            if (libraryState.scrollPosition > 0) {
+                setTimeout(() => {
+                    if (content) content.scrollTop = libraryState.scrollPosition;
+                }, 0);
+            }
+            
+            // Empty state
+            if (filtered.length === 0) {
+                content.innerHTML = `
+                    <div class="library-empty">
+                        <div>No configs match your filters</div>
+                        <button class="btn" style="margin-top: 1rem;" onclick="clearLibraryFilters()">Clear Filters</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Render cards
+            content.innerHTML = '<div class="library-cards"></div>';
+            const cards = content.querySelector('.library-cards');
+            
+            for (const entry of filtered) {
+                const card = document.createElement('div');
+                card.className = 'library-card';
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'article');
+                card.setAttribute('aria-label', `${entry.name} by ${entry.author}, ${entry.setupCount} setup${entry.setupCount === 1 ? '' : 's'}`);
+                
+                // Keyboard navigation
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.target.matches('button')) {
+                        importLibraryEntry(entry.id);
+                    }
+                    // Arrow key navigation between cards
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        const cards = Array.from(document.querySelectorAll('.library-card'));
+                        const currentIndex = cards.indexOf(card);
+                        let nextIndex;
+                        if (e.key === 'ArrowDown') {
+                            nextIndex = currentIndex < cards.length - 1 ? currentIndex + 1 : 0;
+                        } else {
+                            nextIndex = currentIndex > 0 ? currentIndex - 1 : cards.length - 1;
+                        }
+                        cards[nextIndex].focus();
+                    }
+                });
+                
+                card.innerHTML = `
+                    <div class="library-card-header">
+                        <span class="library-card-title">${escapeHtml(entry.name)}</span>
+                        <span class="library-card-badge">${entry.setupCount} ${entry.setupCount === 1 ? 'setup' : 'setups'}</span>
+                    </div>
+                    <div class="library-card-desc">${escapeHtml(truncateText(entry.description, 150))}</div>
+                    <div class="library-card-meta">by ${escapeHtml(entry.author)} &middot; ${escapeHtml(entry.device)}</div>
+                    <div class="library-card-tags">
+                        ${entry.tags.map(t => `<span class="library-card-tag">${escapeHtml(t)}</span>`).join('')}
+                    </div>
+                    <div class="library-card-actions">
+                        <button class="btn" onclick="previewLibraryEntry('${escapeHtml(entry.id)}')">Preview</button>
+                        <button class="btn btn-primary" onclick="importLibraryEntry('${escapeHtml(entry.id)}')">Import</button>
+                    </div>
+                `;
+                cards.appendChild(card);
+            }
+        }
+        
+        // Filter handlers
+        let librarySearchDebounce = null;
+        
+        function handleLibrarySearch(value) {
+            clearTimeout(librarySearchDebounce);
+            librarySearchDebounce = setTimeout(() => {
+                libraryState.searchText = value;
+                const clearBtn = document.querySelector('.library-search-clear');
+                if (clearBtn) {
+                    clearBtn.classList.toggle('visible', !!value);
+                }
+                if (libraryState.index) {
+                    renderLibraryEntries(libraryState.index.entries);
+                }
+            }, 300);
+        }
+        
+        function clearLibrarySearch() {
+            libraryState.searchText = '';
+            const input = document.getElementById('librarySearchInput');
+            if (input) input.value = '';
+            const clearBtn = document.querySelector('.library-search-clear');
+            if (clearBtn) clearBtn.classList.remove('visible');
+            if (libraryState.index) {
+                renderLibraryEntries(libraryState.index.entries);
+            }
+        }
+        
+        function handleLibraryDeviceFilter(value) {
+            libraryState.deviceFilter = value;
+            if (libraryState.index) {
+                renderLibraryEntries(libraryState.index.entries);
+            }
+        }
+        
+        function toggleLibraryTag(tag) {
+            const idx = libraryState.tagFilters.indexOf(tag);
+            if (idx >= 0) {
+                libraryState.tagFilters.splice(idx, 1);
+            } else {
+                libraryState.tagFilters.push(tag);
+            }
+            // Re-render tag chips to show active state
+            if (libraryState.index) {
+                populateLibraryFilters(libraryState.index);
+                renderLibraryEntries(libraryState.index.entries);
+            }
+        }
+        
+        function clearLibraryFilters() {
+            libraryState.searchText = '';
+            libraryState.deviceFilter = '';
+            libraryState.tagFilters = [];
+            
+            const input = document.getElementById('librarySearchInput');
+            if (input) input.value = '';
+            
+            const select = document.getElementById('libraryDeviceFilter');
+            if (select) select.value = '';
+            
+            if (libraryState.index) {
+                populateLibraryFilters(libraryState.index);
+                renderLibraryEntries(libraryState.index.entries);
+            }
+        }
+        
+        // ============================================================
+        // Preview Mode (Phase 3)
+        // ============================================================
+        
+        async function previewLibraryEntry(entryId) {
+            if (!libraryState.index) return;
+            
+            const entry = libraryState.index.entries.find(e => e.id === entryId);
+            if (!entry) {
+                showToast('Config not found', 'error');
+                return;
+            }
+            
+            // Close library modal
+            closeLibraryModal();
+            
+            try {
+                // Fetch config
+                const configResult = await fetchLibraryConfig(entry);
+                
+                // Check hash
+                if (!configResult.hashVerified) {
+                    const proceed = await showHashMismatchDialog();
+                    if (!proceed) {
+                        openLibraryModal();
+                        return;
+                    }
+                }
+                
+                // Validate config structure
+                const validation = validateConfigForPreview(configResult.json, entry);
+                if (!validation.valid) {
+                    showToast(validation.error, 'error');
+                    openLibraryModal();
+                    return;
+                }
+                
+                // Check version compatibility
+                const schemaCheck = checkSchemaCompatibility(configResult.json.version);
+                if (!schemaCheck.allowed) {
+                    showToast(schemaCheck.message, 'error');
+                    openLibraryModal();
+                    return;
+                }
+                
+                const editorCheck = checkEditorMinVersion(entry.minEditorVersion);
+                if (!editorCheck.allowed) {
+                    showToast(editorCheck.message, 'error');
+                    openLibraryModal();
+                    return;
+                }
+                
+                // Enter preview mode
+                enterPreviewMode(entry, configResult.json);
+                
+                if (schemaCheck.info) {
+                    showToast(schemaCheck.info, 'info');
+                }
+                
+            } catch (error) {
+                console.error('Preview error:', error);
+                showToast(error.message || 'Failed to load config', 'error');
+                openLibraryModal();
+            }
+        }
+        
+        function validateConfigForPreview(config, entry) {
+            // Check format
+            if (config.format !== 'uc4-editor' && config.format !== 'uc4-editor-setup') {
+                return { valid: false, error: 'Invalid configuration format.' };
+            }
+            
+            // Check exportedBy
+            if (!config.exportedBy || config.exportedBy.app !== 'uc4-sysex-editor') {
+                return { valid: false, error: 'Configuration missing required metadata.' };
+            }
+            
+            // Check version
+            if (!config.version) {
+                return { valid: false, error: 'Configuration missing version.' };
+            }
+            
+            if (config.format === 'uc4-editor-setup') {
+                // Single setup
+                if (!Array.isArray(config.groups) || config.groups.length !== 8) {
+                    return { valid: false, error: 'Invalid structure: expected 8 groups.' };
+                }
+                if (entry.setupCount !== 1) {
+                    return { valid: false, error: 'Index mismatch: setupCount must be 1 for single-setup format.' };
+                }
+            } else {
+                // Full config
+                if (!Array.isArray(config.setups) || config.setups.length === 0) {
+                    return { valid: false, error: 'Invalid structure: no setups found.' };
+                }
+                if (config.setups.length !== entry.setupCount) {
+                    return { valid: false, error: `Index mismatch: expected ${entry.setupCount} setups, found ${config.setups.length}.` };
+                }
+                // Check contiguous indices
+                for (let i = 0; i < config.setups.length; i++) {
+                    if (config.setups[i].index !== i) {
+                        return { valid: false, error: 'Invalid structure: setup indices must be sequential from 0.' };
+                    }
+                }
+            }
+            
+            return { valid: true };
+        }
+        
+        function enterPreviewMode(entry, configData) {
+            // Save current UI state
+            prePreviewState = {
+                currentSetup,
+                encoderGroup,
+                faderGroup,
+                currentView,
+                overviewTab: typeof overviewTab !== 'undefined' ? overviewTab : 'encoders'
+            };
+            
+            // Create preview buffer from current rawBuffer or factory defaults
+            const EXPECTED_SIZE = 100640;
+            previewBuffer = new Uint8Array(EXPECTED_SIZE);
+            if (rawBuffer) {
+                previewBuffer.set(rawBuffer);
+            }
+            
+            // Clear preview labels
+            previewLabels.clear();
+            
+            // Apply config data to preview buffer
+            if (configData.format === 'uc4-editor-setup') {
+                applyGroupsToPreviewBuffer(0, configData.groups);
+                if (configData.label) {
+                    previewLabels.set(0, configData.label);
+                }
+            } else {
+                for (const setup of configData.setups) {
+                    applyGroupsToPreviewBuffer(setup.index, setup.groups);
+                }
+                if (configData.labels) {
+                    configData.labels.forEach((label, i) => {
+                        if (label) previewLabels.set(i, label);
+                    });
+                }
+            }
+            
+            // Set preview state
+            previewMode = true;
+            previewEntry = entry;
+            previewConfigData = configData;
+            
+            // Navigate to first setup in config
+            if (configData.format === 'uc4-editor-setup') {
+                currentSetup = 0;
+            } else {
+                currentSetup = configData.setups[0].index;
+            }
+            encoderGroup = 0;
+            faderGroup = 0;
+            
+            // Update UI
+            document.body.classList.add('preview-mode');
+            renderPreviewBanner();
+            updateUndoRedoUI();
+            renderCurrentView();
+            updateSetupDropdownLabels();
+            
+            showToast(`Previewing: ${entry.name}`, 'info');
+        }
+        
+        function applyGroupsToPreviewBuffer(setupIdx, groups) {
+            // This writes directly to previewBuffer using low-level encode
+            for (const group of groups) {
+                const g = group.index;
+                
+                // Apply encoders
+                if (group.encoders) {
+                    for (let i = 0; i < 8; i++) {
+                        if (group.encoders[i]) {
+                            applyEncoderToPreviewBuffer(setupIdx, g, i, group.encoders[i]);
+                        }
+                    }
+                }
+                
+                // Apply push buttons
+                if (group.pushButtons) {
+                    for (let i = 0; i < 8; i++) {
+                        if (group.pushButtons[i]) {
+                            applyPushToPreviewBuffer(setupIdx, g, i, group.pushButtons[i]);
+                        }
+                    }
+                }
+                
+                // Apply green buttons
+                if (group.greenButtons) {
+                    for (let i = 0; i < 8; i++) {
+                        if (group.greenButtons[i]) {
+                            applyGreenToPreviewBuffer(setupIdx, g, i, group.greenButtons[i]);
+                        }
+                    }
+                }
+                
+                // Apply faders
+                if (group.faders) {
+                    for (let i = 0; i < 8; i++) {
+                        if (group.faders[i]) {
+                            applyFaderToPreviewBuffer(setupIdx, g, i, group.faders[i]);
+                        }
+                    }
+                }
+                
+                // Apply fader9
+                if (group.fader9) {
+                    applyFader9ToPreviewBuffer(setupIdx, g, group.fader9);
+                }
+                
+                // Apply group name
+                if (group.name) {
+                    applyGroupNameToPreviewBuffer(setupIdx, g, group.name);
+                }
+            }
+        }
+        
+        // Low-level preview buffer writers (mirror the setXXXData functions but write to previewBuffer)
+        function setPreviewValue(setupIdx, secId, bank, valueIdx, value) {
+            if (!sectionIndex) return;
+            const loc = computeActualLocation(setupIdx, secId, bank, valueIdx);
+            const sec = sectionIndex[loc.actualSecId];
+            if (!sec) return;
+            const bnk = sec[loc.actualBank];
+            if (!bnk) return;
+            encodeValue(previewBuffer, bnk.dataOffset, loc.actualValueIdx, value);
+        }
+        
+        function applyEncoderToPreviewBuffer(setupIdx, group, enc, data) {
+            const idx = group * 8 + enc;
+            const chanType = ((data.type & 0x0F) << 4) | ((data.channel - 1) & 0x0F);
+            const accDisp = ((data.acc & 0x0F) << 4) | (data.display & 0x0F);
+            setPreviewValue(setupIdx, 0x1C, 0x00, idx, chanType);
+            setPreviewValue(setupIdx, 0x1C, 0x40, idx, data.cc || data.number || 0);
+            setPreviewValue(setupIdx, 0x1C, 0x80, idx, data.min || 0);
+            setPreviewValue(setupIdx, 0x1C, 0xC0, idx, data.max !== undefined ? data.max : 127);
+            setPreviewValue(setupIdx, 0x1D, 0x00, idx, accDisp);
+        }
+        
+        function applyPushToPreviewBuffer(setupIdx, group, btn, data) {
+            const idx = group * 8 + btn;
+            const chanType = ((data.type & 0x0F) << 4) | ((data.channel - 1) & 0x0F);
+            setPreviewValue(setupIdx, 0x1E, 0x00, idx, chanType);
+            setPreviewValue(setupIdx, 0x1E, 0x40, idx, data.number || 0);
+            setPreviewValue(setupIdx, 0x1E, 0x80, idx, data.lower || 0);
+            setPreviewValue(setupIdx, 0x1E, 0xC0, idx, data.upper !== undefined ? data.upper : 127);
+        }
+        
+        function applyGreenToPreviewBuffer(setupIdx, group, btn, data) {
+            const idx = group * 8 + btn;
+            const chanType = ((data.type & 0x0F) << 4) | ((data.channel - 1) & 0x0F);
+            setPreviewValue(setupIdx, 0x1F, 0x00, idx, chanType);
+            setPreviewValue(setupIdx, 0x1F, 0x40, idx, data.number || 0);
+            setPreviewValue(setupIdx, 0x1F, 0x80, idx, data.lower || 0);
+            setPreviewValue(setupIdx, 0x1F, 0xC0, idx, data.upper !== undefined ? data.upper : 127);
+        }
+        
+        function applyFaderToPreviewBuffer(setupIdx, group, fader, data) {
+            const idx = group * 8 + fader;
+            const chanType = ((data.type & 0x0F) << 4) | ((data.channel - 1) & 0x0F);
+            setPreviewValue(setupIdx, 0x20, 0x00, idx, chanType);
+            setPreviewValue(setupIdx, 0x20, 0x40, idx, data.cc || data.number || 0);
+            setPreviewValue(setupIdx, 0x20, 0x80, idx, data.min || 0);
+            setPreviewValue(setupIdx, 0x20, 0xC0, idx, data.max !== undefined ? data.max : 127);
+        }
+        
+        function applyFader9ToPreviewBuffer(setupIdx, group, data) {
+            const chanType = ((data.type & 0x0F) << 4) | ((data.channel - 1) & 0x0F);
+            setPreviewValue(setupIdx, 0x21, 0x00, group, chanType);
+            setPreviewValue(setupIdx, 0x21, 0x40, group, data.cc || data.number || 0);
+            setPreviewValue(setupIdx, 0x21, 0x80, group, data.min || 0);
+            setPreviewValue(setupIdx, 0x21, 0xC0, group, data.max !== undefined ? data.max : 127);
+        }
+        
+        function applyGroupNameToPreviewBuffer(setupIdx, group, name) {
+            const result = stringToGroupNameValues(name);
+            if (result.error) return;
+            
+            const baseIdx = setupIdx * 8 + group;
+            for (let i = 0; i < 4; i++) {
+                setPreviewValue(0, 0x1B, i * 0x40, baseIdx, result.values[i]);
+            }
+        }
+        
+        function renderPreviewBanner() {
+            // Remove existing banner
+            const existing = document.getElementById('previewBanner');
+            if (existing) existing.remove();
+            
+            if (!previewMode || !previewEntry) return;
+            
+            const banner = document.createElement('div');
+            banner.id = 'previewBanner';
+            banner.className = 'preview-banner';
+            banner.innerHTML = `
+                <div class="preview-banner-text">
+                    <span class="preview-banner-icon">&#9888;</span>
+                    <span>
+                        <span class="preview-banner-title">Preview: ${escapeHtml(previewEntry.name)}</span>
+                        <span class="preview-banner-subtitle"> &mdash; Read-only preview</span>
+                    </span>
+                </div>
+                <div class="preview-banner-actions">
+                    <button class="btn" onclick="exitPreviewMode()">Close Preview</button>
+                    <button class="btn btn-primary" onclick="importFromPreview()">Import This Config</button>
+                </div>
+            `;
+            
+            // Insert after header
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                mainContent.parentNode.insertBefore(banner, mainContent);
+            }
+        }
+        
+        function exitPreviewMode() {
+            if (!previewMode) return;
+            
+            // Restore UI state
+            if (prePreviewState) {
+                currentSetup = prePreviewState.currentSetup;
+                encoderGroup = prePreviewState.encoderGroup;
+                faderGroup = prePreviewState.faderGroup;
+                currentView = prePreviewState.currentView;
+                if (typeof overviewTab !== 'undefined') {
+                    overviewTab = prePreviewState.overviewTab;
+                }
+            }
+            
+            // Clear preview state
+            previewBuffer = null;
+            previewMode = false;
+            previewEntry = null;
+            previewConfigData = null;
+            previewLabels.clear();
+            prePreviewState = null;
+            
+            // Update UI
+            document.body.classList.remove('preview-mode');
+            const banner = document.getElementById('previewBanner');
+            if (banner) banner.remove();
+            
+            updateUndoRedoUI();
+            renderCurrentView();
+            updateSetupDropdownLabels();
+            
+            // Reopen library modal
+            openLibraryModal();
+        }
+        
+        function importFromPreview() {
+            if (!previewMode || !previewEntry || !previewConfigData) {
+                showToast('No preview active', 'error');
+                return;
+            }
+            
+            // Store entry/config for import dialog
+            const entry = previewEntry;
+            const configData = previewConfigData;
+            
+            // Exit preview mode first
+            previewBuffer = null;
+            previewMode = false;
+            previewEntry = null;
+            previewConfigData = null;
+            previewLabels.clear();
+            prePreviewState = null;
+            document.body.classList.remove('preview-mode');
+            const banner = document.getElementById('previewBanner');
+            if (banner) banner.remove();
+            
+            // Show import dialog (Phase 4)
+            showImportDialog(entry, configData);
+        }
+        
+        async function showHashMismatchDialog() {
+            return new Promise((resolve) => {
+                const overlay = document.createElement('div');
+                overlay.className = 'modal-overlay';
+                overlay.innerHTML = `
+                    <div class="modal-dialog">
+                        <h3>&#9888; Content Verification Failed</h3>
+                        <p>The configuration file doesn't match the expected content. This could indicate:</p>
+                        <ul style="margin: 0.5rem 0 1rem 1.5rem; font-size: 0.85rem; color: var(--text-dim);">
+                            <li>File updated but index wasn't</li>
+                            <li>Network corruption</li>
+                            <li>File tampering</li>
+                        </ul>
+                        <p>Do you want to continue anyway?</p>
+                        <div class="modal-actions">
+                            <button class="btn" id="hashCancelBtn">Cancel</button>
+                            <button class="btn btn-primary" id="hashContinueBtn">Continue</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(overlay);
+                
+                overlay.querySelector('#hashCancelBtn').onclick = () => {
+                    overlay.remove();
+                    resolve(false);
+                };
+                
+                overlay.querySelector('#hashContinueBtn').onclick = () => {
+                    overlay.remove();
+                    resolve(true);
+                };
+            });
+        }
+        
+        // Placeholder for Phase 4
+        function showImportDialog(entry, configData) {
+            const setupCount = configData.format === 'uc4-editor-setup' ? 1 : configData.setups.length;
+            
+            // Determine which dialog type
+            if (setupCount === 1) {
+                showSingleSetupImportDialog(entry, configData);
+            } else if (setupCount === 18) {
+                showFullImportDialog(entry, configData);
+            } else {
+                showPartialImportDialog(entry, configData, setupCount);
+            }
+        }
+        
+        function showSingleSetupImportDialog(entry, configData) {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.id = 'libraryImportOverlay';
+            
+            // Check if source has a label
+            const sourceLabel = configData.label || '';
+            const hasSourceLabel = sourceLabel.length > 0;
+            
+            overlay.innerHTML = `
+                <div class="modal-dialog" style="max-width: 400px;">
+                    <h3>Import: ${escapeHtml(entry.name)}</h3>
+                    <p style="margin-bottom: 1rem;">Select target setup slot:</p>
+                    <div class="setup-subdialog-grid" id="importSlotGrid"></div>
+                    ${hasSourceLabel ? `
+                        <label class="setup-subdialog-checkbox" style="margin-top: 1rem;">
+                            <input type="checkbox" id="importLabelCheckbox" checked>
+                            Apply label "${escapeHtml(sourceLabel)}"
+                        </label>
+                    ` : ''}
+                    <div class="modal-actions" style="margin-top: 1.5rem;">
+                        <button class="btn" onclick="closeLibraryImportDialog()">Cancel</button>
+                        <button class="btn btn-primary" id="importConfirmBtn" disabled>Import</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            // Store state
+            overlay._entry = entry;
+            overlay._configData = configData;
+            overlay._selectedSlot = null;
+            
+            // Render slot grid
+            renderImportSlotGrid();
+            
+            // Wire up confirm button
+            document.getElementById('importConfirmBtn').onclick = () => {
+                performLibrarySingleImport();
+            };
+        }
+        
+        function renderImportSlotGrid() {
+            const grid = document.getElementById('importSlotGrid');
+            if (!grid) return;
+            
+            const overlay = document.getElementById('libraryImportOverlay');
+            
+            let html = '';
+            for (let i = 0; i < 18; i++) {
+                const label = setupLabels.get(i);
+                const hasLabel = label && label.length > 0;
+                const isFactory = differsFromFactory(i) === false && !hasLabel;
+                
+                let indicator = '';
+                if (hasLabel) indicator = '&#9642;'; // ▪
+                else if (isFactory) indicator = '&#9670;'; // ◆
+                
+                const selected = overlay._selectedSlot === i ? 'selected' : '';
+                
+                html += `<div class="setup-subdialog-item ${selected}" data-slot="${i}" onclick="selectImportSlot(${i})">
+                    ${i + 1}${indicator}
+                </div>`;
+            }
+            
+            grid.innerHTML = html;
+        }
+        
+        function selectImportSlot(slot) {
+            const overlay = document.getElementById('libraryImportOverlay');
+            if (!overlay) return;
+            
+            overlay._selectedSlot = slot;
+            renderImportSlotGrid();
+            
+            document.getElementById('importConfirmBtn').disabled = false;
+        }
+        
+        function performLibrarySingleImport() {
+            const overlay = document.getElementById('libraryImportOverlay');
+            if (!overlay || overlay._selectedSlot === null) return;
+            
+            const entry = overlay._entry;
+            const configData = overlay._configData;
+            const targetSlot = overlay._selectedSlot;
+            const importLabel = document.getElementById('importLabelCheckbox')?.checked ?? false;
+            
+            // Get source data
+            const sourceGroups = configData.groups;
+            const sourceLabel = configData.label || '';
+            
+            // Capture before state
+            const beforeSnapshot = captureSetupSnapshot(targetSlot);
+            const labelBefore = setupLabels.get(targetSlot) || null;
+            
+            // Build snapshot from source and apply
+            const importedSnapshot = {
+                groups: sourceGroups.map((g, gIdx) => ({
+                    name: g.name || `Grp${gIdx + 1}`,
+                    encoders: g.encoders,
+                    pushButtons: g.pushButtons,
+                    greenButtons: g.greenButtons,
+                    faders: g.faders,
+                    fader9: g.fader9
+                }))
+            };
+            
+            restoreSetupSnapshot(targetSlot, importedSnapshot);
+            
+            // Handle label
+            if (importLabel && sourceLabel) {
+                const sanitized = sourceLabel.slice(0, 12).replace(/[^a-zA-Z0-9 \\-_]/g, '');
+                if (sanitized) {
+                    setupLabels.set(targetSlot, sanitized);
+                } else {
+                    setupLabels.delete(targetSlot);
+                }
+            }
+            
+            // Capture after state
+            const afterSnapshot = captureSetupSnapshot(targetSlot);
+            const labelAfter = setupLabels.get(targetSlot) || null;
+            
+            // Record undo
+            recordUndo({
+                type: 'library-import',
+                description: `Import "${entry.name}" to Setup ${targetSlot + 1}`,
+                affectedSlots: [targetSlot],
+                beforeSnapshots: [{ index: targetSlot, snapshot: beforeSnapshot, label: labelBefore }],
+                afterSnapshots: [{ index: targetSlot, snapshot: afterSnapshot, label: labelAfter }]
+            });
+            
+            // Update state
+            invalidateDiffCache(targetSlot);
+            dirtySinceLoad = true;
+            markModified();
+            
+            // Close dialog and cleanup preview mode if active
+            closeLibraryImportDialog();
+            exitPreviewModeIfActive();
+            
+            refreshMainEditorIfNeeded([targetSlot]);
+            updateSetupDropdownLabels();
+            
+            showToast(`Imported to Setup ${targetSlot + 1}`, 'success');
+        }
+        
+        function showFullImportDialog(entry, configData) {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.id = 'libraryImportOverlay';
+            
+            // Check for unsaved changes
+            const modifiedSetups = [];
+            for (let i = 0; i < 18; i++) {
+                if (differsFromFactory(i)) {
+                    const label = setupLabels.get(i);
+                    modifiedSetups.push(label ? `Setup ${i + 1} (${label})` : `Setup ${i + 1}`);
+                }
+            }
+            
+            // Check if source has labels
+            const hasSourceLabels = configData.labels && configData.labels.some(l => l && l.length > 0);
+            
+            overlay.innerHTML = `
+                <div class="modal-dialog" style="max-width: 450px;">
+                    <h3>Import: ${escapeHtml(entry.name)}</h3>
+                    <p style="color: var(--warning); margin-bottom: 1rem;">
+                        &#9888; This will replace ALL 18 setups
+                    </p>
+                    ${modifiedSetups.length > 0 ? `
+                        <p style="margin-bottom: 0.5rem;">Current session has changes in:</p>
+                        <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 1rem;">
+                            ${escapeHtml(modifiedSetups.slice(0, 5).join(', '))}${modifiedSetups.length > 5 ? ` (+${modifiedSetups.length - 5} more)` : ''}
+                        </p>
+                    ` : ''}
+                    <p style="margin-bottom: 0.5rem;">Label handling:</p>
+                    <label style="display: block; margin-bottom: 0.5rem; cursor: pointer;">
+                        <input type="radio" name="labelOption" value="import" ${hasSourceLabels ? 'checked' : ''}>
+                        Import labels from config
+                    </label>
+                    <label style="display: block; margin-bottom: 1rem; cursor: pointer;">
+                        <input type="radio" name="labelOption" value="keep" ${!hasSourceLabels ? 'checked' : ''}>
+                        Keep my existing labels
+                    </label>
+                    <div class="modal-actions">
+                        <button class="btn" onclick="closeLibraryImportDialog()">Cancel</button>
+                        <button class="btn btn-primary" onclick="performLibraryFullImport()">Replace All</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            // Store state
+            overlay._entry = entry;
+            overlay._configData = configData;
+        }
+        
+        function performLibraryFullImport() {
+            const overlay = document.getElementById('libraryImportOverlay');
+            if (!overlay) return;
+            
+            const entry = overlay._entry;
+            const configData = overlay._configData;
+            const importLabels = document.querySelector('input[name="labelOption"]:checked')?.value === 'import';
+            
+            // Capture before state for all 18 setups
+            const beforeSnapshots = [];
+            for (let i = 0; i < 18; i++) {
+                beforeSnapshots.push({
+                    index: i,
+                    snapshot: captureSetupSnapshot(i),
+                    label: setupLabels.get(i) || null
+                });
+            }
+            
+            // Apply all setups
+            for (const setup of configData.setups) {
+                const targetSlot = setup.index;
+                const importedSnapshot = {
+                    groups: setup.groups.map((g, gIdx) => ({
+                        name: g.name || `Grp${gIdx + 1}`,
+                        encoders: g.encoders,
+                        pushButtons: g.pushButtons,
+                        greenButtons: g.greenButtons,
+                        faders: g.faders,
+                        fader9: g.fader9
+                    }))
+                };
+                restoreSetupSnapshot(targetSlot, importedSnapshot);
+            }
+            
+            // Handle labels
+            if (importLabels) {
+                setupLabels.clear();
+                if (configData.labels) {
+                    configData.labels.forEach((label, i) => {
+                        if (label && label.length > 0) {
+                            const sanitized = label.slice(0, 12).replace(/[^a-zA-Z0-9 \\-_]/g, '');
+                            if (sanitized) setupLabels.set(i, sanitized);
+                        }
+                    });
+                }
+            }
+            
+            // Capture after state
+            const afterSnapshots = [];
+            for (let i = 0; i < 18; i++) {
+                afterSnapshots.push({
+                    index: i,
+                    snapshot: captureSetupSnapshot(i),
+                    label: setupLabels.get(i) || null
+                });
+            }
+            
+            // Record undo
+            recordUndo({
+                type: 'library-import',
+                description: `Import "${entry.name}" (all 18 setups)`,
+                affectedSlots: Array.from({ length: 18 }, (_, i) => i),
+                beforeSnapshots,
+                afterSnapshots
+            });
+            
+            // Invalidate all caches
+            for (let i = 0; i < 18; i++) {
+                invalidateDiffCache(i);
+            }
+            dirtySinceLoad = true;
+            markModified();
+            
+            // Close and cleanup
+            closeLibraryImportDialog();
+            exitPreviewModeIfActive();
+            
+            refreshMainEditorIfNeeded(Array.from({ length: 18 }, (_, i) => i));
+            updateSetupDropdownLabels();
+            
+            showToast('Imported all 18 setups', 'success');
+        }
+        
+        function showPartialImportDialog(entry, configData, setupCount) {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.id = 'libraryImportOverlay';
+            
+            // Build dropdown options (max starting slot is 18 - setupCount)
+            const maxStart = 18 - setupCount;
+            let options = '';
+            for (let i = 0; i <= maxStart; i++) {
+                options += `<option value="${i}">${i + 1}</option>`;
+            }
+            
+            // Check if source has labels
+            const hasSourceLabels = configData.labels && configData.labels.some(l => l && l.length > 0);
+            
+            overlay.innerHTML = `
+                <div class="modal-dialog" style="max-width: 400px;">
+                    <h3>Import: ${escapeHtml(entry.name)}</h3>
+                    <p style="margin-bottom: 1rem;">
+                        Import ${setupCount} setups starting at slot:
+                        <select id="partialStartSlot" onchange="updatePartialImportPreview()" style="margin-left: 0.5rem;">
+                            ${options}
+                        </select>
+                    </p>
+                    <p id="partialSlotPreview" style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 1rem;"></p>
+                    ${hasSourceLabels ? `
+                        <label class="setup-subdialog-checkbox">
+                            <input type="checkbox" id="partialImportLabels" checked>
+                            Import labels from config
+                        </label>
+                    ` : ''}
+                    <div class="modal-actions" style="margin-top: 1.5rem;">
+                        <button class="btn" onclick="closeLibraryImportDialog()">Cancel</button>
+                        <button class="btn btn-primary" onclick="performLibraryPartialImport()">Import</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            // Store state
+            overlay._entry = entry;
+            overlay._configData = configData;
+            overlay._setupCount = setupCount;
+            
+            // Initial preview
+            updatePartialImportPreview();
+        }
+        
+        function updatePartialImportPreview() {
+            const overlay = document.getElementById('libraryImportOverlay');
+            if (!overlay) return;
+            
+            const startSlot = parseInt(document.getElementById('partialStartSlot').value);
+            const count = overlay._setupCount;
+            const endSlot = startSlot + count - 1;
+            
+            const slots = [];
+            for (let i = startSlot; i <= endSlot; i++) {
+                slots.push(i + 1);
+            }
+            
+            document.getElementById('partialSlotPreview').textContent = 
+                `This will fill slots ${slots.join(', ')}`;
+        }
+        
+        function performLibraryPartialImport() {
+            const overlay = document.getElementById('libraryImportOverlay');
+            if (!overlay) return;
+            
+            const entry = overlay._entry;
+            const configData = overlay._configData;
+            const startSlot = parseInt(document.getElementById('partialStartSlot').value);
+            const setupCount = overlay._setupCount;
+            const importLabels = document.getElementById('partialImportLabels')?.checked ?? false;
+            
+            // Capture before state
+            const beforeSnapshots = [];
+            const affectedSlots = [];
+            for (let i = 0; i < setupCount; i++) {
+                const targetSlot = startSlot + i;
+                affectedSlots.push(targetSlot);
+                beforeSnapshots.push({
+                    index: targetSlot,
+                    snapshot: captureSetupSnapshot(targetSlot),
+                    label: setupLabels.get(targetSlot) || null
+                });
+            }
+            
+            // Apply setups
+            for (let i = 0; i < setupCount; i++) {
+                const sourceSetup = configData.setups[i];
+                const targetSlot = startSlot + i;
+                
+                const importedSnapshot = {
+                    groups: sourceSetup.groups.map((g, gIdx) => ({
+                        name: g.name || `Grp${gIdx + 1}`,
+                        encoders: g.encoders,
+                        pushButtons: g.pushButtons,
+                        greenButtons: g.greenButtons,
+                        faders: g.faders,
+                        fader9: g.fader9
+                    }))
+                };
+                restoreSetupSnapshot(targetSlot, importedSnapshot);
+                
+                // Handle label for this slot
+                if (importLabels && configData.labels && configData.labels[i]) {
+                    const label = configData.labels[i];
+                    const sanitized = label.slice(0, 12).replace(/[^a-zA-Z0-9 \\-_]/g, '');
+                    if (sanitized) {
+                        setupLabels.set(targetSlot, sanitized);
+                    } else {
+                        setupLabels.delete(targetSlot);
+                    }
+                }
+            }
+            
+            // Capture after state
+            const afterSnapshots = [];
+            for (let i = 0; i < setupCount; i++) {
+                const targetSlot = startSlot + i;
+                afterSnapshots.push({
+                    index: targetSlot,
+                    snapshot: captureSetupSnapshot(targetSlot),
+                    label: setupLabels.get(targetSlot) || null
+                });
+            }
+            
+            // Record undo
+            recordUndo({
+                type: 'library-import',
+                description: `Import "${entry.name}" to Setups ${startSlot + 1}-${startSlot + setupCount}`,
+                affectedSlots,
+                beforeSnapshots,
+                afterSnapshots
+            });
+            
+            // Invalidate caches
+            for (const slot of affectedSlots) {
+                invalidateDiffCache(slot);
+            }
+            dirtySinceLoad = true;
+            markModified();
+            
+            // Close and cleanup
+            closeLibraryImportDialog();
+            exitPreviewModeIfActive();
+            
+            refreshMainEditorIfNeeded(affectedSlots);
+            updateSetupDropdownLabels();
+            
+            showToast(`Imported ${setupCount} setups starting at slot ${startSlot + 1}`, 'success');
+        }
+        
+        function closeLibraryImportDialog() {
+            const overlay = document.getElementById('libraryImportOverlay');
+            if (overlay) overlay.remove();
+        }
+        
+        function exitPreviewModeIfActive() {
+            if (previewMode) {
+                // Clean exit without reopening library
+                previewBuffer = null;
+                previewMode = false;
+                previewEntry = null;
+                previewConfigData = null;
+                previewLabels.clear();
+                prePreviewState = null;
+                document.body.classList.remove('preview-mode');
+                const banner = document.getElementById('previewBanner');
+                if (banner) banner.remove();
+                updateUndoRedoUI();
+                renderCurrentView();
+            }
+        }
+        
+        function refreshMainEditorIfNeeded(affectedSlots) {
+            if (affectedSlots.includes(currentSetup)) {
+                renderCurrentView();
+            }
+            updateGroupNames();
+        }
+        
+        function importLibraryEntry(entryId) {
+            // Direct import (skip preview)
+            if (!libraryState.index) return;
+            
+            const entry = libraryState.index.entries.find(e => e.id === entryId);
+            if (!entry) {
+                showToast('Config not found', 'error');
+                return;
+            }
+            
+            closeLibraryModal();
+            
+            fetchLibraryConfig(entry).then(async (configResult) => {
+                // Check hash
+                if (!configResult.hashVerified) {
+                    const proceed = await showHashMismatchDialog();
+                    if (!proceed) {
+                        openLibraryModal();
+                        return;
+                    }
+                }
+                
+                // Validate
+                const validation = validateConfigForPreview(configResult.json, entry);
+                if (!validation.valid) {
+                    showToast(validation.error, 'error');
+                    openLibraryModal();
+                    return;
+                }
+                
+                // Check versions
+                const schemaCheck = checkSchemaCompatibility(configResult.json.version);
+                if (!schemaCheck.allowed) {
+                    showToast(schemaCheck.message, 'error');
+                    openLibraryModal();
+                    return;
+                }
+                
+                const editorCheck = checkEditorMinVersion(entry.minEditorVersion);
+                if (!editorCheck.allowed) {
+                    showToast(editorCheck.message, 'error');
+                    openLibraryModal();
+                    return;
+                }
+                
+                // Show import dialog
+                showImportDialog(entry, configResult.json);
+                
+            }).catch(error => {
+                console.error('Import error:', error);
+                showToast(error.message || 'Failed to load config', 'error');
+                openLibraryModal();
+            });
+        }
+        
+        // ============================================================
+        // Share Dialog (Phase 5)
+        // ============================================================
+        
+        const CANONICAL_DEVICES = [
+            { id: 'generic', name: 'Generic' },
+            { id: 'ableton-live', name: 'Ableton Live' },
+            { id: 'bitwig-studio', name: 'Bitwig Studio' },
+            { id: 'korg-wavestate', name: 'Korg Wavestate' },
+            { id: 'korg-drumlogue', name: 'Korg Drumlogue' },
+            { id: 'roland-tr6s', name: 'Roland TR-6S' },
+            { id: 'squarp-hapax', name: 'Squarp Hapax' },
+            { id: 'elektron-digitakt', name: 'Elektron Digitakt' },
+            { id: 'elektron-syntakt', name: 'Elektron Syntakt' },
+            { id: 'other', name: 'Other (specify in description)' }
+        ];
+        
+        const CANONICAL_TAGS = [
+            // Device categories
+            'synth', 'sequencer', 'drum-machine', 'effects', 'daw', 'sampler', 'groovebox',
+            // Manufacturers
+            'korg', 'roland', 'squarp', 'elektron', 'arturia', 'ableton', 'bitwig', 'native-instruments',
+            // Use cases
+            'performance', 'studio', 'live', 'mixing', 'sound-design',
+            // Config types
+            'complete', 'template', 'minimal'
+        ];
+        
+        let shareDialogState = {
+            selectedTags: new Set(),
+            sourceType: 'current' // 'current' or 'setup-N'
+        };
+        
+        function shareFromSetupManager() {
+            if (setupManagerSelection.size !== 1) return;
+            const setupIdx = [...setupManagerSelection][0];
+            openShareDialog(setupIdx);
+        }
+        
+        function openShareDialog(sourceSetup = null) {
+            // Close library modal if open
+            closeLibraryModal();
+            // Close setup manager if open
+            closeSetupManager();
+            
+            shareDialogState.selectedTags.clear();
+            shareDialogState.sourceType = sourceSetup !== null ? `setup-${sourceSetup}` : 'current';
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.id = 'shareDialogOverlay';
+            
+            // Build device options
+            let deviceOptions = CANONICAL_DEVICES.map(d => 
+                `<option value="${d.id}">${escapeHtml(d.name)}</option>`
+            ).join('');
+            
+            // Build tag chips
+            let tagChips = CANONICAL_TAGS.map(tag =>
+                `<span class="share-tag" data-tag="${tag}" onclick="toggleShareTag('${tag}')">${tag}</span>`
+            ).join('');
+            
+            // Source info
+            let sourceInfo = '';
+            if (sourceSetup !== null) {
+                const label = setupLabels.get(sourceSetup);
+                sourceInfo = `Setup ${sourceSetup + 1}${label ? ` (${escapeHtml(label)})` : ''}`;
+            } else {
+                sourceInfo = 'Current Setup (Setup ' + (currentSetup + 1) + ')';
+            }
+            
+            overlay.innerHTML = `
+                <div class="modal-dialog share-dialog">
+                    <h3>Submit to Library</h3>
+                    
+                    <div class="share-source">
+                        <div class="share-source-label">Sharing:</div>
+                        <div>${sourceInfo}</div>
+                    </div>
+                    
+                    <div class="share-field">
+                        <label for="shareName">Config Name *</label>
+                        <input type="text" id="shareName" maxlength="100" placeholder="e.g., Korg Wavestate Performance">
+                        <div class="char-count"><span id="shareNameCount">0</span>/100</div>
+                    </div>
+                    
+                    <div class="share-field">
+                        <label for="shareDevice">Target Device *</label>
+                        <select id="shareDevice">
+                            <option value="">Select device...</option>
+                            ${deviceOptions}
+                        </select>
+                    </div>
+                    
+                    <div class="share-field">
+                        <label for="shareDescription">Description *</label>
+                        <textarea id="shareDescription" maxlength="300" placeholder="Describe what this config does, which controls map to what, etc."></textarea>
+                        <div class="char-count"><span id="shareDescCount">0</span>/300</div>
+                    </div>
+                    
+                    <div class="share-field">
+                        <label>Tags * (select 1-5)</label>
+                        <div class="share-tags" id="shareTagsContainer">
+                            ${tagChips}
+                        </div>
+                        <div class="share-tag-count"><span id="shareTagCount">0</span>/5 selected</div>
+                    </div>
+                    
+                    <div class="share-field">
+                        <label for="shareAuthor">Your Name *</label>
+                        <input type="text" id="shareAuthor" maxlength="50" placeholder="GitHub username or display name">
+                        <div class="char-count"><span id="shareAuthorCount">0</span>/50</div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="btn" onclick="closeShareDialog()">Cancel</button>
+                        <button class="btn btn-primary" id="shareSubmitBtn" onclick="submitShare()" disabled>Submit</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            // Wire up character counters
+            document.getElementById('shareName').addEventListener('input', updateShareValidation);
+            document.getElementById('shareDescription').addEventListener('input', updateShareValidation);
+            document.getElementById('shareAuthor').addEventListener('input', updateShareValidation);
+            document.getElementById('shareDevice').addEventListener('change', updateShareValidation);
+            
+            // Close on overlay click
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeShareDialog();
+            });
+            
+            // Escape key
+            overlay.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeShareDialog();
+            });
+            
+            // Focus first field
+            setTimeout(() => {
+                document.getElementById('shareName')?.focus();
+            }, 50);
+        }
+        
+        function toggleShareTag(tag) {
+            if (shareDialogState.selectedTags.has(tag)) {
+                shareDialogState.selectedTags.delete(tag);
+            } else if (shareDialogState.selectedTags.size < 5) {
+                shareDialogState.selectedTags.add(tag);
+            }
+            
+            // Update UI
+            document.querySelectorAll('.share-tag').forEach(el => {
+                const t = el.dataset.tag;
+                el.classList.toggle('selected', shareDialogState.selectedTags.has(t));
+            });
+            
+            document.getElementById('shareTagCount').textContent = shareDialogState.selectedTags.size;
+            updateShareValidation();
+        }
+        
+        function updateShareValidation() {
+            const name = document.getElementById('shareName').value.trim();
+            const device = document.getElementById('shareDevice').value;
+            const description = document.getElementById('shareDescription').value.trim();
+            const author = document.getElementById('shareAuthor').value.trim();
+            const tagCount = shareDialogState.selectedTags.size;
+            
+            // Update counts
+            document.getElementById('shareNameCount').textContent = name.length;
+            document.getElementById('shareDescCount').textContent = description.length;
+            document.getElementById('shareAuthorCount').textContent = author.length;
+            
+            // Highlight if near limit
+            document.getElementById('shareNameCount').parentElement.classList.toggle('warning', name.length > 90);
+            document.getElementById('shareDescCount').parentElement.classList.toggle('warning', description.length > 280);
+            
+            // Validate
+            const valid = name.length >= 1 && name.length <= 100 &&
+                          device !== '' &&
+                          description.length >= 1 && description.length <= 300 &&
+                          author.length >= 1 && author.length <= 50 &&
+                          tagCount >= 1 && tagCount <= 5;
+            
+            document.getElementById('shareSubmitBtn').disabled = !valid;
+        }
+        
+        function closeShareDialog() {
+            const overlay = document.getElementById('shareDialogOverlay');
+            if (overlay) overlay.remove();
+        }
+        
+        function submitShare() {
+            const name = document.getElementById('shareName').value.trim();
+            const device = document.getElementById('shareDevice').value;
+            const deviceName = CANONICAL_DEVICES.find(d => d.id === device)?.name || device;
+            const description = document.getElementById('shareDescription').value.trim();
+            const author = document.getElementById('shareAuthor').value.trim();
+            const tags = Array.from(shareDialogState.selectedTags);
+            
+            // Generate config JSON
+            let configJson;
+            if (shareDialogState.sourceType === 'current') {
+                configJson = generateSetupJson(currentSetup);
+            } else {
+                const setupIdx = parseInt(shareDialogState.sourceType.replace('setup-', ''));
+                configJson = generateSetupJson(setupIdx);
+            }
+            
+            // Open GitHub issue
+            openShareIssue({
+                name,
+                device: deviceName,
+                description,
+                tags,
+                author,
+                configJson
+            });
+            
+            closeShareDialog();
+        }
+        
+        function generateSetupJson(setupIdx) {
+            // Generate single setup export JSON
+            const snapshot = captureSetupSnapshot(setupIdx);
+            const label = setupLabels.get(setupIdx) || '';
+            
+            const config = {
+                format: 'uc4-editor-setup',
+                version: SUPPORTED_SCHEMA_VERSION,
+                exportedBy: {
+                    app: 'uc4-sysex-editor',
+                    version: CURRENT_EDITOR_VERSION
+                },
+                exported: new Date().toISOString(),
+                sourceSetup: setupIdx,
+                label: label,
+                groups: snapshot.groups.map((g, i) => ({
+                    index: i,
+                    name: g.name,
+                    encoders: g.encoders,
+                    pushButtons: g.pushButtons,
+                    greenButtons: g.greenButtons,
+                    faders: g.faders,
+                    fader9: g.fader9
+                }))
+            };
+            
+            return JSON.stringify(config, null, 2);
+        }
+        
+        const URL_LENGTH_LIMIT = 8000;
+        
+        function openShareIssue(shareData) {
+            const { name, device, description, tags, author, configJson } = shareData;
+            
+            const metadata = `## Config Submission
+**Name:** ${name}
+**Device:** ${device}
+**Author:** ${author}
+**Tags:** ${tags.join(', ')}
+
+## Description
+${description}
+
+## Checklist
+- [ ] Tested with UC4 editor
+- [ ] Description explains the mapping
+- [ ] Agree to MIT license
+`;
+
+            const title = encodeURIComponent(`[Library] ${name}`);
+            
+            if ((metadata + configJson).length < URL_LENGTH_LIMIT) {
+                const body = encodeURIComponent(metadata + '\n## JSON\n```json\n' + configJson + '\n```');
+                window.open(`https://github.com/thegdyne/uc4-sysex-editor/issues/new?title=${title}&body=${body}&labels=library-submission`, '_blank');
+            } else {
+                navigator.clipboard.writeText(configJson).then(() => {
+                    showToast('JSON copied to clipboard', 'success');
+                }).catch(() => {
+                    // Fallback if clipboard fails
+                    console.warn('Clipboard write failed');
+                });
+                const body = encodeURIComponent(metadata + '\n## JSON\n⚠️ Config too large for URL. Paste from clipboard:\n```json\n(paste here)\n```');
+                window.open(`https://github.com/thegdyne/uc4-sysex-editor/issues/new?title=${title}&body=${body}&labels=library-submission`, '_blank');
+            }
+        }
+        
+        // Truncate text helper
+        function truncateText(text, maxLen) {
+            if (text.length <= maxLen) return text;
+            return text.slice(0, maxLen - 3) + '...';
+        }
         
         initUI();
         initTooltipSystem();
