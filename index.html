@@ -236,6 +236,63 @@
             margin-top: 1.5rem;
         }
         
+        /* Filename Prompt Dialog */
+        .filename-dialog {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            min-width: 350px;
+            max-width: 500px;
+        }
+        
+        #filenameModal {
+            z-index: 10002;
+        }
+        
+        .filename-dialog h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .filename-input-row {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+        }
+        
+        .filename-input-row input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            padding: 0.6rem 0.75rem;
+            outline: none;
+        }
+        
+        .filename-input-row input:focus {
+            background: rgba(0, 200, 255, 0.05);
+        }
+        
+        .filename-ext {
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            padding-right: 0.75rem;
+        }
+        
+        .filename-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+        
         /* Group Name Editor Modal */
         .group-name-dialog input {
             font-family: 'JetBrains Mono', monospace;
@@ -1536,6 +1593,320 @@
             z-index: 9999;
             background: transparent;
         }
+        
+        /* ============================================================
+           Setup Manager Modal
+           ============================================================ */
+        
+        .setup-manager-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.15s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .setup-manager-modal {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.2s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .setup-manager-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-control);
+        }
+        
+        .setup-manager-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .setup-manager-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            transition: all 0.15s;
+        }
+        
+        .setup-manager-close:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .setup-manager-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        
+        .setup-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.75rem;
+        }
+        
+        @media (max-width: 768px) {
+            .setup-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .setup-card {
+            background: var(--bg-control);
+            border: 2px solid var(--border);
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+            position: relative;
+        }
+        
+        .setup-card:hover {
+            border-color: var(--border-light);
+        }
+        
+        .setup-card.selected {
+            border-color: var(--accent);
+            background: rgba(0, 212, 170, 0.1);
+        }
+        
+        .setup-card-header {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .setup-card-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+        
+        .setup-card-label:hover {
+            color: var(--text);
+        }
+        
+        .setup-card-label.no-label {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        .setup-card-channel {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .setup-card-modified {
+            color: var(--warning);
+            font-size: 0.8rem;
+        }
+        
+        .setup-manager-footer {
+            border-top: 1px solid var(--border);
+            padding: 1rem 1.25rem;
+            background: var(--bg-control);
+        }
+        
+        .setup-manager-selection {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 0.75rem;
+        }
+        
+        .setup-manager-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .setup-manager-actions .btn {
+            font-size: 0.7rem;
+            padding: 0.4rem 0.75rem;
+        }
+        
+        .setup-manager-actions .btn:disabled {
+            opacity: 0.3;
+        }
+        
+        /* Sub-dialog styles */
+        .setup-subdialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-panel);
+            border: 1px solid var(--accent);
+            padding: 1.25rem;
+            z-index: 10001;
+            min-width: 400px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .setup-subdialog h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .setup-subdialog p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 0.75rem;
+        }
+        
+        .setup-subdialog-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .setup-subdialog-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            background: var(--bg-control);
+            border: 1px solid var(--border);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        
+        .setup-subdialog-item:hover:not(.disabled) {
+            border-color: var(--accent);
+        }
+        
+        .setup-subdialog-item.selected {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border-color: var(--accent);
+        }
+        
+        .setup-subdialog-item.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .setup-subdialog-item.source {
+            background: var(--bg-input);
+            border-color: var(--border-light);
+            cursor: default;
+        }
+        
+        .setup-subdialog-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        
+        .setup-subdialog-checkbox input {
+            accent-color: var(--accent);
+        }
+        
+        .setup-subdialog-warning {
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid var(--warning);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            color: var(--warning);
+            margin: 0.75rem 0;
+        }
+        
+        .setup-subdialog-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        /* Label editor inline */
+        .label-editor {
+            margin: 1rem 0;
+        }
+        
+        .label-editor input {
+            width: 100%;
+            padding: 0.5rem;
+            font-family: inherit;
+            font-size: 0.85rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .label-editor input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+        
+        .label-editor-hint {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+        
+        .label-editor-error {
+            font-size: 0.7rem;
+            color: var(--error);
+            margin-top: 0.25rem;
+        }
     </style>
 </head>
 <body>
@@ -1586,6 +1957,7 @@
                     <option value="">--</option>
                 </select>
             </div>
+            <button class="btn" id="manageSetupsBtn" onclick="openSetupManager()" disabled>Manage Setups</button>
         </div>
         
         <div class="nav-section">
@@ -1647,6 +2019,17 @@
         let isModified = false;
         let suppressModified = false;
         let dirtyBanks = new Set();
+        
+        // Setup Manager State
+        let setupManagerOpen = false;
+        let setupManagerSelection = new Set();  // Set of selected setup indices (0-17)
+        const setupLabels = new Map();  // Map<setupIdx, string>
+        const differsFromFactoryCache = new Map();  // Map<setupIdx, boolean>
+        let dirtySinceLoad = false;
+        
+        // Factory Templates - populated from factory_default.syx at init
+        // Each setup has unique channel and CC assignments
+        let FACTORY_TEMPLATES = null;  // Array(18) of setup snapshots (JSON-domain)
         
         // Undo/Redo State
         const undoStack = [];
@@ -1776,9 +2159,9 @@
         const NON_CANONICAL_GLYPHS = {
             33: '-',  // dash (verified: glyph_dash.syx)
             34: '_',  // underscore/lowbar (verified: glyph_lowbar.syx)
-            35: '⌐',  // segment: top-left
-            36: '∏',  // segment: two top verticals
-            37: '⌊',  // segment: two bottom horizontals
+            35: 'âŒˆÂ',  // segment: top-left
+            36: 'âˆˆÂ',  // segment: two top verticals
+            37: 'âŒˆÅ ',  // segment: two bottom horizontals
             38: ' '   // space variant (verified: glyph_blank.syx, Ableton RAC_/PAn_)
         };
         
@@ -3751,6 +4134,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 
                 sectionIndex = buildIndex(rawBuffer);
                 
+                // Initialize factory templates from this SysEx
+                initFactoryTemplates();
+                
                 // Store original for reset
                 originalBuffer = new Uint8Array(rawBuffer);
                 
@@ -3767,12 +4153,17 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 document.getElementById('setupSelect').value = '0';
                 document.getElementById('exportBtn').disabled = false;
                 document.getElementById('exportJsonBtn').disabled = false;
+                document.getElementById('manageSetupsBtn').disabled = false;
                 
                 currentSetup = 0;
                 encoderGroup = 0;
                 faderGroup = 0;
                 isModified = false;
                 dirtyBanks.clear();
+                
+                // Clear setup labels on fresh import
+                setupLabels.clear();
+                differsFromFactoryCache.clear();
                 
                 updateGroupTabs('encoderGroupTabs', 0);
                 updateGroupTabs('faderGroupTabs', 0);
@@ -3782,6 +4173,10 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 
                 // Build initial conflict map
                 rebuildConflictMap();
+                
+                // Refresh all setup-related UI
+                const allSetups = Array.from({ length: 18 }, (_, i) => i);
+                afterSetupStateMutation(allSetups);
                 
                 renderFocusedView();
             } catch (err) {
@@ -3795,84 +4190,100 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         function exportSysEx() {
             if (!rawBuffer) return;
             
-            // Recalculate all dirty checksums
-            // dirtyBanks contains "${setupIdx}-${actualSecId}-${actualBank}"
-            for (const key of dirtyBanks) {
-                const [, secId, bank] = key.split('-').map(Number);
-                const sec = sectionIndex[secId];
-                if (sec && sec[bank]) {
-                    recalcBankChecksum(rawBuffer, sec[bank].dataOffset);
+            promptFilename('uc4_edited.syx', 'Export SysEx', (filename) => {
+                // Recalculate all dirty checksums
+                // dirtyBanks contains "${setupIdx}-${actualSecId}-${actualBank}"
+                for (const key of dirtyBanks) {
+                    const [, secId, bank] = key.split('-').map(Number);
+                    const sec = sectionIndex[secId];
+                    if (sec && sec[bank]) {
+                        recalcBankChecksum(rawBuffer, sec[bank].dataOffset);
+                    }
                 }
-            }
-            dirtyBanks.clear();
-            
-            const blob = new Blob([rawBuffer], { type: 'application/octet-stream' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'uc4_edited.syx';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            // Clear session - user saved their work
-            clearSession();
-            isModified = false;
-            updateStatus('loaded', 'Exported successfully');
-            showToast('SysEx exported', 'success');
+                dirtyBanks.clear();
+                
+                const blob = new Blob([rawBuffer], { type: 'application/octet-stream' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Clear session - user saved their work
+                clearSession();
+                isModified = false;
+                updateStatus('loaded', 'Exported successfully');
+                showToast('SysEx exported', 'success');
+            });
         }
         
         function exportJSON() {
             if (!rawBuffer) return;
             
-            const data = {
-                format: 'uc4-editor',
-                version: '1.0',
-                exported: new Date().toISOString(),
-                setups: []
-            };
-            
-            for (let s = 0; s < NUM_SETUPS; s++) {
-                const setup = {
-                    index: s,
-                    groups: []
-                };
-                
-                for (let g = 0; g < NUM_GROUPS; g++) {
-                    const group = {
-                        index: g,
-                        name: getGroupName(s, g),
-                        encoders: [],
-                        pushButtons: [],
-                        greenButtons: [],
-                        faders: [],
-                        fader9: getFader9Data(s, g)
-                    };
-                    
-                    for (let i = 0; i < 8; i++) {
-                        group.encoders.push(getEncoderData(s, g, i));
-                        group.pushButtons.push(getPushData(s, g, i));
-                        group.greenButtons.push(getGreenData(s, g, i));
-                        group.faders.push(getFaderData(s, g, i));
-                    }
-                    
-                    setup.groups.push(group);
+            promptFilename('uc4_config.json', 'Export JSON', (filename) => {
+                // Build setupLabels object from Map
+                const labelsObj = {};
+                for (const [idx, label] of setupLabels) {
+                    labelsObj[idx.toString()] = label;
                 }
                 
-                data.setups.push(setup);
-            }
-            
-            const json = JSON.stringify(data, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'uc4_config.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+                const data = {
+                    format: 'uc4-editor',
+                    version: '1.1',
+                    exported: new Date().toISOString(),
+                    setupLabels: Object.keys(labelsObj).length > 0 ? labelsObj : undefined,
+                    setups: []
+                };
+                
+                for (let s = 0; s < NUM_SETUPS; s++) {
+                    const setup = {
+                        index: s,
+                        groups: []
+                    };
+                    
+                    for (let g = 0; g < NUM_GROUPS; g++) {
+                        const group = {
+                            index: g,
+                            name: getGroupName(s, g),
+                            encoders: [],
+                            pushButtons: [],
+                            greenButtons: [],
+                            faders: [],
+                            fader9: getFader9Data(s, g)
+                        };
+                        
+                        for (let i = 0; i < 8; i++) {
+                            group.encoders.push(getEncoderData(s, g, i));
+                            group.pushButtons.push(getPushData(s, g, i));
+                            group.greenButtons.push(getGreenData(s, g, i));
+                            group.faders.push(getFaderData(s, g, i));
+                        }
+                        
+                        setup.groups.push(group);
+                    }
+                    
+                    data.setups.push(setup);
+                }
+                
+                // Clean up undefined setupLabels
+                if (!data.setupLabels) delete data.setupLabels;
+                
+                const json = JSON.stringify(data, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showToast('JSON exported', 'success');
+            });
         }
         
         document.getElementById('jsonInput').addEventListener('change', async (e) => {
@@ -3892,6 +4303,21 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 if (data.format !== 'uc4-editor') {
                     alert('Invalid JSON format. Expected UC4 Editor export.');
                     return;
+                }
+                
+                // Import setup labels if present (v1.1+)
+                if (data.setupLabels && typeof data.setupLabels === 'object') {
+                    setupLabels.clear();
+                    for (const [key, value] of Object.entries(data.setupLabels)) {
+                        const idx = parseInt(key, 10);
+                        if (!isNaN(idx) && idx >= 0 && idx < 18 && typeof value === 'string') {
+                            // Sanitize label (max 12 chars, valid chars only)
+                            const sanitized = value.slice(0, 12).replace(/[^a-zA-Z0-9 \-_]/g, '');
+                            if (sanitized) {
+                                setupLabels.set(idx, sanitized);
+                            }
+                        }
+                    }
                 }
                 
                 // Apply JSON data to buffer
@@ -3922,8 +4348,13 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                     }
                 }
                 
+                // Invalidate all diff caches after import
+                differsFromFactoryCache.clear();
+                dirtySinceLoad = true;
+                
                 updateStatus('modified', 'JSON imported - changes pending');
                 updateGroupNames();
+                updateSetupDropdownLabels();
                 renderCurrentView();
             } catch (err) {
                 alert('Error loading JSON: ' + err.message);
@@ -3967,6 +4398,75 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 toast.style.transform = 'translateX(100%)';
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
+        }
+        
+        // ============================================================
+        // Filename Prompt Dialog
+        // ============================================================
+        
+        function promptFilename(defaultName, title, onConfirm) {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.id = 'filenameModal';
+            
+            // Extract extension from default name
+            const lastDot = defaultName.lastIndexOf('.');
+            const ext = lastDot > 0 ? defaultName.slice(lastDot) : '';
+            const baseName = lastDot > 0 ? defaultName.slice(0, lastDot) : defaultName;
+            
+            overlay.innerHTML = `
+                <div class="filename-dialog">
+                    <h3>${title}</h3>
+                    <div class="filename-input-row">
+                        <input type="text" id="filenameInput" value="${baseName}" spellcheck="false">
+                        <span class="filename-ext">${ext}</span>
+                    </div>
+                    <div class="filename-actions">
+                        <button class="btn" id="filenameCancelBtn">Cancel</button>
+                        <button class="btn primary" id="filenameConfirmBtn">Export</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            const input = document.getElementById('filenameInput');
+            const confirmBtn = document.getElementById('filenameConfirmBtn');
+            const cancelBtn = document.getElementById('filenameCancelBtn');
+            
+            // Select the base name for easy editing
+            input.focus();
+            input.select();
+            
+            function close() {
+                overlay.remove();
+            }
+            
+            function confirm() {
+                let filename = input.value.trim();
+                if (!filename) filename = baseName;
+                // Sanitize filename
+                filename = filename.replace(/[\/\\:*?"<>|]/g, '-').replace(/[\x00-\x1F]/g, '');
+                close();
+                onConfirm(filename + ext);
+            }
+            
+            confirmBtn.onclick = confirm;
+            cancelBtn.onclick = close;
+            
+            overlay.onclick = (e) => {
+                if (e.target === overlay) close();
+            };
+            
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    confirm();
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    close();
+                }
+            });
         }
         
         // ============================================================
@@ -4255,6 +4755,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 // Reset to imported SysEx
                 rawBuffer = new Uint8Array(originalBuffer);
                 sectionIndex = buildIndex(rawBuffer);
+                
+                // Re-initialize factory templates
+                initFactoryTemplates();
             } else {
                 // Load default - create a basic UC4 config
                 // For now, just show a message since we don't have a default template
@@ -4275,8 +4778,16 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             quickPaste.source = null;
             quickPaste.pasteCount = 0;
             
+            // Clear setup labels (reset clears everything)
+            setupLabels.clear();
+            differsFromFactoryCache.clear();
+            
             // Rebuild conflict map
             rebuildConflictMap();
+            
+            // Refresh all setup-related UI
+            const allSetups = Array.from({ length: 18 }, (_, i) => i);
+            afterSetupStateMutation(allSetups);
             
             // Re-render
             renderCurrentView();
@@ -4311,6 +4822,84 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                     case 'group-name': {
                         const values = reverse ? action.beforeValues : action.afterValues;
                         setGroupName(action.setupIdx, action.group, values);
+                        break;
+                    }
+                    
+                    // Setup Manager actions
+                    case 'setup-copy': {
+                        const snapshots = reverse ? action.beforeSnapshots : action.afterSnapshots;
+                        const labels = reverse ? action.labelsBefore : action.labelsAfter;
+                        for (const idx of action.destIndices) {
+                            restoreSetupSnapshot(idx, snapshots[idx]);
+                            if (labels[idx]) {
+                                setupLabels.set(idx, labels[idx]);
+                            } else {
+                                setupLabels.delete(idx);
+                            }
+                        }
+                        invalidateDiffCache(action.destIndices);
+                        afterSetupStateMutation(action.destIndices);
+                        break;
+                    }
+                    
+                    case 'setup-swap': {
+                        const snapshots = reverse ? action.beforeSnapshots : action.afterSnapshots;
+                        const labels = reverse ? action.labelsBefore : action.labelsAfter;
+                        restoreSetupSnapshot(action.idxA, snapshots[action.idxA]);
+                        restoreSetupSnapshot(action.idxB, snapshots[action.idxB]);
+                        if (labels[action.idxA]) {
+                            setupLabels.set(action.idxA, labels[action.idxA]);
+                        } else {
+                            setupLabels.delete(action.idxA);
+                        }
+                        if (labels[action.idxB]) {
+                            setupLabels.set(action.idxB, labels[action.idxB]);
+                        } else {
+                            setupLabels.delete(action.idxB);
+                        }
+                        invalidateDiffCache([action.idxA, action.idxB]);
+                        afterSetupStateMutation([action.idxA, action.idxB]);
+                        break;
+                    }
+                    
+                    case 'setup-reset-factory': {
+                        const snapshots = reverse ? action.beforeSnapshots : action.afterSnapshots;
+                        const labels = reverse ? action.labelsBefore : action.labelsAfter;
+                        for (const idx of action.indices) {
+                            restoreSetupSnapshot(idx, snapshots[idx]);
+                            if (labels[idx]) {
+                                setupLabels.set(idx, labels[idx]);
+                            } else {
+                                setupLabels.delete(idx);
+                            }
+                        }
+                        invalidateDiffCache(action.indices);
+                        afterSetupStateMutation(action.indices);
+                        break;
+                    }
+                    
+                    case 'setup-import': {
+                        const snapshot = reverse ? action.beforeSnapshot : action.afterSnapshot;
+                        const label = reverse ? action.labelBefore : action.labelAfter;
+                        restoreSetupSnapshot(action.targetIdx, snapshot);
+                        if (label) {
+                            setupLabels.set(action.targetIdx, label);
+                        } else {
+                            setupLabels.delete(action.targetIdx);
+                        }
+                        invalidateDiffCache([action.targetIdx]);
+                        afterSetupStateMutation([action.targetIdx]);
+                        break;
+                    }
+                    
+                    case 'setup-label': {
+                        const label = reverse ? action.labelBefore : action.labelAfter;
+                        if (label) {
+                            setupLabels.set(action.idx, label);
+                        } else {
+                            setupLabels.delete(action.idx);
+                        }
+                        afterSetupStateMutation([action.idx]);
                         break;
                     }
                 }
@@ -4489,6 +5078,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             rawBuffer = new Uint8Array(session.buffer);
             sectionIndex = buildIndex(rawBuffer);
             
+            // Initialize factory templates from restored SysEx
+            initFactoryTemplates();
+            
             // Allow Reset to function after restore
             originalBuffer = new Uint8Array(rawBuffer);
             
@@ -4507,6 +5099,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             document.getElementById('setupSelect').value = currentSetup.toString();
             document.getElementById('exportBtn').disabled = false;
             document.getElementById('exportJsonBtn').disabled = false;
+            document.getElementById('manageSetupsBtn').disabled = false;
             
             updateGroupTabs('encoderGroupTabs', encoderGroup);
             updateGroupTabs('faderGroupTabs', faderGroup);
@@ -5305,7 +5898,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                     Copy Control
                 </div>
                 <div class="context-menu-item" onclick="copyRow('${controlType}', ${currentSetup}, ${index}); hideContextMenu();">
-                    Copy Row (${controlType === 'fader9' ? 'Fad9' : (index + 1)} * 8 groups)
+                    Copy Row (${controlType === 'fader9' ? 'Fad9' : (index + 1)} × 8 groups)
                 </div>
                 <div class="context-menu-item" onclick="copyColumn('${controlType}', ${currentSetup}, ${group}); hideContextMenu();">
                     Copy Column (Group ${group + 1})
@@ -6539,6 +7132,1644 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         });
         
         // ============================================================
+        // Setup Manager
+        // ============================================================
+        
+        // Factory Templates - initialized from factory_default.syx
+        // Replaces the old FACTORY_DEFAULTS parametric approach
+        // Each setup has unique channel (1-16 for setups 1-16, 13-14 for setups 17-18)
+        // and group-specific CC/Note patterns
+        
+        function initFactoryTemplates() {
+            if (!rawBuffer || !sectionIndex) {
+                console.error('Cannot init factory templates: no SysEx loaded');
+                return;
+            }
+            
+            FACTORY_TEMPLATES = [];
+            for (let setupIdx = 0; setupIdx < 18; setupIdx++) {
+                FACTORY_TEMPLATES[setupIdx] = captureSetupSnapshot(setupIdx);
+            }
+            
+            console.log('Factory templates initialized for all 18 setups');
+        }
+        
+        function createFactorySetupSnapshot(setupIdx = 0) {
+            if (!FACTORY_TEMPLATES) {
+                console.warn('Factory templates not initialized, returning empty snapshot');
+                return { groups: [] };
+            }
+            // Deep clone to prevent mutation
+            return JSON.parse(JSON.stringify(FACTORY_TEMPLATES[setupIdx]));
+        }
+        
+        // Validation defaults - used for clamping/fallback during JSON import
+        // These are NOT factory defaults, just safe fallback values
+        const VALIDATION_DEFAULTS = {
+            encoder: (idx) => ({
+                channel: 1,
+                type: 2,      // CCAb
+                cc: idx,
+                min: 0,
+                max: 127,
+                acc: 3,
+                display: 1
+            }),
+            fader: (idx) => ({
+                channel: 1,
+                type: 0,
+                cc: idx,
+                min: 0,
+                max: 127,
+                mode: 0,
+                display: 1
+            }),
+            pushButton: (idx) => ({
+                channel: 1,
+                typeNibble: 16,
+                cc: idx,
+                lower: 0,
+                upper: 127,
+                mode: 0,
+                display: 0
+            }),
+            greenButton: (idx) => ({
+                channel: 1,
+                typeNibble: 16,
+                cc: idx,
+                lower: 0,
+                upper: 127,
+                mode: 0,
+                display: 1
+            }),
+            fader9: () => ({
+                channel: 1,
+                cc: 112,
+                min: 0,
+                max: 127,
+                mode: 0
+            }),
+            groupName: (groupIdx) => `GrP${groupIdx + 1}`
+        };
+        
+        // Snapshot functions
+        function captureSetupSnapshot(setupIdx) {
+            return {
+                groups: Array.from({ length: 8 }, (_, g) => ({
+                    name: getGroupName(setupIdx, g),
+                    encoders: Array.from({ length: 8 }, (_, i) => getEncoderData(setupIdx, g, i)),
+                    pushButtons: Array.from({ length: 8 }, (_, i) => getPushData(setupIdx, g, i)),
+                    greenButtons: Array.from({ length: 8 }, (_, i) => getGreenData(setupIdx, g, i)),
+                    faders: Array.from({ length: 8 }, (_, i) => getFaderData(setupIdx, g, i)),
+                    fader9: getFader9Data(setupIdx, g),
+                })),
+            };
+        }
+        
+        function restoreSetupSnapshot(setupIdx, snap) {
+            suppressModified = true;
+            try {
+                for (let g = 0; g < 8; g++) {
+                    // Set group name
+                    const nameResult = stringToGroupNameValues(snap.groups[g].name);
+                    if (!nameResult.error) {
+                        setGroupName(setupIdx, g, nameResult.values);
+                    }
+                    
+                    // Set controls
+                    for (let i = 0; i < 8; i++) {
+                        setEncoderData(setupIdx, g, i, snap.groups[g].encoders[i]);
+                        setPushData(setupIdx, g, i, snap.groups[g].pushButtons[i]);
+                        setGreenData(setupIdx, g, i, snap.groups[g].greenButtons[i]);
+                        setFaderData(setupIdx, g, i, snap.groups[g].faders[i]);
+                    }
+                    setFader9Data(setupIdx, g, snap.groups[g].fader9);
+                }
+            } finally {
+                suppressModified = false;
+            }
+        }
+        
+        function invalidateDiffCache(indices) {
+            if (Array.isArray(indices)) {
+                for (const idx of indices) {
+                    differsFromFactoryCache.delete(idx);
+                }
+            } else {
+                differsFromFactoryCache.delete(indices);
+            }
+        }
+        
+        // Compare snapshots for equality
+        function snapshotsEqual(a, b) {
+            return JSON.stringify(a) === JSON.stringify(b);
+        }
+        
+        // Check if setup differs from factory defaults
+        function differsFromFactory(setupIdx) {
+            if (!FACTORY_TEMPLATES) {
+                return false;  // Can't compare without templates
+            }
+            
+            if (differsFromFactoryCache.has(setupIdx)) {
+                return differsFromFactoryCache.get(setupIdx);
+            }
+            
+            const current = captureSetupSnapshot(setupIdx);
+            const factory = FACTORY_TEMPLATES[setupIdx];
+            
+            // CRITICAL: Full comparison including channel
+            // Each setup has unique factory template
+            const differs = !snapshotsEqual(current, factory);
+            
+            differsFromFactoryCache.set(setupIdx, differs);
+            return differs;
+        }
+        
+        // Calculate primary channel for a setup (for display in cards)
+        function calculatePrimaryChannel(setupIdx) {
+            const channelCounts = new Map();
+            
+            // Count all channels across all groups and controls
+            for (let g = 0; g < 8; g++) {
+                for (let i = 0; i < 8; i++) {
+                    const enc = getEncoderData(setupIdx, g, i);
+                    channelCounts.set(enc.channel, (channelCounts.get(enc.channel) || 0) + 1);
+                    
+                    const push = getPushData(setupIdx, g, i);
+                    channelCounts.set(push.channel, (channelCounts.get(push.channel) || 0) + 1);
+                    
+                    const green = getGreenData(setupIdx, g, i);
+                    channelCounts.set(green.channel, (channelCounts.get(green.channel) || 0) + 1);
+                    
+                    const fader = getFaderData(setupIdx, g, i);
+                    channelCounts.set(fader.channel, (channelCounts.get(fader.channel) || 0) + 1);
+                }
+                const f9 = getFader9Data(setupIdx, g);
+                channelCounts.set(f9.channel, (channelCounts.get(f9.channel) || 0) + 1);
+            }
+            
+            // Total controls: 264 per setup
+            const totalControls = 264;
+            
+            // Check for exact 1-8 pattern
+            const channels = [...channelCounts.keys()].sort((a, b) => a - b);
+            if (channels.length === 8 && channels.join(',') === '1,2,3,4,5,6,7,8') {
+                // Check if relatively evenly distributed
+                const minCount = Math.min(...channelCounts.values());
+                const maxCount = Math.max(...channelCounts.values());
+                if (minCount >= totalControls / 16) {
+                    return 'Ch 1-8';
+                }
+            }
+            
+            // Find dominant channel
+            let maxChannel = 1;
+            let maxCount = 0;
+            for (const [ch, count] of channelCounts) {
+                if (count > maxCount || (count === maxCount && ch < maxChannel)) {
+                    maxChannel = ch;
+                    maxCount = count;
+                }
+            }
+            
+            // Check if dominant (>70%)
+            if (maxCount / totalControls > 0.7) {
+                return `Ch ${maxChannel}`;
+            }
+            
+            // Check for contiguous range with >=80% coverage
+            if (channels.length >= 2) {
+                const minCh = channels[0];
+                const maxCh = channels[channels.length - 1];
+                const rangeChannels = maxCh - minCh + 1;
+                
+                if (rangeChannels === channels.length) {
+                    // Contiguous range
+                    let rangeTotal = 0;
+                    for (let ch = minCh; ch <= maxCh; ch++) {
+                        rangeTotal += channelCounts.get(ch) || 0;
+                    }
+                    if (rangeTotal / totalControls >= 0.8) {
+                        return `Ch ${minCh}-${maxCh}`;
+                    }
+                }
+            }
+            
+            return 'Mixed';
+        }
+        
+        // Open Setup Manager Modal
+        function openSetupManager() {
+            if (!rawBuffer) return;
+            
+            setupManagerOpen = true;
+            setupManagerSelection.clear();
+            setupManagerSelection.add(currentSetup);
+            
+            renderSetupManager();
+        }
+        
+        function closeSetupManager() {
+            setupManagerOpen = false;
+            const overlay = document.querySelector('.setup-manager-overlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+        
+        function renderSetupManager() {
+            // Remove existing overlay
+            const existing = document.querySelector('.setup-manager-overlay');
+            if (existing) existing.remove();
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'setup-manager-overlay';
+            overlay.onclick = (e) => {
+                if (e.target === overlay) closeSetupManager();
+            };
+            
+            const modal = document.createElement('div');
+            modal.className = 'setup-manager-modal';
+            
+            // Header
+            const header = document.createElement('div');
+            header.className = 'setup-manager-header';
+            header.innerHTML = `
+                <span class="setup-manager-title">Setup Manager</span>
+                <button class="setup-manager-close" onclick="closeSetupManager()">&times;</button>
+            `;
+            modal.appendChild(header);
+            
+            // Body with grid
+            const body = document.createElement('div');
+            body.className = 'setup-manager-body';
+            
+            const grid = document.createElement('div');
+            grid.className = 'setup-grid';
+            
+            for (let i = 0; i < 18; i++) {
+                grid.appendChild(createSetupCard(i));
+            }
+            
+            body.appendChild(grid);
+            modal.appendChild(body);
+            
+            // Footer with actions
+            const footer = document.createElement('div');
+            footer.className = 'setup-manager-footer';
+            footer.innerHTML = renderSetupManagerFooter();
+            modal.appendChild(footer);
+            
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+            
+            // Focus current setup card
+            const currentCard = overlay.querySelector(`[data-setup="${currentSetup}"]`);
+            if (currentCard) currentCard.focus();
+            
+            // Add keyboard handler
+            overlay.addEventListener('keydown', handleSetupManagerKeyDown);
+        }
+        
+        function createSetupCard(setupIdx) {
+            const card = document.createElement('div');
+            card.className = 'setup-card';
+            card.dataset.setup = setupIdx;
+            card.tabIndex = 0;
+            
+            if (setupManagerSelection.has(setupIdx)) {
+                card.classList.add('selected');
+            }
+            
+            const label = setupLabels.get(setupIdx);
+            const primaryCh = calculatePrimaryChannel(setupIdx);
+            const modified = differsFromFactory(setupIdx);
+            
+            card.innerHTML = `
+                <div class="setup-card-header">Setup ${setupIdx + 1}</div>
+                <div class="setup-card-label ${label ? '' : 'no-label'}">${label || '(no label)'}</div>
+                <div class="setup-card-channel">
+                    <span>${primaryCh}</span>
+                    ${modified ? '<span class="setup-card-modified" title="Differs from factory">●</span>' : ''}
+                </div>
+            `;
+            
+            // Double-click on label to edit
+            const labelEl = card.querySelector('.setup-card-label');
+            labelEl.ondblclick = (e) => {
+                e.stopPropagation();
+                setupManagerSelection.clear();
+                setupManagerSelection.add(setupIdx);
+                updateSetupManagerUI();
+                showLabelEditor();
+            };
+            
+            card.onclick = (e) => handleSetupCardClick(e, setupIdx);
+            card.ondblclick = () => {
+                closeSetupManager();
+                selectSetup(setupIdx);
+            };
+            
+            return card;
+        }
+        
+        function handleSetupCardClick(e, setupIdx) {
+            if (e.ctrlKey || e.metaKey) {
+                // Toggle selection
+                if (setupManagerSelection.has(setupIdx)) {
+                    setupManagerSelection.delete(setupIdx);
+                } else {
+                    setupManagerSelection.add(setupIdx);
+                }
+            } else if (e.shiftKey && setupManagerSelection.size > 0) {
+                // Range select
+                const lastSelected = Math.max(...setupManagerSelection);
+                const start = Math.min(lastSelected, setupIdx);
+                const end = Math.max(lastSelected, setupIdx);
+                for (let i = start; i <= end; i++) {
+                    setupManagerSelection.add(i);
+                }
+            } else {
+                // Single select
+                setupManagerSelection.clear();
+                setupManagerSelection.add(setupIdx);
+            }
+            
+            updateSetupManagerUI();
+        }
+        
+        function handleSetupManagerKeyDown(e) {
+            if (e.key === 'Escape') {
+                closeSetupManager();
+                return;
+            }
+            
+            if (e.key === 'Enter' && setupManagerSelection.size === 1) {
+                const selected = [...setupManagerSelection][0];
+                closeSetupManager();
+                selectSetup(selected);
+                return;
+            }
+            
+            // Arrow navigation
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+                navigateSetupGrid(e.key);
+                return;
+            }
+            
+            // Shortcut keys
+            if (e.key === 'c' || e.key === 'C') {
+                if (setupManagerSelection.size >= 1) {
+                    showCopyDialog();
+                }
+            } else if (e.key === 's' || e.key === 'S') {
+                if (setupManagerSelection.size === 2) {
+                    performDirectSwap();
+                } else if (setupManagerSelection.size === 1) {
+                    showSwapDialog();
+                }
+            } else if (e.key === 'Delete') {
+                if (setupManagerSelection.size >= 1) {
+                    showResetToFactoryDialog();
+                }
+            } else if (e.key === 'e' || e.key === 'E') {
+                if (setupManagerSelection.size === 1) {
+                    e.preventDefault();
+                    showLabelEditor();
+                }
+            }
+        }
+        
+        function navigateSetupGrid(key) {
+            if (setupManagerSelection.size === 0) {
+                setupManagerSelection.add(0);
+                updateSetupManagerUI();
+                return;
+            }
+            
+            const current = Math.max(...setupManagerSelection);
+            let next = current;
+            
+            switch (key) {
+                case 'ArrowLeft':
+                    next = Math.max(0, current - 1);
+                    break;
+                case 'ArrowRight':
+                    next = Math.min(17, current + 1);
+                    break;
+                case 'ArrowUp':
+                    next = current >= 6 ? current - 6 : current;
+                    break;
+                case 'ArrowDown':
+                    next = current <= 11 ? current + 6 : current;
+                    break;
+            }
+            
+            setupManagerSelection.clear();
+            setupManagerSelection.add(next);
+            updateSetupManagerUI();
+            
+            // Focus the card
+            const card = document.querySelector(`[data-setup="${next}"]`);
+            if (card) card.focus();
+        }
+        
+        function updateSetupManagerUI() {
+            // Update card selection states
+            document.querySelectorAll('.setup-card').forEach(card => {
+                const idx = parseInt(card.dataset.setup);
+                card.classList.toggle('selected', setupManagerSelection.has(idx));
+            });
+            
+            // Update footer
+            const footer = document.querySelector('.setup-manager-footer');
+            if (footer) {
+                footer.innerHTML = renderSetupManagerFooter();
+            }
+        }
+        
+        function renderSetupManagerFooter() {
+            const count = setupManagerSelection.size;
+            let selectionText = 'Select one or more setups';
+            
+            if (count === 1) {
+                const idx = [...setupManagerSelection][0];
+                const label = setupLabels.get(idx);
+                selectionText = `Selected: Setup ${idx + 1}${label ? ` (${label})` : ''}`;
+            } else if (count > 1) {
+                const indices = [...setupManagerSelection].sort((a, b) => a - b).map(i => i + 1);
+                selectionText = `Selected: Setups ${indices.join(', ')}`;
+            }
+            
+            const canCopy = count >= 1;
+            const canSwap = count === 1 || count === 2;
+            const canClear = count >= 1;
+            const canEditLabel = count === 1;
+            const canExport = count === 1;
+            
+            return `
+                <div class="setup-manager-selection">${selectionText}</div>
+                <div class="setup-manager-actions">
+                    <button class="btn" onclick="showCopyDialog()" ${canCopy ? '' : 'disabled'}>Copy to...</button>
+                    <button class="btn" onclick="${count === 2 ? 'performDirectSwap()' : 'showSwapDialog()'}" ${canSwap ? '' : 'disabled'}>Swap with...</button>
+                    <button class="btn" onclick="showResetToFactoryDialog()" ${canClear ? '' : 'disabled'} title="Restore selected setups to factory defaults">Reset to Factory</button>
+                    <button class="btn" onclick="showLabelEditor()" ${canEditLabel ? '' : 'disabled'}>Edit Label</button>
+                    <span class="btn-divider"></span>
+                    <button class="btn" onclick="showImportToSlotDialog()">Import...</button>
+                    <button class="btn" onclick="exportSingleSetup()" ${canExport ? '' : 'disabled'}>Export</button>
+                    <span class="btn-divider"></span>
+                    <button class="btn" onclick="closeSetupManager()">Close</button>
+                </div>
+            `;
+        }
+        
+        // Copy Dialog
+        function showCopyDialog() {
+            if (setupManagerSelection.size === 0) return;
+            
+            const sourceIdx = [...setupManagerSelection][0];
+            const sourceLabel = setupLabels.get(sourceIdx);
+            
+            const dialog = document.createElement('div');
+            dialog.className = 'setup-subdialog';
+            dialog.id = 'copySubdialog';
+            
+            dialog.innerHTML = `
+                <h4>Copy Setup ${sourceIdx + 1} to...</h4>
+                <p>Select destination slot(s):</p>
+                <div class="setup-subdialog-grid" id="copyDestGrid"></div>
+                <label class="setup-subdialog-checkbox">
+                    <input type="checkbox" id="copyLabelCheck" checked>
+                    Copy setup label${sourceLabel ? ` ("${sourceLabel}")` : ''}
+                </label>
+                <div id="copyWarning" class="setup-subdialog-warning" style="display: none;"></div>
+                <div class="setup-subdialog-buttons">
+                    <button class="btn" onclick="closeCopyDialog()">Cancel</button>
+                    <button class="btn btn-primary" id="copyConfirmBtn" onclick="performCopy()" disabled>Copy</button>
+                </div>
+            `;
+            
+            document.body.appendChild(dialog);
+            
+            // Render destination grid
+            const grid = document.getElementById('copyDestGrid');
+            const destSelection = new Set();
+            
+            for (let i = 0; i < 18; i++) {
+                const item = document.createElement('div');
+                item.className = 'setup-subdialog-item';
+                item.dataset.idx = i;
+                
+                if (i === sourceIdx) {
+                    item.classList.add('source');
+                    item.textContent = `▪ ${i + 1}`;
+                } else {
+                    item.textContent = i + 1;
+                    item.onclick = () => {
+                        if (destSelection.has(i)) {
+                            destSelection.delete(i);
+                            item.classList.remove('selected');
+                        } else {
+                            destSelection.add(i);
+                            item.classList.add('selected');
+                        }
+                        updateCopyDialogState(sourceIdx, destSelection);
+                    };
+                }
+                
+                grid.appendChild(item);
+            }
+            
+            // Store reference
+            dialog._sourceIdx = sourceIdx;
+            dialog._destSelection = destSelection;
+        }
+        
+        function updateCopyDialogState(sourceIdx, destSelection) {
+            const confirmBtn = document.getElementById('copyConfirmBtn');
+            const warning = document.getElementById('copyWarning');
+            
+            confirmBtn.disabled = destSelection.size === 0;
+            
+            if (destSelection.size > 0) {
+                const destList = [...destSelection].sort((a, b) => a - b).map(i => i + 1).join(', ');
+                warning.textContent = `⚠ This will overwrite setup${destSelection.size > 1 ? 's' : ''} ${destList}`;
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+            }
+        }
+        
+        function closeCopyDialog() {
+            const dialog = document.getElementById('copySubdialog');
+            if (dialog) dialog.remove();
+        }
+        
+        function performCopy() {
+            const dialog = document.getElementById('copySubdialog');
+            if (!dialog) return;
+            
+            const sourceIdx = dialog._sourceIdx;
+            const destIndices = [...dialog._destSelection];
+            const copyLabel = document.getElementById('copyLabelCheck').checked;
+            
+            if (destIndices.length === 0) return;
+            
+            // Capture before snapshots
+            const beforeSnapshots = {};
+            const labelsBefore = {};
+            for (const idx of destIndices) {
+                beforeSnapshots[idx] = captureSetupSnapshot(idx);
+                labelsBefore[idx] = setupLabels.get(idx) || null;
+            }
+            
+            // Capture source
+            const sourceSnapshot = captureSetupSnapshot(sourceIdx);
+            const sourceLabel = setupLabels.get(sourceIdx);
+            
+            // Apply copy
+            for (const idx of destIndices) {
+                restoreSetupSnapshot(idx, sourceSnapshot);
+                if (copyLabel) {
+                    if (sourceLabel) {
+                        setupLabels.set(idx, sourceLabel);
+                    } else {
+                        setupLabels.delete(idx);
+                    }
+                }
+            }
+            
+            // Capture after snapshots
+            const afterSnapshots = {};
+            const labelsAfter = {};
+            for (const idx of destIndices) {
+                afterSnapshots[idx] = captureSetupSnapshot(idx);
+                labelsAfter[idx] = setupLabels.get(idx) || null;
+            }
+            
+            // Record undo
+            recordUndo({
+                type: 'setup-copy',
+                description: `Copy Setup ${sourceIdx + 1} to ${destIndices.map(i => i + 1).join(', ')}`,
+                sourceIdx,
+                destIndices,
+                beforeSnapshots,
+                afterSnapshots,
+                labelsBefore,
+                labelsAfter
+            });
+            
+            // Update state
+            invalidateDiffCache(destIndices);
+            dirtySinceLoad = true;
+            markModified();
+            refreshMainEditorIfNeeded(destIndices);
+            
+            closeCopyDialog();
+            renderSetupManager();
+            
+            showToast(`Copied Setup ${sourceIdx + 1} to ${destIndices.length} slot(s)`, 'success');
+        }
+        
+        // Swap Dialog
+        function showSwapDialog() {
+            if (setupManagerSelection.size !== 1) return;
+            
+            const sourceIdx = [...setupManagerSelection][0];
+            const sourceLabel = setupLabels.get(sourceIdx);
+            
+            const dialog = document.createElement('div');
+            dialog.className = 'setup-subdialog';
+            dialog.id = 'swapSubdialog';
+            
+            dialog.innerHTML = `
+                <h4>Swap Setup ${sourceIdx + 1} with...</h4>
+                <p>Select setup to swap with:</p>
+                <div class="setup-subdialog-grid" id="swapDestGrid"></div>
+                <label class="setup-subdialog-checkbox">
+                    <input type="checkbox" id="swapLabelCheck" checked>
+                    Swap setup labels
+                </label>
+                <div id="swapPreview" style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.5rem;"></div>
+                <div class="setup-subdialog-buttons">
+                    <button class="btn" onclick="closeSwapDialog()">Cancel</button>
+                    <button class="btn btn-primary" id="swapConfirmBtn" onclick="performSwapFromDialog()" disabled>Swap</button>
+                </div>
+            `;
+            
+            document.body.appendChild(dialog);
+            
+            // Render grid
+            const grid = document.getElementById('swapDestGrid');
+            let targetIdx = null;
+            
+            for (let i = 0; i < 18; i++) {
+                const item = document.createElement('div');
+                item.className = 'setup-subdialog-item';
+                item.dataset.idx = i;
+                
+                if (i === sourceIdx) {
+                    item.classList.add('source');
+                    item.textContent = `▪ ${i + 1}`;
+                } else {
+                    item.textContent = i + 1;
+                    item.onclick = () => {
+                        // Single selection
+                        grid.querySelectorAll('.setup-subdialog-item').forEach(el => {
+                            if (!el.classList.contains('source')) {
+                                el.classList.remove('selected');
+                            }
+                        });
+                        item.classList.add('selected');
+                        targetIdx = i;
+                        updateSwapDialogState(sourceIdx, targetIdx);
+                    };
+                }
+                
+                grid.appendChild(item);
+            }
+            
+            dialog._sourceIdx = sourceIdx;
+            dialog._getTarget = () => targetIdx;
+        }
+        
+        function updateSwapDialogState(sourceIdx, targetIdx) {
+            const confirmBtn = document.getElementById('swapConfirmBtn');
+            const preview = document.getElementById('swapPreview');
+            
+            confirmBtn.disabled = targetIdx === null;
+            
+            if (targetIdx !== null) {
+                const sourceLabel = setupLabels.get(sourceIdx) || '(no label)';
+                const targetLabel = setupLabels.get(targetIdx) || '(no label)';
+                preview.textContent = `Setup ${sourceIdx + 1} (${sourceLabel}) ↔ Setup ${targetIdx + 1} (${targetLabel})`;
+            } else {
+                preview.textContent = '';
+            }
+        }
+        
+        function closeSwapDialog() {
+            const dialog = document.getElementById('swapSubdialog');
+            if (dialog) dialog.remove();
+        }
+        
+        function performSwapFromDialog() {
+            const dialog = document.getElementById('swapSubdialog');
+            if (!dialog) return;
+            
+            const sourceIdx = dialog._sourceIdx;
+            const targetIdx = dialog._getTarget();
+            const swapLabels = document.getElementById('swapLabelCheck').checked;
+            
+            if (targetIdx === null) return;
+            
+            performSwap(sourceIdx, targetIdx, swapLabels);
+            closeSwapDialog();
+        }
+        
+        function performDirectSwap() {
+            if (setupManagerSelection.size !== 2) return;
+            
+            const [idxA, idxB] = [...setupManagerSelection].sort((a, b) => a - b);
+            performSwap(idxA, idxB, true);
+        }
+        
+        function performSwap(idxA, idxB, swapLabelsFlag = true) {
+            // Capture before
+            const beforeSnapshots = {
+                [idxA]: captureSetupSnapshot(idxA),
+                [idxB]: captureSetupSnapshot(idxB)
+            };
+            const labelsBefore = {
+                [idxA]: setupLabels.get(idxA) || null,
+                [idxB]: setupLabels.get(idxB) || null
+            };
+            
+            // Perform swap
+            restoreSetupSnapshot(idxA, beforeSnapshots[idxB]);
+            restoreSetupSnapshot(idxB, beforeSnapshots[idxA]);
+            
+            if (swapLabelsFlag) {
+                const tempLabel = setupLabels.get(idxA);
+                if (setupLabels.has(idxB)) {
+                    setupLabels.set(idxA, setupLabels.get(idxB));
+                } else {
+                    setupLabels.delete(idxA);
+                }
+                if (tempLabel) {
+                    setupLabels.set(idxB, tempLabel);
+                } else {
+                    setupLabels.delete(idxB);
+                }
+            }
+            
+            // Capture after
+            const afterSnapshots = {
+                [idxA]: captureSetupSnapshot(idxA),
+                [idxB]: captureSetupSnapshot(idxB)
+            };
+            const labelsAfter = {
+                [idxA]: setupLabels.get(idxA) || null,
+                [idxB]: setupLabels.get(idxB) || null
+            };
+            
+            // Record undo
+            recordUndo({
+                type: 'setup-swap',
+                description: `Swap Setup ${idxA + 1} ↔ Setup ${idxB + 1}`,
+                idxA,
+                idxB,
+                beforeSnapshots,
+                afterSnapshots,
+                labelsBefore,
+                labelsAfter
+            });
+            
+            // Update state
+            invalidateDiffCache([idxA, idxB]);
+            dirtySinceLoad = true;
+            markModified();
+            refreshMainEditorIfNeeded([idxA, idxB]);
+            
+            renderSetupManager();
+            showToast(`Swapped Setup ${idxA + 1} ↔ Setup ${idxB + 1}`, 'success');
+        }
+        
+        // Reset to Factory Dialog
+        function showResetToFactoryDialog() {
+            if (setupManagerSelection.size === 0) return;
+            
+            const indices = [...setupManagerSelection].sort((a, b) => a - b);
+            const count = indices.length;
+            
+            const dialog = document.createElement('div');
+            dialog.className = 'setup-subdialog';
+            dialog.id = 'resetToFactorySubdialog';
+            
+            let content;
+            if (count === 1) {
+                const idx = indices[0];
+                const label = setupLabels.get(idx);
+                content = `
+                    <h4>Reset to Factory</h4>
+                    <p>Restore Setup ${idx + 1}${label ? ` (${label})` : ''} to factory defaults?</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim);">This will restore all 264 controls and group names from <code>factory_default.syx</code>.</p>
+                    ${label ? `<p style="font-size: 0.8rem; color: var(--text-dim);">The setup label will be removed.</p>` : ''}
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">This action can be undone.</p>
+                `;
+            } else {
+                const setupList = indices.map(i => {
+                    const label = setupLabels.get(i);
+                    return `Setup ${i + 1}${label ? ` (${label})` : ''}`;
+                }).join(', ');
+                content = `
+                    <h4>Reset to Factory</h4>
+                    <p>Restore ${count} setups to factory defaults?</p>
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0.5rem 0;">${setupList}</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted);">This action can be undone.</p>
+                `;
+            }
+            
+            dialog.innerHTML = `
+                ${content}
+                <div class="setup-subdialog-buttons">
+                    <a href="#" onclick="selectAllSetups(); return false;" style="font-size: 0.8rem; margin-right: auto;">Select All</a>
+                    <button class="btn" onclick="closeResetToFactoryDialog()">Cancel</button>
+                    <button class="btn btn-primary" onclick="performResetToFactory()">Reset to Factory</button>
+                </div>
+            `;
+            
+            dialog._indices = indices;
+            document.body.appendChild(dialog);
+        }
+        
+        function closeResetToFactoryDialog() {
+            const dialog = document.getElementById('resetToFactorySubdialog');
+            if (dialog) dialog.remove();
+        }
+        
+        function selectAllSetups() {
+            // Select all 18 setups
+            for (let i = 0; i < 18; i++) {
+                setupManagerSelection.add(i);
+            }
+            // Close current dialog and reopen with new selection
+            closeResetToFactoryDialog();
+            updateSetupManagerUI();
+            showResetToFactoryDialog();
+        }
+        
+        function performResetToFactory() {
+            const dialog = document.getElementById('resetToFactorySubdialog');
+            if (!dialog) return;
+            
+            const indices = dialog._indices;
+            
+            // Capture before
+            const beforeSnapshots = {};
+            const labelsBefore = {};
+            for (const idx of indices) {
+                beforeSnapshots[idx] = captureSetupSnapshot(idx);
+                labelsBefore[idx] = setupLabels.get(idx) || null;
+            }
+            
+            // Apply factory defaults - each setup gets its own template
+            for (const idx of indices) {
+                const factorySnapshot = createFactorySetupSnapshot(idx);
+                restoreSetupSnapshot(idx, factorySnapshot);
+                setupLabels.delete(idx);
+            }
+            
+            // Capture after
+            const afterSnapshots = {};
+            const labelsAfter = {};
+            for (const idx of indices) {
+                afterSnapshots[idx] = captureSetupSnapshot(idx);
+                labelsAfter[idx] = null;
+            }
+            
+            // Record undo
+            recordUndo({
+                type: 'setup-reset-factory',
+                description: `Reset Setup${indices.length > 1 ? 's' : ''} ${indices.map(i => i + 1).join(', ')} to factory`,
+                indices,
+                beforeSnapshots,
+                afterSnapshots,
+                labelsBefore,
+                labelsAfter
+            });
+            
+            // Update state
+            invalidateDiffCache(indices);
+            dirtySinceLoad = true;
+            markModified();
+            
+            closeResetToFactoryDialog();
+            afterSetupStateMutation(indices);
+            
+            showToast(`Reset ${indices.length} setup${indices.length > 1 ? 's' : ''} to factory defaults`, 'success');
+        }
+        
+        // Label Editor
+        function showLabelEditor() {
+            if (setupManagerSelection.size !== 1) return;
+            
+            const idx = [...setupManagerSelection][0];
+            const currentLabel = setupLabels.get(idx) || '';
+            
+            const dialog = document.createElement('div');
+            dialog.className = 'setup-subdialog';
+            dialog.id = 'labelSubdialog';
+            
+            dialog.innerHTML = `
+                <h4>Edit Label - Setup ${idx + 1}</h4>
+                <div class="label-editor">
+                    <input type="text" id="labelInput" value="${escapeHtml(currentLabel)}" maxlength="12" placeholder="Enter label...">
+                    <div class="label-editor-hint">Max 12 characters. Letters, numbers, space, hyphen, underscore.</div>
+                    <div id="labelError" class="label-editor-error" style="display: none;"></div>
+                </div>
+                <div class="setup-subdialog-buttons">
+                    <button class="btn" onclick="closeLabelEditor()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveLabel()">Save</button>
+                </div>
+            `;
+            
+            dialog._idx = idx;
+            dialog._originalLabel = currentLabel;
+            document.body.appendChild(dialog);
+            
+            // Focus input
+            const input = document.getElementById('labelInput');
+            input.focus();
+            input.select();
+            
+            // Validate on input
+            input.oninput = validateLabelInput;
+            input.onkeydown = (e) => {
+                if (e.key === 'Enter') saveLabel();
+                if (e.key === 'Escape') closeLabelEditor();
+            };
+        }
+        
+        function validateLabelInput() {
+            const input = document.getElementById('labelInput');
+            const error = document.getElementById('labelError');
+            const value = input.value;
+            
+            // Valid characters: alphanumeric, space, hyphen, underscore
+            const sanitized = value.replace(/[^a-zA-Z0-9 \-_]/g, '');
+            
+            if (sanitized !== value) {
+                input.value = sanitized;
+                error.textContent = 'Invalid characters removed';
+                error.style.display = 'block';
+            } else {
+                error.style.display = 'none';
+            }
+        }
+        
+        function closeLabelEditor() {
+            const dialog = document.getElementById('labelSubdialog');
+            if (dialog) dialog.remove();
+        }
+        
+        function saveLabel() {
+            const dialog = document.getElementById('labelSubdialog');
+            if (!dialog) return;
+            
+            const idx = dialog._idx;
+            const originalLabel = dialog._originalLabel;
+            const newLabel = document.getElementById('labelInput').value.trim();
+            
+            if (newLabel === originalLabel) {
+                closeLabelEditor();
+                return;
+            }
+            
+            // Update label
+            if (newLabel) {
+                setupLabels.set(idx, newLabel);
+            } else {
+                setupLabels.delete(idx);
+            }
+            
+            // Record undo (simple label change)
+            recordUndo({
+                type: 'setup-label',
+                description: `Change Setup ${idx + 1} label`,
+                idx,
+                labelBefore: originalLabel || null,
+                labelAfter: newLabel || null
+            });
+            
+            dirtySinceLoad = true;
+            markModified();
+            updateSetupDropdownLabels();
+            
+            closeLabelEditor();
+            renderSetupManager();
+            
+            showToast(`Updated Setup ${idx + 1} label`, 'success');
+        }
+        
+        // Import to Slot Dialog (Phase 8)
+        function showImportToSlotDialog() {
+            const dialog = document.createElement('div');
+            dialog.className = 'setup-subdialog import-subdialog';
+            dialog.id = 'importSubdialog';
+            
+            dialog.innerHTML = `
+                <h4>Import JSON to Slot</h4>
+                <div class="import-file-section">
+                    <input type="file" id="importSlotFileInput" accept=".json" style="display: none;">
+                    <button class="btn" onclick="document.getElementById('importSlotFileInput').click()">Choose JSON file...</button>
+                    <span id="importFileName" style="margin-left: 0.5rem; color: var(--text-dim);">No file selected</span>
+                </div>
+                <div id="importFileInfo" style="display: none; margin-top: 1rem;">
+                    <div id="importFileType" style="font-size: 0.85rem; margin-bottom: 0.5rem;"></div>
+                    <div id="importSourceSection" style="display: none; margin-bottom: 0.75rem;">
+                        <p style="margin-bottom: 0.5rem;">Extract setup from file:</p>
+                        <div class="setup-subdialog-grid" id="importSourceGrid"></div>
+                    </div>
+                    <div id="importTargetSection" style="margin-bottom: 0.75rem;">
+                        <p style="margin-bottom: 0.5rem;">Import to slot:</p>
+                        <div class="setup-subdialog-grid" id="importTargetGrid"></div>
+                    </div>
+                    <label class="setup-subdialog-checkbox">
+                        <input type="checkbox" id="importLabelCheck" checked>
+                        Import setup label
+                    </label>
+                </div>
+                <div id="importWarnings" class="setup-subdialog-warning" style="display: none;"></div>
+                <div class="setup-subdialog-buttons">
+                    <button class="btn" onclick="closeImportSlotDialog()">Cancel</button>
+                    <button class="btn btn-primary" id="importConfirmBtn" onclick="performImportToSlot()" disabled>Import</button>
+                </div>
+            `;
+            
+            document.body.appendChild(dialog);
+            
+            // Store state
+            dialog._parsedData = null;
+            dialog._sourceIdx = null;
+            dialog._targetIdx = setupManagerSelection.size === 1 ? [...setupManagerSelection][0] : null;
+            dialog._validationWarnings = [];
+            
+            // Set up file input handler
+            document.getElementById('importSlotFileInput').onchange = handleImportFileSelect;
+            
+            // If we have a pre-selected target, render target grid
+            renderImportTargetGrid(dialog._targetIdx);
+        }
+        
+        async function handleImportFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const dialog = document.getElementById('importSubdialog');
+            if (!dialog) return;
+            
+            document.getElementById('importFileName').textContent = file.name;
+            
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+                
+                // Validate format
+                const validation = validateImportJSON(data);
+                
+                if (validation.error) {
+                    showImportError(validation.error);
+                    return;
+                }
+                
+                dialog._parsedData = data;
+                dialog._validationWarnings = validation.warnings;
+                
+                // Determine file type and show appropriate UI
+                if (data.format === 'uc4-editor-setup') {
+                    // Single setup file
+                    document.getElementById('importFileType').innerHTML = `
+                        <strong>Type:</strong> Single setup
+                        ${data.label ? `<br><strong>Label:</strong> ${escapeHtml(data.label)}` : ''}
+                    `;
+                    document.getElementById('importSourceSection').style.display = 'none';
+                    dialog._sourceIdx = 0; // Single setup is always index 0 in the parsed data
+                } else if (data.format === 'uc4-editor') {
+                    // Full dump
+                    document.getElementById('importFileType').innerHTML = `
+                        <strong>Type:</strong> Full dump (${data.setups.length} setups)
+                        ${data.version ? `<br><strong>Version:</strong> ${data.version}` : ''}
+                    `;
+                    document.getElementById('importSourceSection').style.display = 'block';
+                    renderImportSourceGrid(data);
+                    
+                    // Default to first labeled setup, or setup 0
+                    let defaultSource = 0;
+                    if (data.setupLabels) {
+                        for (let i = 0; i < 18; i++) {
+                            if (data.setupLabels[i.toString()]) {
+                                defaultSource = i;
+                                break;
+                            }
+                        }
+                    }
+                    selectImportSource(defaultSource);
+                }
+                
+                document.getElementById('importFileInfo').style.display = 'block';
+                
+                // Show warnings if any
+                if (validation.warnings.length > 0) {
+                    const warningsDiv = document.getElementById('importWarnings');
+                    if (validation.warnings.length <= 5) {
+                        warningsDiv.innerHTML = `<strong>⚠ ${validation.warnings.length} issue(s) found:</strong><ul style="margin: 0.25rem 0 0 1rem; padding: 0;">` +
+                            validation.warnings.map(w => `<li style="font-size: 0.75rem;">${escapeHtml(w)}</li>`).join('') +
+                            '</ul>';
+                    } else {
+                        warningsDiv.innerHTML = `<strong>⚠ ${validation.warnings.length} issues found.</strong> First 5:<ul style="margin: 0.25rem 0 0 1rem; padding: 0;">` +
+                            validation.warnings.slice(0, 5).map(w => `<li style="font-size: 0.75rem;">${escapeHtml(w)}</li>`).join('') +
+                            '</ul>';
+                    }
+                    warningsDiv.style.display = 'block';
+                }
+                
+                updateImportDialogState();
+                
+            } catch (err) {
+                showImportError(`Parse error: ${err.message}`);
+            }
+        }
+        
+        function validateImportJSON(data) {
+            const warnings = [];
+            
+            // Check format
+            if (!data.format) {
+                return { error: 'Missing format field - not a UC4 configuration file' };
+            }
+            
+            if (data.format === 'uc4-editor-setup') {
+                // Single setup validation
+                if (!data.groups || !Array.isArray(data.groups)) {
+                    return { error: 'Invalid structure: missing groups array' };
+                }
+                if (data.groups.length !== 8) {
+                    return { error: `Invalid structure: expected 8 groups, found ${data.groups.length}` };
+                }
+                
+                // Validate each group
+                for (let g = 0; g < 8; g++) {
+                    const groupWarnings = validateGroupStructure(data.groups[g], g, 'groups');
+                    if (groupWarnings.error) return groupWarnings;
+                    warnings.push(...groupWarnings.warnings);
+                }
+                
+                // Wrap in normalized structure for easier processing
+                data._normalizedSetups = [{
+                    groups: data.groups,
+                    label: data.label
+                }];
+                
+            } else if (data.format === 'uc4-editor') {
+                // Full dump validation
+                if (!data.setups || !Array.isArray(data.setups)) {
+                    return { error: 'Invalid structure: missing setups array' };
+                }
+                if (data.setups.length !== 18) {
+                    return { error: `Invalid structure: expected 18 setups, found ${data.setups.length}` };
+                }
+                
+                // Validate each setup
+                for (let s = 0; s < 18; s++) {
+                    const setup = data.setups[s];
+                    if (!setup.groups || !Array.isArray(setup.groups)) {
+                        return { error: `Invalid structure: setup ${s + 1} missing groups array` };
+                    }
+                    if (setup.groups.length !== 8) {
+                        return { error: `Invalid structure: setup ${s + 1} expected 8 groups, found ${setup.groups.length}` };
+                    }
+                    
+                    // Check index consistency
+                    if (setup.index !== undefined && setup.index !== s) {
+                        warnings.push(`setups[${s}].index: value ${setup.index} doesn't match array position, using position`);
+                    }
+                    
+                    for (let g = 0; g < 8; g++) {
+                        const groupWarnings = validateGroupStructure(setup.groups[g], g, `setups[${s}].groups`);
+                        if (groupWarnings.error) return groupWarnings;
+                        warnings.push(...groupWarnings.warnings);
+                    }
+                }
+                
+                // Normalize for processing
+                data._normalizedSetups = data.setups.map((setup, idx) => ({
+                    groups: setup.groups,
+                    label: data.setupLabels ? data.setupLabels[idx.toString()] : null
+                }));
+                
+            } else {
+                return { error: `Unknown format "${data.format}" - not a UC4 configuration file` };
+            }
+            
+            return { warnings };
+        }
+        
+        function validateGroupStructure(group, groupIdx, path) {
+            const warnings = [];
+            const prefix = `${path}[${groupIdx}]`;
+            
+            // Check required keys
+            const required = ['encoders', 'pushButtons', 'greenButtons', 'faders', 'fader9'];
+            for (const key of required) {
+                if (!(key in group)) {
+                    return { error: `Invalid structure: ${prefix} missing ${key}` };
+                }
+            }
+            
+            // Check array lengths
+            const arrays = { encoders: 8, pushButtons: 8, greenButtons: 8, faders: 8 };
+            for (const [key, expectedLen] of Object.entries(arrays)) {
+                if (!Array.isArray(group[key])) {
+                    return { error: `Invalid structure: ${prefix}.${key} is not an array` };
+                }
+                if (group[key].length !== expectedLen) {
+                    return { error: `Invalid structure: ${prefix}.${key} length ${group[key].length}, expected ${expectedLen}` };
+                }
+            }
+            
+            // Check fader9 is object
+            if (typeof group.fader9 !== 'object' || group.fader9 === null) {
+                return { error: `Invalid structure: ${prefix}.fader9 is not an object` };
+            }
+            
+            // Validate values and coerce if needed
+            for (let i = 0; i < 8; i++) {
+                warnings.push(...validateControlValues(group.encoders[i], `${prefix}.encoders[${i}]`, 'encoder', i));
+                warnings.push(...validateControlValues(group.pushButtons[i], `${prefix}.pushButtons[${i}]`, 'pushButton', i));
+                warnings.push(...validateControlValues(group.greenButtons[i], `${prefix}.greenButtons[${i}]`, 'greenButton', i));
+                warnings.push(...validateControlValues(group.faders[i], `${prefix}.faders[${i}]`, 'fader', i));
+            }
+            warnings.push(...validateControlValues(group.fader9, `${prefix}.fader9`, 'fader9', 0));
+            
+            // Check for unknown fields
+            const knownKeys = ['name', 'index', 'encoders', 'pushButtons', 'greenButtons', 'faders', 'fader9'];
+            for (const key of Object.keys(group)) {
+                if (!knownKeys.includes(key)) {
+                    warnings.push(`${prefix}: unknown field '${key}' ignored`);
+                }
+            }
+            
+            return { warnings };
+        }
+        
+        function validateControlValues(control, path, type, idx) {
+            const warnings = [];
+            const defaults = VALIDATION_DEFAULTS[type](idx);
+            
+            // Clamp channel
+            if ('channel' in control) {
+                const ch = parseInt(control.channel);
+                if (isNaN(ch)) {
+                    control.channel = defaults.channel;
+                    warnings.push(`${path}.channel: invalid value, using default ${defaults.channel}`);
+                } else if (ch < 1 || ch > 16) {
+                    control.channel = Math.max(1, Math.min(16, ch));
+                    warnings.push(`${path}.channel: value ${ch} clamped to ${control.channel}`);
+                }
+            }
+            
+            // Clamp CC
+            if ('cc' in control) {
+                const cc = parseInt(control.cc);
+                if (isNaN(cc)) {
+                    control.cc = defaults.cc;
+                    warnings.push(`${path}.cc: invalid value, using default ${defaults.cc}`);
+                } else if (cc < 0 || cc > 127) {
+                    control.cc = Math.max(0, Math.min(127, cc));
+                    warnings.push(`${path}.cc: value ${cc} clamped to ${control.cc}`);
+                }
+            }
+            
+            // Clamp min/max or lower/upper
+            for (const field of ['min', 'max', 'lower', 'upper']) {
+                if (field in control) {
+                    const val = parseInt(control[field]);
+                    if (isNaN(val)) {
+                        control[field] = defaults[field] !== undefined ? defaults[field] : 0;
+                        warnings.push(`${path}.${field}: invalid value, using default`);
+                    } else if (val < 0 || val > 127) {
+                        control[field] = Math.max(0, Math.min(127, val));
+                        warnings.push(`${path}.${field}: value ${val} clamped to ${control[field]}`);
+                    }
+                }
+            }
+            
+            // Validate type (encoder: 0-6, fader: 0-3)
+            if ('type' in control) {
+                const t = parseInt(control.type);
+                const maxType = type === 'encoder' ? 6 : 3;
+                if (isNaN(t) || t < 0 || t > maxType) {
+                    control.type = defaults.type;
+                    warnings.push(`${path}.type: invalid value ${control.type}, using default ${defaults.type}`);
+                }
+            }
+            
+            // Validate typeNibble (buttons)
+            if ('typeNibble' in control) {
+                const tn = parseInt(control.typeNibble);
+                if (isNaN(tn)) {
+                    control.typeNibble = defaults.typeNibble;
+                    warnings.push(`${path}.typeNibble: invalid value, using default ${defaults.typeNibble}`);
+                } else if (tn < 0 || tn > 127) {
+                    control.typeNibble = Math.max(0, Math.min(127, tn));
+                    warnings.push(`${path}.typeNibble: value ${tn} clamped to ${control.typeNibble}`);
+                } else if (tn % 16 !== 0) {
+                    warnings.push(`${path}.typeNibble: value ${tn} not nibble-aligned`);
+                }
+            }
+            
+            // Validate acc (encoder: 0-3)
+            if ('acc' in control) {
+                const acc = parseInt(control.acc);
+                if (isNaN(acc) || acc < 0 || acc > 3) {
+                    control.acc = defaults.acc !== undefined ? defaults.acc : 3;
+                    warnings.push(`${path}.acc: invalid value, using default`);
+                }
+            }
+            
+            // Validate mode (0-1)
+            if ('mode' in control) {
+                const m = parseInt(control.mode);
+                if (isNaN(m) || m < 0 || m > 1) {
+                    control.mode = defaults.mode !== undefined ? defaults.mode : 0;
+                    warnings.push(`${path}.mode: invalid value, using default 0`);
+                }
+            }
+            
+            // Validate display (0-2)
+            if ('display' in control) {
+                const d = parseInt(control.display);
+                if (isNaN(d) || d < 0 || d > 2) {
+                    control.display = defaults.display !== undefined ? defaults.display : 1;
+                    warnings.push(`${path}.display: invalid value, using default 1`);
+                }
+            }
+            
+            return warnings;
+        }
+        
+        function showImportError(message) {
+            const warningsDiv = document.getElementById('importWarnings');
+            if (warningsDiv) {
+                warningsDiv.innerHTML = `<strong style="color: #ff6b6b;">✕ ${escapeHtml(message)}</strong>`;
+                warningsDiv.style.display = 'block';
+            }
+            document.getElementById('importFileInfo').style.display = 'none';
+            document.getElementById('importConfirmBtn').disabled = true;
+        }
+        
+        function renderImportSourceGrid(data) {
+            const grid = document.getElementById('importSourceGrid');
+            grid.innerHTML = '';
+            
+            for (let i = 0; i < 18; i++) {
+                const item = document.createElement('div');
+                item.className = 'setup-subdialog-item';
+                item.dataset.idx = i;
+                
+                // Check if this setup has a label
+                const hasLabel = data.setupLabels && data.setupLabels[i.toString()];
+                if (hasLabel) {
+                    item.title = data.setupLabels[i.toString()];
+                    item.classList.add('has-label');
+                }
+                
+                item.textContent = i + 1;
+                item.onclick = () => selectImportSource(i);
+                grid.appendChild(item);
+            }
+        }
+        
+        function selectImportSource(idx) {
+            const dialog = document.getElementById('importSubdialog');
+            if (!dialog) return;
+            
+            dialog._sourceIdx = idx;
+            
+            // Update grid selection
+            document.querySelectorAll('#importSourceGrid .setup-subdialog-item').forEach(el => {
+                el.classList.toggle('selected', parseInt(el.dataset.idx) === idx);
+            });
+            
+            updateImportDialogState();
+        }
+        
+        function renderImportTargetGrid(preselectedIdx) {
+            const grid = document.getElementById('importTargetGrid');
+            grid.innerHTML = '';
+            
+            for (let i = 0; i < 18; i++) {
+                const item = document.createElement('div');
+                item.className = 'setup-subdialog-item';
+                item.dataset.idx = i;
+                
+                const label = setupLabels.get(i);
+                if (label) {
+                    item.title = label;
+                    item.classList.add('has-label');
+                }
+                
+                if (preselectedIdx === i) {
+                    item.classList.add('selected');
+                }
+                
+                item.textContent = i + 1;
+                item.onclick = () => selectImportTarget(i);
+                grid.appendChild(item);
+            }
+        }
+        
+        function selectImportTarget(idx) {
+            const dialog = document.getElementById('importSubdialog');
+            if (!dialog) return;
+            
+            dialog._targetIdx = idx;
+            
+            // Update grid selection (single select only)
+            document.querySelectorAll('#importTargetGrid .setup-subdialog-item').forEach(el => {
+                el.classList.toggle('selected', parseInt(el.dataset.idx) === idx);
+            });
+            
+            updateImportDialogState();
+        }
+        
+        function updateImportDialogState() {
+            const dialog = document.getElementById('importSubdialog');
+            if (!dialog) return;
+            
+            const canImport = dialog._parsedData && dialog._sourceIdx !== null && dialog._targetIdx !== null;
+            document.getElementById('importConfirmBtn').disabled = !canImport;
+        }
+        
+        function closeImportSlotDialog() {
+            const dialog = document.getElementById('importSubdialog');
+            if (dialog) dialog.remove();
+        }
+        
+        function performImportToSlot() {
+            const dialog = document.getElementById('importSubdialog');
+            if (!dialog) return;
+            
+            const data = dialog._parsedData;
+            const sourceIdx = dialog._sourceIdx;
+            const targetIdx = dialog._targetIdx;
+            const importLabel = document.getElementById('importLabelCheck').checked;
+            
+            if (!data || sourceIdx === null || targetIdx === null) return;
+            
+            // Get the normalized setup data
+            const sourceSetup = data._normalizedSetups[sourceIdx];
+            
+            // Capture before state
+            const beforeSnapshot = captureSetupSnapshot(targetIdx);
+            const labelBefore = setupLabels.get(targetIdx) || null;
+            
+            // Convert imported groups to snapshot format and apply
+            const importedSnapshot = {
+                groups: sourceSetup.groups.map((g, gIdx) => ({
+                    name: g.name || VALIDATION_DEFAULTS.groupName(gIdx),
+                    encoders: g.encoders,
+                    pushButtons: g.pushButtons,
+                    greenButtons: g.greenButtons,
+                    faders: g.faders,
+                    fader9: g.fader9
+                }))
+            };
+            
+            restoreSetupSnapshot(targetIdx, importedSnapshot);
+            
+            // Handle label
+            if (importLabel && sourceSetup.label) {
+                const sanitized = sourceSetup.label.slice(0, 12).replace(/[^a-zA-Z0-9 \-_]/g, '');
+                if (sanitized) {
+                    setupLabels.set(targetIdx, sanitized);
+                } else {
+                    setupLabels.delete(targetIdx);
+                }
+            } else if (importLabel) {
+                // No source label, clear target label
+                setupLabels.delete(targetIdx);
+            }
+            // If !importLabel, leave target label unchanged
+            
+            // Capture after state
+            const afterSnapshot = captureSetupSnapshot(targetIdx);
+            const labelAfter = setupLabels.get(targetIdx) || null;
+            
+            // Record undo
+            recordUndo({
+                type: 'setup-import',
+                description: `Import to Setup ${targetIdx + 1}`,
+                targetIdx,
+                beforeSnapshot,
+                afterSnapshot,
+                labelBefore,
+                labelAfter
+            });
+            
+            // Update state
+            invalidateDiffCache(targetIdx);
+            dirtySinceLoad = true;
+            markModified();
+            refreshMainEditorIfNeeded([targetIdx]);
+            updateSetupDropdownLabels();
+            
+            closeImportSlotDialog();
+            renderSetupManager();
+            
+            const warningCount = dialog._validationWarnings.length;
+            if (warningCount > 0) {
+                showToast(`Imported to Setup ${targetIdx + 1} (${warningCount} warning${warningCount > 1 ? 's' : ''})`, 'success');
+            } else {
+                showToast(`Imported to Setup ${targetIdx + 1}`, 'success');
+            }
+        }
+        
+        // Export Single Setup
+        function exportSingleSetup() {
+            if (setupManagerSelection.size !== 1) return;
+            
+            const idx = [...setupManagerSelection][0];
+            const label = setupLabels.get(idx);
+            
+            // Generate default filename
+            let defaultFilename = `uc4-setup-${idx + 1}`;
+            if (label) {
+                const sanitized = label.toLowerCase()
+                    .replace(/[\/\\:*?"<>|]/g, '-')
+                    .replace(/[\x00-\x1F]/g, '')
+                    .replace(/-+/g, '-')
+                    .replace(/^-|-$/g, '');
+                if (sanitized) {
+                    defaultFilename += `-${sanitized}`;
+                }
+            }
+            defaultFilename += '.json';
+            
+            promptFilename(defaultFilename, 'Export Single Setup', (filename) => {
+                const snapshot = captureSetupSnapshot(idx);
+                
+                const exportData = {
+                    format: 'uc4-editor-setup',
+                    version: '1.0',
+                    exported: new Date().toISOString(),
+                    sourceSetup: idx,
+                    label: label || undefined,
+                    groups: snapshot.groups
+                };
+                
+                // Download
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                showToast(`Exported Setup ${idx + 1}`, 'success');
+            });
+        }
+        
+        // Helper: refresh main editor if affected
+        function refreshMainEditorIfNeeded(affectedSetups) {
+            if (affectedSetups.includes(currentSetup)) {
+                updateGroupNames();
+                rebuildConflictMap();
+                renderCurrentView();
+            }
+        }
+        
+        // Update setup dropdown to show labels
+        function updateSetupDropdownLabels() {
+            const select = document.getElementById('setupSelect');
+            if (!select) return;
+            
+            for (let i = 0; i < 18; i++) {
+                const option = select.options[i + 1]; // +1 for the "--" placeholder
+                if (option) {
+                    const label = setupLabels.get(i);
+                    option.textContent = label ? `${i + 1}: ${label}` : `${i + 1}`;
+                }
+            }
+        }
+        
+        // Unified post-mutation hook for setup state changes
+        // Call this after: clear, copy, swap, label edit, import-to-slot, global reset/import
+        function afterSetupStateMutation(affectedSetupIdxs) {
+            // Always refresh dropdown labels
+            updateSetupDropdownLabels();
+            
+            // Refresh main editor if affected setup is current
+            refreshMainEditorIfNeeded(affectedSetupIdxs);
+            
+            // Refresh Setup Manager if open
+            if (setupManagerOpen) {
+                renderSetupManager();
+            }
+        }
+        
+        // Escape HTML for safe insertion
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // ============================================================
         // Init
         // ============================================================
         
@@ -6571,11 +8802,16 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 
                 sectionIndex = buildIndex(rawBuffer);
                 
+                // Initialize factory templates from loaded SysEx
+                // Must be done before any differsFromFactory checks
+                initFactoryTemplates();
+                
                 // Enable UI
                 document.getElementById('setupSelect').disabled = false;
                 document.getElementById('setupSelect').value = '0';
                 document.getElementById('exportBtn').disabled = false;
                 document.getElementById('exportJsonBtn').disabled = false;
+                document.getElementById('manageSetupsBtn').disabled = false;
                 
                 currentSetup = 0;
                 encoderGroup = 0;
