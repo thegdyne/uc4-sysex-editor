@@ -8,7 +8,6 @@
   ],
   "tags": [
     { "tag": "ableton", "count": 1 },
-    { "tag": "complete", "count": 1 },
     { "tag": "daw", "count": 1 },
     { "tag": "drum-machine", "count": 1 },
     { "tag": "elektron", "count": 1 },
@@ -18,20 +17,20 @@
   ],
   "entries": [
     {
-      "id": "elektron-digitakt2-full",
-      "name": "Elektron Digitakt II Complete",
+      "id": "elektron-digitakt2",
+      "name": "Elektron Digitakt II",
       "author": "thegdyne",
-      "description": "Full 18-setup configuration for Digitakt II. Each setup maps to a track (1-8) with encoders for filter, amp, LFO controls. Groups provide different parameter pages per track.",
+      "description": "Two setups for Digitakt II. Setup 1: Track controls (filter, amp, LFO). Setup 2: Source/sample controls. Each group maps to a track (1-8).",
       "deviceId": "elektron-digitakt",
       "device": "Elektron Digitakt",
-      "tags": ["elektron", "drum-machine", "complete", "performance"],
-      "file": "configs/elektron-digitakt2-full.json",
+      "tags": ["elektron", "drum-machine", "performance"],
+      "file": "configs/elektron-digitakt2.json",
       "format": "uc4-editor",
-      "setupCount": 18,
-      "contentHash": "sha256-6dc9c840622a61873c65ebfeb896290b8a64b42bf41dd0f663bc5f670944ef9f",
+      "setupCount": 2,
+      "contentHash": "sha256-e65816f2d285b720e3f881afc55512c1c8a938e965599040207e87f930a63ef8",
       "minEditorVersion": "1.0.0",
       "created": "2026-01-15T21:30:00.000Z",
-      "updated": "2026-01-15T21:30:00.000Z"
+      "updated": "2026-01-15T22:50:00.000Z"
     },
     {
       "id": "generic-cc-sequential",

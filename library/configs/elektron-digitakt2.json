@@ -1,0 +1,4937 @@
+{
+  "format": "uc4-editor",
+  "version": "1.0.0",
+  "exportedBy": {
+    "app": "uc4-sysex-editor",
+    "version": "1.0.0"
+  },
+  "exported": "2026-01-13T19:57:51.018165",
+  "setups": [
+    {
+      "index": 0,
+      "groups": [
+        {
+          "index": 0,
+          "name": "Tr01",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 74,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 75,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 77,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 71,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 79,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 81,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 82,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 83,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 13,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 14,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 16,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 1,
+            "cc": 90,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 1,
+          "name": "Tr02",
+          "encoders": [
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 74,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 75,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 77,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 71,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 79,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 81,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 82,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 83,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 13,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 14,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 16,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 2,
+            "cc": 90,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 2,
+          "name": "Tr03",
+          "encoders": [
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 74,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 75,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 77,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 71,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 79,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 81,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 82,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 83,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 13,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 14,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 16,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 3,
+            "cc": 90,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 3,
+          "name": "Tr04",
+          "encoders": [
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 74,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 75,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 77,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 71,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 79,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 81,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 82,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 83,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 13,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 14,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 16,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 4,
+            "cc": 90,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 4,
+          "name": "Tr05",
+          "encoders": [
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 74,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 75,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 77,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 71,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 79,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 81,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 82,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 83,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 13,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 14,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 16,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 5,
+            "cc": 90,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 5,
+          "name": "Tr06",
+          "encoders": [
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 74,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 75,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 77,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 71,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 79,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 81,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 82,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 83,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 13,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 14,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 16,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 6,
+            "cc": 90,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 6,
+          "name": "Tr07",
+          "encoders": [
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 74,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 75,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 77,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 71,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 79,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 81,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 82,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 83,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 13,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 14,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 16,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 7,
+            "cc": 90,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 7,
+          "name": "Tr08",
+          "encoders": [
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 74,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 75,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 77,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 71,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 79,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 81,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 82,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 83,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 13,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 14,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 16,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 8,
+            "cc": 90,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "groups": [
+        {
+          "index": 0,
+          "name": "LEV ",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 2
+            }
+          ],
+          "fader9": {
+            "channel": 9,
+            "cc": 119,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 1,
+          "name": "PAN ",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 90,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 2
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 9,
+            "cc": 119,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 2,
+          "name": "DLY ",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 84,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 9,
+            "cc": 119,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 3,
+          "name": "REV ",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 85,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 9,
+            "cc": 119,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 4,
+          "name": "OD  ",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 57,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 9,
+            "cc": 119,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 5,
+          "name": "BR  ",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 54,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 9,
+            "cc": 119,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 6,
+          "name": "SRR ",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 55,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 9,
+            "cc": 119,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        },
+        {
+          "index": 7,
+          "name": "CHO ",
+          "encoders": [
+            {
+              "channel": 1,
+              "type": 2,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 2,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 2,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 2,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 2,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 2,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 2,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 2,
+              "cc": 12,
+              "min": 0,
+              "max": 127,
+              "acc": 2,
+              "display": 1
+            }
+          ],
+          "pushButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 0,
+              "cc": 0,
+              "lower": 0,
+              "upper": 127,
+              "mode": 0,
+              "display": 1
+            }
+          ],
+          "greenButtons": [
+            {
+              "channel": 1,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "typeNibble": 32,
+              "cc": 94,
+              "lower": 0,
+              "upper": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "faders": [
+            {
+              "channel": 1,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 2,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 3,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 4,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 5,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 6,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 7,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            },
+            {
+              "channel": 8,
+              "type": 0,
+              "cc": 95,
+              "min": 0,
+              "max": 127,
+              "mode": 1,
+              "display": 1
+            }
+          ],
+          "fader9": {
+            "channel": 9,
+            "cc": 119,
+            "min": 0,
+            "max": 127,
+            "mode": 1
+          }
+        }
+      ]
+    }
+  ],
+  "labels": [
+    "DT2-Trk",
+    "DT2-Src"
+  ]
+}

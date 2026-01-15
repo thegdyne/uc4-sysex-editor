@@ -2041,6 +2041,12 @@
             color: var(--accent);
         }
         
+        .import-dropdown-item.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+        
         .import-dropdown-divider {
             height: 1px;
             background: var(--border);
@@ -2592,9 +2598,9 @@
                 <button class="btn import-dropdown-btn" onclick="toggleImportDropdown(event)">Import</button>
                 <div class="import-dropdown-menu">
                     <div class="import-dropdown-item" onclick="document.getElementById('sysexInput').click(); closeImportDropdown();">Import SysEx</div>
-                    <div class="import-dropdown-item" onclick="document.getElementById('jsonInput').click(); closeImportDropdown();">Import JSON</div>
+                    <div class="import-dropdown-item" id="importJsonItem" onclick="document.getElementById('jsonInput').click(); closeImportDropdown();">Import JSON</div>
                     <div class="import-dropdown-divider"></div>
-                    <div class="import-dropdown-item" onclick="openLibraryModal(); closeImportDropdown();">Browse Library...</div>
+                    <div class="import-dropdown-item" id="browseLibraryItem" onclick="openLibraryModal(); closeImportDropdown();">Browse Library...</div>
                 </div>
             </div>
             <button class="btn" id="exportBtn" onclick="exportSysEx()" disabled>Export SysEx</button>
@@ -3674,6 +3680,9 @@
                 }
                 setupSelect.appendChild(opt);
             }
+            
+            // Set initial dropdown state (disabled until buffer loaded)
+            updateImportDropdownState();
         }
         
         function renderFocusedView() {
@@ -5009,6 +5018,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 document.getElementById('exportBtn').disabled = false;
                 document.getElementById('exportJsonBtn').disabled = false;
                 document.getElementById('manageSetupsBtn').disabled = false;
+                updateImportDropdownState();
                 
                 currentSetup = 0;
                 encoderGroup = 0;
@@ -9853,6 +9863,19 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             dropdown.classList.remove('open');
         }
         
+        function updateImportDropdownState() {
+            const hasBuffer = rawBuffer !== null;
+            const jsonItem = document.getElementById('importJsonItem');
+            const libraryItem = document.getElementById('browseLibraryItem');
+            
+            if (jsonItem) {
+                jsonItem.classList.toggle('disabled', !hasBuffer);
+            }
+            if (libraryItem) {
+                libraryItem.classList.toggle('disabled', !hasBuffer);
+            }
+        }
+        
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             const dropdown = document.getElementById('importDropdown');
@@ -11131,11 +11154,11 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                     ` : ''}
                     <p style="margin-bottom: 0.5rem;">Label handling:</p>
                     <label style="display: block; margin-bottom: 0.5rem; cursor: pointer;">
-                        <input type="radio" name="labelOption" value="import" ${hasSourceLabels ? 'checked' : ''}>
+                        <input type="radio" name="labelOption" value="import" checked>
                         Import labels from config
                     </label>
                     <label style="display: block; margin-bottom: 1rem; cursor: pointer;">
-                        <input type="radio" name="labelOption" value="keep" ${!hasSourceLabels ? 'checked' : ''}>
+                        <input type="radio" name="labelOption" value="keep">
                         Keep my existing labels
                     </label>
                     <div class="modal-actions">
