@@ -9744,6 +9744,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 updateGroupNames();
                 updateStatus('loaded', 'Loaded: factory_default.syx');
                 document.getElementById('fileInfo').textContent = `factory_default.syx (${rawBuffer.length.toLocaleString()} bytes)`;
+                updateImportDropdownState();
                 
                 // Build initial conflict map
                 rebuildConflictMap();
