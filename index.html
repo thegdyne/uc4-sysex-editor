@@ -1128,7 +1128,7 @@
         }
         
         .section-title::after {
-            content: '–';
+            content: '—';
             margin-left: 0.75rem;
             color: var(--border);
             font-weight: 300;
@@ -1155,6 +1155,92 @@
         
         .section-badge:hover {
             background: var(--bg-control);
+        }
+        
+        /* Focused View Inline Group Selectors */
+        .focused-section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .focused-section-header .section-title {
+            flex-shrink: 0;
+        }
+        
+        .focused-inline-group-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .focused-inline-group-selector .group-name-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-control);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: border-color 0.1s, filter 0.1s;
+            letter-spacing: 0.05em;
+        }
+        
+        .focused-inline-group-selector .group-name-badge:hover {
+            border-color: var(--accent);
+            filter: brightness(1.1);
+        }
+        
+        /* Color-code badge by section type */
+        .focused-inline-group-selector.encoder-domain .group-name-badge {
+            color: var(--encoder);
+        }
+        
+        .focused-inline-group-selector.fader-domain .group-name-badge {
+            color: var(--fader);
+        }
+        
+        .focused-inline-group-selector .selector-tabs {
+            display: flex;
+            gap: 1px;
+        }
+        
+        .focused-inline-group-selector .selector-tab {
+            font-family: inherit;
+            font-size: 0.65rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 1px solid var(--border);
+            background: var(--bg-control);
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: border-color 0.1s, color 0.1s, background-color 0.1s;
+            padding: 0;
+        }
+        
+        .focused-inline-group-selector .selector-tab:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+        
+        .focused-inline-group-selector .selector-tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-dark);
+            font-weight: 600;
+        }
+        
+        /* Mobile: larger touch targets */
+        @media (max-width: 768px) {
+            .focused-inline-group-selector .selector-tab {
+                width: 2rem;
+                height: 2rem;
+                font-size: 0.75rem;
+            }
         }
         
         /* Control Grid */
@@ -2027,6 +2113,64 @@
         const differsFromFactoryCache = new Map();  // Map<setupIdx, boolean>
         let dirtySinceLoad = false;
         
+        // Factory Ableton Setup Detection
+        // These hashes identify factory SE17/SE18 (Ableton configs) by their snapshot content
+        // Generated from factory_default.syx - if a loaded setup matches, auto-label "Ableton"
+        const ABLETON_SETUP_HASHES = {
+            16: null,  // SE17 hash - will be computed on first factory load
+            17: null   // SE18 hash - will be computed on first factory load
+        };
+        let abletonHashesInitialized = false;
+        
+        // Simple string hash (djb2 algorithm)
+        function hashString(str) {
+            let hash = 5381;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) + hash) + str.charCodeAt(i);
+                hash = hash >>> 0;  // Convert to unsigned 32-bit
+            }
+            return hash.toString(16);
+        }
+        
+        // Hash a setup snapshot for comparison
+        function hashSetupSnapshot(snapshot) {
+            return hashString(JSON.stringify(snapshot));
+        }
+        
+        // Check if setup matches factory Ableton config and auto-label if so
+        function checkAndApplyAbletonLabel(setupIdx) {
+            if (!abletonHashesInitialized) return;
+            
+            const snapshot = captureSetupSnapshot(setupIdx);
+            const hash = hashSetupSnapshot(snapshot);
+            
+            // Check against both Ableton setup hashes (SE17 and SE18)
+            if (hash === ABLETON_SETUP_HASHES[16] || hash === ABLETON_SETUP_HASHES[17]) {
+                setupLabels.set(setupIdx, 'Ableton');
+            } else {
+                // Clear label if it no longer matches (e.g., after edit)
+                if (setupLabels.get(setupIdx) === 'Ableton') {
+                    setupLabels.delete(setupIdx);
+                }
+            }
+        }
+        
+        // Check all 18 setups for Ableton labels
+        function checkAllAbletonLabels() {
+            for (let i = 0; i < 18; i++) {
+                checkAndApplyAbletonLabel(i);
+            }
+        }
+        
+        // Initialize Ableton hashes from factory templates (called once on factory load)
+        function initAbletonHashes() {
+            if (abletonHashesInitialized || !FACTORY_TEMPLATES) return;
+            
+            ABLETON_SETUP_HASHES[16] = hashSetupSnapshot(FACTORY_TEMPLATES[16]);
+            ABLETON_SETUP_HASHES[17] = hashSetupSnapshot(FACTORY_TEMPLATES[17]);
+            abletonHashesInitialized = true;
+        }
+        
         // Factory Templates - populated from factory_default.syx at init
         // Each setup has unique channel and CC assignments
         let FACTORY_TEMPLATES = null;  // Array(18) of setup snapshots (JSON-domain)
@@ -2075,6 +2219,20 @@
         
         // Link Groups State
         let linkGroups = false;
+        
+        // Focused View Inline Group Selector Constants
+        const LINK_CANONICAL_DOMAIN = 'encoder';  // Which domain is canonical when linkGroups toggles ON
+        const STICKY_HEADER_OFFSET_PX = 0;        // Adjust if nav becomes sticky
+        let pendingFocusedAnchorKey = null;       // For "last click wins" scroll anchoring
+        
+        // Maps section keys to their group domain
+        const SECTION_DOMAIN = {
+            faders: 'fader',
+            fader9: 'fader',
+            green: 'fader',
+            encoders: 'encoder',
+            push: 'encoder'
+        };
         
         // Parameters that affect conflict detection
         const CONFLICT_PARAMS = new Set([
@@ -2159,9 +2317,9 @@
         const NON_CANONICAL_GLYPHS = {
             33: '-',  // dash (verified: glyph_dash.syx)
             34: '_',  // underscore/lowbar (verified: glyph_lowbar.syx)
-            35: 'âŒˆÂ',  // segment: top-left
-            36: 'âˆˆÂ',  // segment: two top verticals
-            37: 'âŒˆÅ ',  // segment: two bottom horizontals
+            35: 'Ã¢Å’Ë†Ã‚Â',  // segment: top-left
+            36: 'Ã¢Ë†Ë†Ã‚Â',  // segment: two top verticals
+            37: 'Ã¢Å’Ë†Ã…Â ',  // segment: two bottom horizontals
             38: ' '   // space variant (verified: glyph_blank.syx, Ableton RAC_/PAn_)
         };
         
@@ -2326,7 +2484,7 @@
                 // Display modes (shared global group)
                 'display.OFF': "Display disabled. 7-segment shows nothing when this control is active.",
                 'display.Std': "Standard display. Shows current value 0-127 on the 7-segment. Factory default.",
-                'display.bPoL': "Bipolar display. Shows value as ±63, centered at 64. Good for pan or bipolar parameters.",
+                'display.bPoL': "Bipolar display. Shows value as Â±63, centered at 64. Good for pan or bipolar parameters.",
                 
                 // Fader modes (shared by faders 1-8 and fader 9)
                 'faderMode.Jump': "Immediate response. Sends current position when moved. May cause value jumps.",
@@ -2912,82 +3070,169 @@
             const main = document.getElementById('mainContent');
             main.innerHTML = '';
             
-            // Get group names for display
-            const encoderGroupName = getGroupName(currentSetup, encoderGroup);
-            const faderGroupName = getGroupName(currentSetup, faderGroup);
+            // Helper to safely append sections (createSection may return null)
+            const appendSection = (section, gridCreator) => {
+                if (!section) return;
+                if (gridCreator) {
+                    const grid = gridCreator();
+                    section.appendChild(grid);
+                }
+                main.appendChild(section);
+            };
             
             // Faders section (uses fader group)
-            const faderSection = createSection('Faders', 'faders', faderGroupName, faderGroup);
-            const faderGrid = document.createElement('div');
-            faderGrid.className = 'control-grid';
-            
-            for (let i = 0; i < 8; i++) {
-                faderGrid.appendChild(createFaderCard(i));
-            }
-            faderSection.appendChild(faderGrid);
-            main.appendChild(faderSection);
+            const faderSection = createSection('Faders', 'faders', 'faders');
+            appendSection(faderSection, () => {
+                const grid = document.createElement('div');
+                grid.className = 'control-grid';
+                for (let i = 0; i < 8; i++) grid.appendChild(createFaderCard(i));
+                return grid;
+            });
             
             // Fader 9 section (uses fader group)
-            const fader9Section = createSection('Fader 9', 'fader9', faderGroupName, faderGroup);
-            fader9Section.appendChild(createFader9Card());
-            main.appendChild(fader9Section);
+            const fader9Section = createSection('Fader 9', 'fader9', 'fader9');
+            if (fader9Section) {
+                fader9Section.appendChild(createFader9Card());
+                main.appendChild(fader9Section);
+            }
             
             // Green Buttons section (uses fader group)
-            const greenSection = createSection('Green Buttons', 'green', faderGroupName, faderGroup);
-            const greenGrid = document.createElement('div');
-            greenGrid.className = 'control-grid';
-            
-            for (let i = 0; i < 8; i++) {
-                greenGrid.appendChild(createGreenCard(i));
-            }
-            greenSection.appendChild(greenGrid);
-            main.appendChild(greenSection);
+            const greenSection = createSection('Green Buttons', 'green', 'green');
+            appendSection(greenSection, () => {
+                const grid = document.createElement('div');
+                grid.className = 'control-grid';
+                for (let i = 0; i < 8; i++) grid.appendChild(createGreenCard(i));
+                return grid;
+            });
             
             // Encoders section (uses encoder group)
-            const encSection = createSection('Encoders', 'encoders', encoderGroupName, encoderGroup);
-            const encGrid = document.createElement('div');
-            encGrid.className = 'control-grid';
+            const encSection = createSection('Encoders', 'encoders', 'encoders');
+            appendSection(encSection, () => {
+                const grid = document.createElement('div');
+                grid.className = 'control-grid';
+                for (let i = 0; i < 8; i++) grid.appendChild(createEncoderCard(i));
+                return grid;
+            });
             
-            for (let i = 0; i < 8; i++) {
-                encGrid.appendChild(createEncoderCard(i));
-            }
-            encSection.appendChild(encGrid);
-            main.appendChild(encSection);
-            
-            // Push Buttons section (uses encoder group - they're on the encoders)
-            const pushSection = createSection('Push Buttons', 'push', encoderGroupName, encoderGroup);
-            const pushGrid = document.createElement('div');
-            pushGrid.className = 'control-grid';
-            
-            for (let i = 0; i < 8; i++) {
-                pushGrid.appendChild(createPushCard(i));
-            }
-            pushSection.appendChild(pushGrid);
-            main.appendChild(pushSection);
+            // Push Buttons section (uses encoder group)
+            const pushSection = createSection('Push Buttons', 'push', 'push');
+            appendSection(pushSection, () => {
+                const grid = document.createElement('div');
+                grid.className = 'control-grid';
+                for (let i = 0; i < 8; i++) grid.appendChild(createPushCard(i));
+                return grid;
+            });
         }
         
-        function createSection(title, className, badge, groupIdx) {
+        /**
+         * Creates a section with inline group selector for Focused View.
+         * @param {string} title - Section title (e.g., "Encoders")
+         * @param {string} className - CSS class for styling (e.g., "encoders")
+         * @param {string} sectionKey - Stable key for data-section attribute
+         */
+        function createSection(title, className, sectionKey) {
             const section = document.createElement('section');
             section.className = 'control-section';
+            section.dataset.section = sectionKey;  // For scroll anchoring
+            
+            // Derive domain from sectionKey mapping
+            const domain = SECTION_DOMAIN[sectionKey];
+            if (!domain) {
+                console.error(`Unknown sectionKey: ${sectionKey}`);
+                return null;
+            }
+            section.dataset.domain = domain;
+            
+            // Derive active group from current state
+            const activeGroup = domain === 'encoder' ? encoderGroup : faderGroup;
             
             const header = document.createElement('div');
-            header.className = 'section-header';
+            header.className = 'focused-section-header';
             
             const h2 = document.createElement('h2');
             h2.className = 'section-title ' + className;
             h2.textContent = title;
             header.appendChild(h2);
             
-            const span = document.createElement('span');
-            span.className = 'section-badge';
-            span.textContent = badge;
-            span.title = 'Click to edit group name';
-            span.style.cursor = 'pointer';
-            span.onclick = () => showGroupNameEditor(currentSetup, groupIdx);
-            header.appendChild(span);
+            // Inline group selector
+            const selectorContainer = document.createElement('div');
+            selectorContainer.className = `focused-inline-group-selector ${domain}-domain`;
+            selectorContainer.dataset.domain = domain;
+            selectorContainer.setAttribute('aria-label', 
+                domain === 'encoder' ? 'Encoder group selector' : 'Fader group selector');
+            
+            // Group name badge (clickable to edit)
+            const nameBadge = document.createElement('span');
+            nameBadge.className = 'group-name-badge';
+            nameBadge.textContent = getGroupName(currentSetup, activeGroup);
+            nameBadge.title = 'Click to edit group name';
+            nameBadge.onclick = () => {
+                // Derive group at click time to avoid stale closure
+                const currentActiveGroup = domain === 'encoder' ? encoderGroup : faderGroup;
+                showGroupNameEditor(currentSetup, currentActiveGroup);
+            };
+            selectorContainer.appendChild(nameBadge);
+            
+            // Group tabs
+            const tabs = document.createElement('div');
+            tabs.className = 'selector-tabs';
+            tabs.setAttribute('role', 'group');
+            tabs.setAttribute('aria-label', 'Select group');
+            
+            for (let i = 0; i < 8; i++) {
+                const tab = document.createElement('button');
+                tab.type = 'button';
+                tab.className = 'selector-tab' + (i === activeGroup ? ' active' : '');
+                tab.dataset.group = i;
+                tab.textContent = i + 1;
+                tab.title = `Group ${i + 1}: ${getGroupName(currentSetup, i)}`;
+                tab.setAttribute('aria-pressed', String(i === activeGroup));
+                tabs.appendChild(tab);
+            }
+            
+            // Attach click handler to tabs container (event delegation)
+            tabs.addEventListener('click', (e) => {
+                const tab = e.target.closest('.selector-tab');
+                if (!tab) return;
+                
+                const groupIndex = parseInt(tab.dataset.group, 10);
+                const clickedSectionKey = tab.closest('section')?.dataset.section;
+                if (!clickedSectionKey) return;
+                handleFocusedGroupChange(domain, groupIndex, clickedSectionKey);
+            });
+            
+            selectorContainer.appendChild(tabs);
+            header.appendChild(selectorContainer);
             
             section.appendChild(header);
             return section;
+        }
+        
+        /**
+         * Handles group changes from inline selectors in Focused View.
+         * Preserves scroll position across full re-render.
+         */
+        function handleFocusedGroupChange(domain, groupIndex, sectionKey) {
+            // Early exit if already on this group
+            const currentGroup = domain === 'encoder' ? encoderGroup : faderGroup;
+            if (groupIndex === currentGroup && (!linkGroups || encoderGroup === faderGroup)) {
+                return;
+            }
+            
+            // Capture scroll position before re-render
+            const scrollY = window.scrollY;
+            
+            // Use existing group selection functions (they handle linkGroups and trigger re-render)
+            if (domain === 'encoder') {
+                selectEncoderGroup(groupIndex);
+            } else {
+                selectFaderGroup(groupIndex);
+            }
+            
+            // Restore scroll position after render
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollY);
+            });
         }
         
         function createEncoderCard(idx) {
@@ -4165,6 +4410,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 setupLabels.clear();
                 differsFromFactoryCache.clear();
                 
+                // Auto-label setups that match factory Ableton configs
+                checkAllAbletonLabels();
+                
                 updateGroupTabs('encoderGroupTabs', 0);
                 updateGroupTabs('faderGroupTabs', 0);
                 updateGroupNames();
@@ -4503,7 +4751,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                            autocomplete="off"
                            spellcheck="false">
                     
-                    <p class="preview">UC4 will show: <span id="groupNamePreview">${escapeHtml(currentDisplay).replace(/ /g, '·')}</span></p>
+                    <p class="preview">UC4 will show: <span id="groupNamePreview">${escapeHtml(currentDisplay).replace(/ /g, 'Â·')}</span></p>
                     
                     <p class="hint">Valid: 0-9 A b C d E F G H I J L n O t P S r U Y - _ space</p>
                     <p class="error" id="groupNameError"></p>
@@ -4558,8 +4806,8 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             } else {
                 error.textContent = '';
                 saveBtn.disabled = false;
-                // Show what UC4 will actually display (· for spaces)
-                preview.textContent = result.display.replace(/ /g, '·');
+                // Show what UC4 will actually display (Â· for spaces)
+                preview.textContent = result.display.replace(/ /g, 'Â·');
             }
         }
         
@@ -4781,6 +5029,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             // Clear setup labels (reset clears everything)
             setupLabels.clear();
             differsFromFactoryCache.clear();
+            
+            // Auto-label setups that match factory Ableton configs
+            checkAllAbletonLabels();
             
             // Rebuild conflict map
             rebuildConflictMap();
@@ -5898,7 +6149,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                     Copy Control
                 </div>
                 <div class="context-menu-item" onclick="copyRow('${controlType}', ${currentSetup}, ${index}); hideContextMenu();">
-                    Copy Row (${controlType === 'fader9' ? 'Fad9' : (index + 1)} × 8 groups)
+                    Copy Row (${controlType === 'fader9' ? 'Fad9' : (index + 1)} Ã— 8 groups)
                 </div>
                 <div class="context-menu-item" onclick="copyColumn('${controlType}', ${currentSetup}, ${group}); hideContextMenu();">
                     Copy Column (Group ${group + 1})
@@ -7151,6 +7402,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 FACTORY_TEMPLATES[setupIdx] = captureSetupSnapshot(setupIdx);
             }
             
+            // Initialize Ableton hashes for auto-labeling
+            initAbletonHashes();
+            
             console.log('Factory templates initialized for all 18 setups');
         }
         
@@ -7451,7 +7705,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 <div class="setup-card-label ${label ? '' : 'no-label'}">${label || '(no label)'}</div>
                 <div class="setup-card-channel">
                     <span>${primaryCh}</span>
-                    ${modified ? '<span class="setup-card-modified" title="Differs from factory">●</span>' : ''}
+                    ${modified ? '<span class="setup-card-modified" title="Differs from factory">●</span>' : ''}
                 </div>
             `;
             
@@ -7614,7 +7868,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 <div class="setup-manager-actions">
                     <button class="btn" onclick="showCopyDialog()" ${canCopy ? '' : 'disabled'}>Copy to...</button>
                     <button class="btn" onclick="${count === 2 ? 'performDirectSwap()' : 'showSwapDialog()'}" ${canSwap ? '' : 'disabled'}>Swap with...</button>
-                    <button class="btn" onclick="showResetToFactoryDialog()" ${canClear ? '' : 'disabled'} title="Restore selected setups to factory defaults">Reset to Factory</button>
+                    <button class="btn" onclick="showResetToFactoryDialog()" ${canClear ? '' : 'disabled'} title="Restore selected setups to factory defaults">Reset Slot to Factory</button>
                     <button class="btn" onclick="showLabelEditor()" ${canEditLabel ? '' : 'disabled'}>Edit Label</button>
                     <span class="btn-divider"></span>
                     <button class="btn" onclick="showImportToSlotDialog()">Import...</button>
@@ -7664,7 +7918,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 
                 if (i === sourceIdx) {
                     item.classList.add('source');
-                    item.textContent = `▪ ${i + 1}`;
+                    item.textContent = `▸ ${i + 1}`;
                 } else {
                     item.textContent = i + 1;
                     item.onclick = () => {
@@ -7765,7 +8019,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             invalidateDiffCache(destIndices);
             dirtySinceLoad = true;
             markModified();
-            refreshMainEditorIfNeeded(destIndices);
+            afterSetupStateMutation(destIndices);
             
             closeCopyDialog();
             renderSetupManager();
@@ -7812,7 +8066,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 
                 if (i === sourceIdx) {
                     item.classList.add('source');
-                    item.textContent = `▪ ${i + 1}`;
+                    item.textContent = `▸ ${i + 1}`;
                 } else {
                     item.textContent = i + 1;
                     item.onclick = () => {
@@ -7953,7 +8207,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 const idx = indices[0];
                 const label = setupLabels.get(idx);
                 content = `
-                    <h4>Reset to Factory</h4>
+                    <h4>Reset Slot to Factory</h4>
                     <p>Restore Setup ${idx + 1}${label ? ` (${label})` : ''} to factory defaults?</p>
                     <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim);">This will restore all 264 controls and group names from <code>factory_default.syx</code>.</p>
                     ${label ? `<p style="font-size: 0.8rem; color: var(--text-dim);">The setup label will be removed.</p>` : ''}
@@ -7965,7 +8219,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                     return `Setup ${i + 1}${label ? ` (${label})` : ''}`;
                 }).join(', ');
                 content = `
-                    <h4>Reset to Factory</h4>
+                    <h4>Reset Slots to Factory</h4>
                     <p>Restore ${count} setups to factory defaults?</p>
                     <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0.5rem 0;">${setupList}</p>
                     <p style="font-size: 0.75rem; color: var(--text-muted);">This action can be undone.</p>
@@ -8504,7 +8758,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         function showImportError(message) {
             const warningsDiv = document.getElementById('importWarnings');
             if (warningsDiv) {
-                warningsDiv.innerHTML = `<strong style="color: #ff6b6b;">✕ ${escapeHtml(message)}</strong>`;
+                warningsDiv.innerHTML = `<strong style="color: #ff6b6b;">✖ ${escapeHtml(message)}</strong>`;
                 warningsDiv.style.display = 'block';
             }
             document.getElementById('importFileInfo').style.display = 'none';
@@ -8750,6 +9004,11 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         // Unified post-mutation hook for setup state changes
         // Call this after: clear, copy, swap, label edit, import-to-slot, global reset/import
         function afterSetupStateMutation(affectedSetupIdxs) {
+            // Re-check Ableton labels for affected setups
+            for (const idx of affectedSetupIdxs) {
+                checkAndApplyAbletonLabel(idx);
+            }
+            
             // Always refresh dropdown labels
             updateSetupDropdownLabels();
             
@@ -8818,6 +9077,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 faderGroup = 0;
                 isModified = false;
                 dirtyBanks.clear();
+                
+                // Auto-label setups that match factory Ableton configs
+                checkAllAbletonLabels();
                 
                 // Clear undo/redo stacks on fresh load
                 undoStack.length = 0;

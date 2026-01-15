@@ -1,6 +1,6 @@
 # UC4 SysEx Editor — Technical Specification
 
-Version: 2.1.0  
+Version: 2.2.0  
 Date: 2026-01-15  
 Status: Implemented
 
@@ -98,16 +98,24 @@ Full parameter editing for selected groups with contextual tooltips.
 
 **Section Order:**
 1. Faders (fader group)
-2. Green Buttons (fader group)
-3. Encoders (encoder group)
-4. Push Buttons (encoder group)
-5. Fader 9 (fader group)
+2. Fader 9 (fader group)
+3. Green Buttons (fader group)
+4. Encoders (encoder group)
+5. Push Buttons (encoder group)
 
 **Section Header Format:**
 ```
-┌─ SECTION_NAME ─────────────────────── GrPN ─┐
+┌─ SECTION_NAME ─ [GrPN] [1][2][3][4][5][6][7][8] ────┐
 ```
-Where `GrPN` is the 4-character group name in accent color.
+- `GrPN` is the clickable group name badge (click to edit name)
+- `[1]-[8]` are inline group selector tabs
+- Badge color: encoder sections blue, fader sections orange
+
+**Inline Group Selectors:**
+- Click any tab to switch the displayed group
+- All sections in the same domain update together (encoder/push or fader/green/fader9)
+- Viewport scroll position preserved across group changes
+- If "Link Groups" enabled, all sections switch together
 
 **Tooltips:**
 - Hover over parameter labels for explanations
@@ -154,7 +162,7 @@ Modal dialog for managing entire setups.
 | **Clear** | Zero out all parameters in setup |
 | **Copy** | Duplicate setup to other slot(s) |
 | **Swap** | Exchange two setups |
-| **Reset** | Restore setup to factory defaults |
+| **Reset Slot** | Restore selected setup(s) to factory defaults |
 | **Export** | Save single setup as JSON |
 | **Import** | Load single setup JSON to slot |
 
@@ -178,6 +186,15 @@ Modal dialog for managing entire setups.
 - Click to select single setup
 - Ctrl+click for multi-select
 - Click empty area to deselect
+
+#### Auto-Labeling (Ableton)
+Factory SE17 and SE18 contain Ableton-specific configurations. The editor automatically labels any setup slot that matches these configurations:
+
+- On file load, all 18 slots are checked against SE17/SE18 hashes
+- After copy/swap/reset, affected slots are re-checked
+- If a slot's content matches factory SE17 or SE18, it gets "Ableton" label
+- If a slot with "Ableton" label is edited to no longer match, the label is removed
+- Works regardless of which slot the Ableton config is in
 
 #### Label Storage
 Labels stored in localStorage, not in SysEx. Key: `uc4-editor-setup-labels`.
