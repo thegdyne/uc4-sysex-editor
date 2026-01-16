@@ -968,6 +968,24 @@
             letter-spacing: 0.1em;
         }
         
+        .library-source-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--accent);
+            border-radius: 3px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+        
+        .library-source-badge::before {
+            content: '📦';
+            font-size: 0.8rem;
+        }
+        
         .link-groups-toggle {
             display: flex;
             align-items: center;
@@ -2622,7 +2640,9 @@
                     <option value="">--</option>
                 </select>
             </div>
+            <span id="librarySourceBadge" class="library-source-badge" style="display: none;"></span>
             <button class="btn" id="manageSetupsBtn" onclick="openSetupManager()" disabled>Setup Manager</button>
+            <button class="btn" id="libraryBtn" onclick="openLibraryModal()" disabled>Library</button>
         </div>
         
         <div class="nav-section">
@@ -2689,6 +2709,7 @@
         let setupManagerOpen = false;
         let setupManagerSelection = new Set();  // Set of selected setup indices (0-17)
         const setupLabels = new Map();  // Map<setupIdx, string>
+        const librarySourceMap = new Map();  // Map<setupIdx, configName> - tracks which setups came from library
         const differsFromFactoryCache = new Map();  // Map<setupIdx, boolean>
         let dirtySinceLoad = false;
         
@@ -4891,9 +4912,23 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
         function selectSetup(idx) {
             currentSetup = parseInt(idx);
             updateGroupNames();
+            updateLibrarySourceBadge();
             // Rebuild conflict map for new setup
             rebuildConflictMap();
             renderCurrentView();
+        }
+        
+        function updateLibrarySourceBadge() {
+            const badge = document.getElementById('librarySourceBadge');
+            if (!badge) return;
+            
+            const configName = librarySourceMap.get(currentSetup);
+            if (configName) {
+                badge.textContent = configName;
+                badge.style.display = 'inline-flex';
+            } else {
+                badge.style.display = 'none';
+            }
         }
         
         function toggleLinkGroups(checked) {
@@ -5018,7 +5053,9 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 document.getElementById('exportBtn').disabled = false;
                 document.getElementById('exportJsonBtn').disabled = false;
                 document.getElementById('manageSetupsBtn').disabled = false;
+                document.getElementById('libraryBtn').disabled = false;
                 updateImportDropdownState();
+                updateLibrarySourceBadge();
                 
                 currentSetup = 0;
                 encoderGroup = 0;
@@ -5028,6 +5065,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 
                 // Clear setup labels on fresh import
                 setupLabels.clear();
+                librarySourceMap.clear();
                 differsFromFactoryCache.clear();
                 
                 // Auto-label setups that match factory Ableton configs
@@ -5176,6 +5214,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 // Import setup labels if present (v1.1+)
                 if (data.setupLabels && typeof data.setupLabels === 'object') {
                     setupLabels.clear();
+                    librarySourceMap.clear();
                     for (const [key, value] of Object.entries(data.setupLabels)) {
                         const idx = parseInt(key, 10);
                         if (!isNaN(idx) && idx >= 0 && idx < 18 && typeof value === 'string') {
@@ -5656,6 +5695,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             
             // Clear setup labels (reset clears everything)
             setupLabels.clear();
+            librarySourceMap.clear();
             differsFromFactoryCache.clear();
             
             // Auto-label setups that match factory Ableton configs
@@ -6003,6 +6043,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             document.getElementById('exportBtn').disabled = false;
             document.getElementById('exportJsonBtn').disabled = false;
             document.getElementById('manageSetupsBtn').disabled = false;
+            document.getElementById('libraryBtn').disabled = false;
             
             updateGroupTabs('encoderGroupTabs', encoderGroup);
             updateGroupTabs('faderGroupTabs', faderGroup);
@@ -9724,6 +9765,7 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
                 document.getElementById('exportBtn').disabled = false;
                 document.getElementById('exportJsonBtn').disabled = false;
                 document.getElementById('manageSetupsBtn').disabled = false;
+                document.getElementById('libraryBtn').disabled = false;
                 
                 currentSetup = 0;
                 encoderGroup = 0;
@@ -11121,6 +11163,10 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             refreshMainEditorIfNeeded([targetSlot]);
             updateSetupDropdownLabels();
             
+            // Track library source
+            librarySourceMap.set(targetSlot, entry.name);
+            updateLibrarySourceBadge();
+            
             showToast(`Imported to Setup ${targetSlot + 1}`, 'success');
         }
         
@@ -11255,6 +11301,12 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             
             refreshMainEditorIfNeeded(Array.from({ length: 18 }, (_, i) => i));
             updateSetupDropdownLabels();
+            
+            // Track library source for all 18 setups
+            for (let i = 0; i < 18; i++) {
+                librarySourceMap.set(i, entry.name);
+            }
+            updateLibrarySourceBadge();
             
             showToast('Imported all 18 setups', 'success');
         }
@@ -11410,6 +11462,12 @@ Acc: ${accs[data.acc] || '?'}, Display: ${disps[data.display] || '?'}`;
             
             refreshMainEditorIfNeeded(affectedSlots);
             updateSetupDropdownLabels();
+            
+            // Track library source for affected slots
+            for (const slot of affectedSlots) {
+                librarySourceMap.set(slot, entry.name);
+            }
+            updateLibrarySourceBadge();
             
             showToast(`Imported ${setupCount} setups starting at slot ${startSlot + 1}`, 'success');
         }
